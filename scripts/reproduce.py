@@ -38,13 +38,14 @@ REPO_ENV = {
                          "urllib3<2", "setuptools<82"], "editable": "."},
     "scrapy": {"deps": ["pytest", "attrs", "pexpect", "psutil", "pyftpdlib", "pygments", "pytest-timeout",
                         "sybil", "testfixtures"], "editable": "."},
-    "tomlkit": {"deps": ["pytest", "PyYAML"], "editable": ".", "mkdirs": ["tests/toml-test/tests"]},
+    "tomlkit": {"deps": ["pytest", "PyYAML"], "editable": ".", "submodules": {"tests/toml-test": "toml-test"}},
     "marshmallow": {"deps": ["pytest", "simplejson"], "editable": "."},
     "click": {"deps": ["pytest"], "editable": "."},
 }
 
 RUNNER = r"""
 set -e
+command -v uv >/dev/null || pip install -q uv==0.11.32
 cd /w/fixed
 export SETUPTOOLS_SCM_PRETEND_VERSION=99.0.0 PIP_DISABLE_PIP_VERSION_CHECK=1
 {install_fixed}
@@ -159,9 +160,15 @@ def run_one(cand: dict, repos_dir: str, work: Path) -> dict:
     export(repo, cand["fix_commit"], wd / "fixed")
     export(repo, cand["buggy_commit"], wd / "buggy")
     touched = overlay_tests(repo, cand["fix_commit"], wd / "buggy")
-    for d in cfg.get("mkdirs", []):  # git-archive omits submodules; tests expect the dirs to exist
-        for t in ("fixed", "buggy"):
-            (wd / t / d).mkdir(parents=True, exist_ok=True)
+    # git-archive omits submodules: export each pinned submodule commit from a local clone
+    for sub_path, sub_clone in cfg.get("submodules", {}).items():
+        for t, rev in (("fixed", cand["fix_commit"]), ("buggy", cand["buggy_commit"])):
+            row = git(repo, "ls-tree", rev, sub_path).split()
+            if row and row[1] == "commit":
+                dest = wd / t / sub_path
+                shutil.rmtree(dest, ignore_errors=True)
+                dest.mkdir(parents=True)
+                export(str(Path(repos_dir).parent / "submods" / sub_clone), row[2], dest)
     tests = [p for p in touched if p.endswith(".py") and Path(p).name not in ("conftest.py", "__init__.py")
              and (Path(p).name.startswith("test") or Path(p).name.endswith("_test.py"))]
     if not tests:
@@ -170,7 +177,13 @@ def run_one(cand: dict, repos_dir: str, work: Path) -> dict:
         return {"status": "dropped", "reason": "no_runnable_test"}
     # dependency pin: newest releases available one day after the fix commit
     pin = (datetime.fromisoformat(cand["date"]) + timedelta(days=1)).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    deps = " ".join(f"'{d}'" for d in cfg["deps"])
+    dep_list = list(cfg["deps"])
+    # scrapy: older trees get --reactor from pytest-twisted, newer ones define it in conftest.py
+    if name == "scrapy":
+        conftest = wd / "fixed" / "conftest.py"
+        if not (conftest.exists() and re.search(r'addoption\(\s*"--reactor"', conftest.read_text())):
+            dep_list.append("pytest-twisted")
+    deps = " ".join(f"'{d}'" for d in dep_list)
     if "pythonpath" in cfg:
         install_fixed = f"uv pip install --system --exclude-newer {pin} {deps}"
         install_buggy = "true"
@@ -183,12 +196,18 @@ def run_one(cand: dict, repos_dir: str, work: Path) -> dict:
                            py_buggy=py_buggy, tests=" ".join(tests))
     (wd / "out" / "run.sh").write_text(script)
     env_args = []
-    if os.environ.get("HTTPS_PROXY"):
-        env_args = ["-e", f"HTTPS_PROXY={os.environ['HTTPS_PROXY']}", "-e", "SSL_CERT_FILE=/ca.crt",
-                    "-e", "UV_SYSTEM_CERTS=1", "-v", "/root/.ccr/ca-bundle.crt:/ca.crt:ro"]
+    if os.environ.get("HTTPS_PROXY"):  # only needed behind an egress proxy
+        env_args = ["-e", f"HTTPS_PROXY={os.environ['HTTPS_PROXY']}"]
+        ca = os.environ.get("FLB_CA_BUNDLE", "/root/.ccr/ca-bundle.crt")
+        if Path(ca).exists():
+            env_args += ["-e", "SSL_CERT_FILE=/ca.crt", "-e", "PIP_CERT=/ca.crt", "-e", "UV_SYSTEM_CERTS=1",
+                         "-v", f"{ca}:/ca.crt:ro"]
+    if sys.platform.startswith("linux") and shutil.which("uv"):  # reuse host uv binary (faster)
+        env_args += ["-v", f"{shutil.which('uv')}:/usr/local/bin/uv:ro"]
+    cache = Path(os.environ.get("FLB_UV_CACHE", Path.home() / ".cache" / "fl-bench-uv"))
+    cache.mkdir(parents=True, exist_ok=True)
     cmd = ["docker", "run", "--rm", "--network", "host", *env_args,
-           "-e", "UV_CACHE_DIR=/uvcache", "-v", "/home/user/uvcache:/uvcache",
-           "-v", f"{shutil.which('uv')}:/usr/local/bin/uv:ro",
+           "-e", "UV_CACHE_DIR=/uvcache", "-e", "UV_LINK_MODE=copy", "-v", f"{cache}:/uvcache",
            "-v", f"{wd}:/w", BASE_IMAGE, "bash", "/w/out/run.sh"]
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
     (wd / "out" / "docker.log").write_text(proc.stdout + proc.stderr)

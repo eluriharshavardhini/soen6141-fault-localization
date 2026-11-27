@@ -1,0 +1,15 @@
+{
+  "bugsinpy_commit_ids": 783,
+  "identity_overlap_with_bugsinpy": [],
+  "repo_overlap_with_swe_bench": [],
+  "earliest_instance": "2025-06-05",
+  "latest_instance": "2026-10-25",
+  "days_after_cutoff_min": {
+    "Llama-3.1/3.3": 522,
+    "Llama-4": 278,
+    "Qwen2.5-Coder": 248,
+    "DeepSeek-Coder-V2": 340,
+    "gpt-oss": 340,
+    "Qwen3": 37
+  }
+}

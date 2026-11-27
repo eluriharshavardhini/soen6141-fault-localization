@@ -4,19 +4,73 @@ SOEN 6141 course project: *Build a Benchmark, Then Beat the Baseline*. Task: **f
 
 Given a failing (bug-revealing) test and its output, rank the files, functions and lines most likely to contain the fault. The oracle is the code changed by the real developer fix, validated by a test that fails before the fix and passes after it.
 
-> Status: **Phase 1 (benchmark construction) in progress.**
+> Status: **Phase 1 complete**: 63 validated bugs from 7 repositories, June 2025 to October 2026.
+
+**Start here:** [Proposal](docs/proposal.md) · [Benchmark card](docs/BENCHMARK_CARD.md) · [Requirements → evidence](docs/PHASE1_EVIDENCE.md) · [Plain-language explainer](docs/EXPLAINER.md)
+
+## Verify any bug in one command
+
+Requirements: Linux or macOS with Docker running, git, Python ≥ 3.10.
+
+```bash
+git clone https://github.com/eluriharshavardhini/soen6141-fault-localization
+cd soen6141-fault-localization
+python scripts/verify.py --list                       # list instance ids
+python scripts/verify.py pallets__click-a1235aacb1     # one instance (~1 min)
+python scripts/verify.py --all                        # all 63 (~1-2 h)
+```
+
+Each run clones the upstream repository (once), builds the buggy and fixed trees in a fresh `python:3.12-slim` container (pinned by digest), installs dependencies as they were on the fix date, and prints `FAILS on buggy, PASSES on fixed` for every witness test.
+
+## Rebuild the benchmark from scratch
+
+```bash
+mkdir -p repos && for r in tobymao/sqlglot psf/black Textualize/rich pallets/click pylint-dev/astroid \
+  python-poetry/tomlkit marshmallow-code/marshmallow scrapy/scrapy tqdm/tqdm; do
+  git clone --shallow-since=2025-04-01 https://github.com/$r repos/$(basename $r); done
+git clone https://github.com/BurntSushi/toml-test submods/toml-test
+python scripts/mine.py repos data/mining                                   # static rules M1-M6
+python scripts/reproduce.py repos data/mining/candidates.jsonl data/repro  # Docker rules R1-R6 (~90 min)
+python scripts/build_benchmark.py                                          # sampling + logs
+git clone --depth 1 https://github.com/soarsmu/BugsInPy ../BugsInPy
+python scripts/contamination_overlap.py ../BugsInPy                        # contamination check C1
+```
+
+Note: upstream `HEAD` keeps moving. Mining reads only commits inside the fixed date window, so re-mining reproduces the same candidate list as long as upstream history is not rewritten.
 
 ## Layout
 
 | Path | Contents |
 |---|---|
-| `protocol/SCREENING_PROTOCOL.md` | Selection rules, committed before any mining (see git history) |
+| `protocol/SCREENING_PROTOCOL.md` | Selection rules, committed before any mining (first commit), plus dated amendments |
 | `scripts/mine.py` | Static mining of candidate fix commits (rules M1-M6) |
 | `scripts/oracle.py` | File / function / line oracle from the developer fix |
 | `scripts/reproduce.py` | Fail-to-pass reproduction in pinned Docker environments (rules R1-R6) |
-| `data/` | Candidates, screening log, final benchmark instances |
-| `docs/` | Proposal, benchmark card |
+| `scripts/build_benchmark.py` | Seeded per-repo sampling, screening log, summary |
+| `scripts/verify.py` | One-command re-verification of any instance |
+| `scripts/contamination_overlap.py` | Contamination check C1 (identity overlap, recency) |
+| `data/benchmark/instances.jsonl` | **The benchmark**: 63 instances |
+| `data/benchmark/env/` | Exact `pip freeze` per instance |
+| `data/screening_log.csv` | Every commit screened, with outcome and drop reason |
+| `data/screening_summary.md` | Counts per rule × repository |
+| `data/mining/`, `data/repro/` | Raw intermediate outputs |
+| `data/contamination/` | Contamination check results |
+| `logs/` | Run logs |
 
-## Reproduction
+## Instance format
 
-Coming with Phase 1 completion.
+```jsonc
+{
+  "instance_id": "psf__black-24e4cb20ab",
+  "repo": "psf/black", "buggy_commit": "...", "fix_commit": "...", "date": "2025-06-05T...",
+  "fail_to_pass": ["tests.test_black.BlackTestCase::test_backslash_carriage_return"],
+  "failure_output": {"<test id>": "<assertion + traceback on the buggy version>"},  // model input
+  "oracle": {"files": [...], "functions": ["black.comments::list_comments"], "lines": {"<file>": [..]}},
+  "fix_subject": "...",   // label only, never shown to a model
+  "dep_pin_exclude_newer": "...", "python": "3.12"
+}
+```
+
+## License
+
+Scripts: MIT. The benchmark data references upstream projects (MIT, BSD-3, LGPL-2.1) by commit id. See the benchmark card.

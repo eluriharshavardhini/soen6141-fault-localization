@@ -1,0 +1,8 @@
+iniconfig==2.3.0
+-e file:///w/fixed
+packaging==26.0
+pip==25.0.1
+pluggy==1.6.0
+pygments==2.20.0
+pytest==9.0.2
+simplejson==3.20.2

@@ -132,7 +132,26 @@ and the benchmark card.
   repository's data-driven runner is used (black: `tests/test_format.py`).
 - **R1 environment detail.** Dependencies are resolved with `uv --exclude-newer` set to the
   fix date + 1 day, so each instance gets the library versions available when it was fixed.
-  Harness-only fixes found in the smoke test: tomlkit's `toml-test` git submodule directory
-  is created empty (git archive omits submodules); scrapy is run without `pytest-twisted`
+  Harness-only fixes found in the smoke test: tomlkit's `toml-test` git submodule is
+  exported at the commit pinned by each tree (git archive omits submodules); scrapy is run without `pytest-twisted`
   (it conflicts with scrapy's own `--reactor` option). The 7 smoke-test candidates are
   re-run under the final harness like every other candidate.
+
+### Amendment 2 (2026-11-27, harness only)
+
+The empty-directory workaround for tomlkit's submodule made every tomlkit candidate fail
+collection on both trees (`conftest.py` asserts the submodule content exists), i.e. an
+environment failure, not a screening outcome. The harness now exports the pinned submodule
+commit, and all tomlkit candidates are re-run. No selection rule changed.
+
+### Amendment 3 (2026-11-27, harness only)
+
+scrapy changed how its `--reactor` pytest option is provided during the window: older trees
+need the `pytest-twisted` plugin, newer trees define the option in `conftest.py` (and the
+plugin then conflicts). The harness now installs `pytest-twisted` only when the fixed tree's
+`conftest.py` does not define `--reactor`. The scrapy candidates that had failed with reason
+`env` because of this were re-run. No selection rule changed.
+
+Note on hangs: one tomlkit candidate (96a4d22fdd) hangs on the buggy tree, so the 900 s
+timeout leaves no JUnit report. The pre-registered rules have no "hang" outcome, so it is
+recorded as `collection_error` (no evaluable buggy run) and dropped, as the rules dictate.

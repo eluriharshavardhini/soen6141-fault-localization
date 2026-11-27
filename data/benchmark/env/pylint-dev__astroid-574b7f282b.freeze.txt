@@ -1,0 +1,14 @@
+-e file:///w/fixed
+attrs==26.1.0
+iniconfig==2.3.0
+packaging==26.2
+pip==25.0.1
+pluggy==1.6.0
+pygments==2.20.0
+pytest==9.1.1
+python-dateutil==2.9.0.post0
+regex==2026.7.19
+setuptools==81.0.0
+six==1.17.0
+typing-extensions==4.16.0
+urllib3==1.26.20
