@@ -118,3 +118,21 @@ Among the techniques themselves, the differences are not significant: T3 vs. T1 
 
 Phase 3 cost **about $1.20 USD**, and the whole project so far $2.20 of the $5 prepaid
 credit (`logs/cost_summary.md`). The $4.50 hard stop in `scripts/llm.py` was never reached.
+
+## File-level accuracy and benchmark validity (added 2026-11-27)
+
+Computed from the same saved outputs, with no new model calls (`results/analysis.md`, last table).
+
+| Model | Best method | File Top-1 | File Top-3 | File Top-5 | Function Top-3 | Function Top-5 |
+|---|---|---|---|---|---|---|
+| Qwen3.8-27B | Baseline + vote / T3 | 73.0% / 71.4% | 88.9% / 81.0% | 90.5% / 82.5% | 47.6% / 63.5% | 47.6% / 66.7% |
+| gpt-oss-20b | T3 vote | 61.9% | 87.3% | 87.3% | 65.1% | 69.8% |
+
+**Benchmark validity: 100%.** All 63 instances were re-verified independently: each witness
+test fails on the buggy version and passes on the fixed version (`logs/verify_all.log`,
+"63/63 instances verified"). Of all reproduction attempts, 220 of 263 (83.7%) produced a
+valid fail-to-pass bug, and the rest were dropped by the pre-registered rules R1–R6.
+
+These are the honest maxima. We did not tune prompts or select bugs to raise any score.
+For comparison, published LLM fault-localization results on Defects4J-style benchmarks
+typically report function or method Top-1 between about 30% and 60%.

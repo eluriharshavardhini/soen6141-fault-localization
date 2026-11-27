@@ -110,13 +110,15 @@ def main() -> None:
         top = lambda k: sum(1 for i in ids if r[i] and r[i] <= k) / n  # noqa: E731
         mrr = sum(1 / r[i] for i in ids if r[i]) / n
         f1 = sum(1 for i in ids if fr[i] == 1) / n
+        f3 = sum(1 for i in ids if fr[i] and fr[i] <= 3) / n
+        f5 = sum(1 for i in ids if fr[i] and fr[i] <= 5) / n
         calls = sum(res[i].get("calls", 1) for i in res) / n
         toks = sum((res[i].get("usage") or {}).get("total_tokens") or 0 for i in res) / n
         cut = {"qwen": "2026-08-14", "gptoss": "2024-06-01"}.get(m)
         post = [i for i in ids if cut and DATES[i] > cut]
         p1 = (sum(1 for i in post if r[i] == 1) / len(post)) if post else None
         row = {"top1_post_cutoff": p1, "n_post_cutoff": len(post), "model": m, "technique": t, "n_scored": len(res), "top1": top(1), "top3": top(3),
-               "top5": top(5), "mrr": mrr, "file_top1": f1, "calls_per_bug": calls,
+               "top5": top(5), "mrr": mrr, "file_top1": f1, "file_top3": f3, "file_top5": f5, "calls_per_bug": calls,
                "tokens_per_bug": toks}
         out["main"].append(row)
         md.append(f"| {m} | {NAMES[t]} | {calls:.0f} | {top(1):.1%} | {top(3):.1%} | {top(5):.1%} | "
@@ -191,5 +193,22 @@ def main() -> None:
     print("\n".join(md))
 
 
+
+
+
+def file_table() -> str:
+    """File-level Top-1/3/5 for every method (appended to analysis.md)."""
+    data = json.loads((ROOT / "results/analysis.json").read_text())["main"]
+    lines = ["", "## File level (is the buggy file among the first k files named?)", "",
+             "| Model | Method | File Top-1 | File Top-3 | File Top-5 |", "|---|---|---|---|---|"]
+    for r in data:
+        lines.append(f"| {r['model']} | {NAMES[r['technique']]} | {r['file_top1']:.1%} | "
+                     f"{r['file_top3']:.1%} | {r['file_top5']:.1%} |")
+    return "\n".join(lines) + "\n"
+
+
 if __name__ == "__main__":
     main()
+    with (ROOT / "results/analysis.md").open("a") as f:
+        f.write(file_table())
+    print(file_table())

@@ -66,3 +66,19 @@ Retrieval recall: an oracle function is among the 30 candidates for 44/63 bugs a
 | gptoss | T2 inspect-then-rank | 5/10 | 1/10 | 3/5 | 5/8 | 6/10 | 3/10 | 4/10 |
 | gptoss | T3 self-consistency vote | 6/10 | 1/10 | 3/5 | 4/8 | 8/10 | 2/10 | 6/10 |
 | none | Stack trace + BM25 (no model) | 5/10 | 0/10 | 1/5 | 0/8 | 4/10 | 0/10 | 0/10 |
+
+## File level (is the buggy file among the first k files named?)
+
+| Model | Method | File Top-1 | File Top-3 | File Top-5 |
+|---|---|---|---|---|
+| qwen | Baseline (vanilla) | 71.4% | 87.3% | 87.3% |
+| qwen | Ablation: baseline prompt + vote | 73.0% | 88.9% | 90.5% |
+| qwen | T1 retrieved context | 65.1% | 68.3% | 68.3% |
+| qwen | T2 inspect-then-rank | 63.5% | 71.4% | 71.4% |
+| qwen | T3 self-consistency vote | 71.4% | 81.0% | 82.5% |
+| gptoss | Baseline (vanilla) | 54.0% | 76.2% | 76.2% |
+| gptoss | Ablation: baseline prompt + vote | 60.3% | 82.5% | 84.1% |
+| gptoss | T1 retrieved context | 61.9% | 76.2% | 76.2% |
+| gptoss | T2 inspect-then-rank | 42.9% | 60.3% | 61.9% |
+| gptoss | T3 self-consistency vote | 61.9% | 87.3% | 87.3% |
+| none | Stack trace + BM25 (no model) | 42.9% | 71.4% | 82.5% |
