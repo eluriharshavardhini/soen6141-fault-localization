@@ -65,7 +65,7 @@ Note: upstream `HEAD` keeps moving. Mining reads only commits inside the fixed d
   "repo": "psf/black", "buggy_commit": "...", "fix_commit": "...", "date": "2025-06-05T...",
   "fail_to_pass": ["tests.test_black.BlackTestCase::test_backslash_carriage_return"],
   "failure_output": {"<test id>": "<assertion + traceback on the buggy version>"},  // model input
-  "oracle": {"files": [...], "functions": ["black.comments::list_comments"], "lines": {"<file>": [..]}},
+  "oracle": {"files": [...], "functions": ["blib2to3.pgen2.tokenize::transform_whitespace"], "lines": {"<file>": [..]}},
   "fix_subject": "...",   // label only, never shown to a model
   "dep_pin_exclude_newer": "...", "python": "3.12"
 }
