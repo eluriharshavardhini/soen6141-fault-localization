@@ -4,9 +4,9 @@ SOEN 6141 course project: *Build a Benchmark, Then Beat the Baseline*. Task: **f
 
 Given a failing (bug-revealing) test and its output, rank the files, functions and lines most likely to contain the fault. The oracle is the code changed by the real developer fix, validated by a test that fails before the fix and passes after it.
 
-> Status: **Phase 1 complete**: 63 validated bugs from 7 repositories, June 2025 to October 2026.
+> Status: **Phase 2 complete**: baseline fault localization with two open-weight model families, plus two model-based contamination checks. See [Phase 2 results](docs/PHASE2_EVIDENCE.md).
 
-**Start here:** [Proposal](docs/proposal.md) · [Benchmark card](docs/BENCHMARK_CARD.md) · [Requirements → evidence](docs/PHASE1_EVIDENCE.md) · [Plain-language explainer](docs/EXPLAINER.md)
+**Start here:** [Proposal](docs/proposal.md) · [Benchmark card](docs/BENCHMARK_CARD.md) · Requirements → evidence: [Phase 1](docs/PHASE1_EVIDENCE.md), [Phase 2](docs/PHASE2_EVIDENCE.md) · [Plain-language explainer](docs/EXPLAINER.md)
 
 ## Verify any bug in one command
 
@@ -38,6 +38,20 @@ python scripts/contamination_overlap.py ../BugsInPy                        # con
 
 Note: upstream `HEAD` keeps moving. Mining reads only commits inside the fixed date window, so re-mining reproduces the same candidate list as long as upstream history is not rewritten.
 
+## Run the Phase 2 models
+
+Put your keys in an untracked `.env` file (git ignores it): `GROQ_API_KEY=...` and optionally
+`OPENROUTER_API_KEY=...`. All responses are cached in `data/llm_cache/`, so the scoring
+commands below reproduce the published numbers without any key.
+
+```bash
+python scripts/run_fl.py --model gptoss                             # baseline, Groq
+FL_PROVIDER=openrouter python scripts/run_fl.py --model qwen        # baseline, OpenRouter (Wafer host)
+python scripts/contamination_model.py build-old ../BugsInPy         # old-bug set for C2/C3
+python scripts/contamination_model.py c2 --model gptoss             # same for c3, and for qwen with FL_PROVIDER=openrouter
+python scripts/score.py && python scripts/contamination_model.py report && python scripts/cost_report.py
+```
+
 ## Layout
 
 | Path | Contents |
@@ -55,7 +69,13 @@ Note: upstream `HEAD` keeps moving. Mining reads only commits inside the fixed d
 | `data/screening_summary.md` | Counts per rule × repository |
 | `data/mining/`, `data/repro/` | Raw intermediate outputs |
 | `data/contamination/` | Contamination check results |
-| `logs/` | Run logs |
+| `scripts/llm.py` | Model client: Groq / OpenRouter, response cache, cost log, hard spending cap |
+| `scripts/run_fl.py`, `scripts/fl_common.py` | Fault-localization runs (baseline `vanilla`) |
+| `scripts/score.py` | Top-1/3/5, MRR, file Top-1 against the oracle |
+| `scripts/contamination_model.py` | Contamination checks C2 (old vs new bugs) and C3 (fix recall) |
+| `results/` | Predictions per technique and model, `scores.md` |
+| `data/llm_cache/` | Every model request and response (for exact re-scoring) |
+| `logs/` | Run logs, `llm_calls.jsonl` (one line per paid/free call), `cost_summary.md` |
 
 ## Instance format
 

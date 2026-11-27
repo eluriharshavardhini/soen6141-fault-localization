@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/responsetypes.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def from_content_disposition(self, content_disposition):\n        try:\n            filename = to_native_str(content_disposition).split(';')[1].split('=')[1]\n            filename = filename.strip('\"\\'')\n            return self.from_filename(filename)\n        except IndexError:\n            return Response\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"    def from_content_disposition(self, content_disposition):\\n        try:\\n            filename = to_native_str(content_disposition).split(';')[1].split('=')[1]\\n            filename = filename.strip('\\\"\\\\'')\\n            return self.from_filename(filename)\\n        except IndexError:\\n            return None\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 177,
+   "completion_tokens": 354,
+   "total_tokens": 531
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef bracket_split_build_line(\n    leaves: List[Leaf], original: Line, opening_bracket: Leaf, *, is_body: bool = False\n) -> Line:\n    \"\"\"Return a new line with given `leaves` and respective comments from `original`.\n\n    If `is_body` is True, the result line is one-indented inside brackets and as such\n    has its first leaf's prefix normalized and a trailing comma added when expected.\n    \"\"\"\n    result = Line(depth=original.depth)\n    if is_body:\n        result.inside_brackets = True\n        result.depth += 1\n        if leaves:\n            # Since body is a new indent level, remove spurious leading whitespace.\n            normalize_prefix(leaves[0], inside_brackets=True)\n            # Ensure a trailing comma when expected.\n            if original.is_import:\n                if leaves[-1].type != token.COMMA:\n                    leaves.append(Leaf(token.COMMA, \",\"))\n    # Populate the line\n    for leaf in leaves:\n        result.append(leaf, preformatted=True)\n        for comment_after in original.comments_after(leaf):\n            result.append(comment_after, preformatted=True)\n    if is_body:\n        result.should_explode = should_explode(result, opening_bracket)\n    return result\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def bracket_split_build_line(\\n    leaves: List[Leaf], original: Line, opening_bracket: Leaf, *, is_body: bool = False\\n) -> Line:\\n    \\\"\\\"\\\"Return a new line with given `leaves` and respective comments from `original`.\\n\\n    If `is_body` is True, the result line is one-indented inside brackets and as such\\n    has its first leaf's prefix normalized and a trailing comma added when expected.\\n    \\\"\\\"\\\"\\n    result = Line(depth=original.depth)\\n    if is_body:\\n        result.inside_brackets = True\\n        result.depth += 1\\n        if leaves:\\n            # Since body is a new indent level, remove spurious leading whitespace.\\n            normalize_prefix(leaves[0], inside_brackets=True)\\n            # Ensure a trailing comma when expected.\\n            if original.is_import:\\n                if leaves[-1].type != token.COMMA:\\n                    leaves.append(Leaf(token.COMMA, \\\",\\\"))\\n    # Populate the line\\n    for leaf in leaves:\\n        result.append(leaf, preformatted=True)\\n        for comment_after in original.comments_after(leaf):\\n            result.append(comment_after, preformatted=True)\\n    if is_body:\\n        result.should_explode = should_explode(result, opening_bracket)\\n    return result\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 426,
+   "completion_tokens": 755,
+   "total_tokens": 1181
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_d6de37e6be"
+ }
+}

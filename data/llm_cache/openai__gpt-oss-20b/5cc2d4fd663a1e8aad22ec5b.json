@@ -1,0 +1,28 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project marshmallow-code/marshmallow, file src/marshmallow/validate.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def options(\n        self,\n        valuegetter: str | typing.Callable[[typing.Any], typing.Any] = str,\n    ) -> typing.Iterable[tuple[typing.Any, str]]:\n        \"\"\"Return a generator over the (value, label) pairs, where value\n        is a string associated with each choice. This convenience method\n        is useful to populate, for instance, a form select field.\n\n        :param valuegetter: Can be a callable or a string. In the former case, it must\n            be a one-argument callable which returns the value of a\n            choice. In the latter case, the string specifies the name\n            of an attribute of the choice objects. Defaults to `str()`.\n        \"\"\"\n        valuegetter = valuegetter if callable(valuegetter) else attrgetter(valuegetter)\n        pairs = zip_longest(self.choices, self.labels, fillvalue=\"\")\n\n        return ((valuegetter(choice), label) for choice, label in pairs)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def options(self, valuegetter: str | typing.Callable[[typing.Any], typing.Any] = str) -> typing.Iterable[tuple[typing.Any, str]]:\\n    \\\"\\\"\\\"Return a generator over the (value, label) pairs, where value\\n    is a string associated with each choice. This convenience method\\n    is useful to populate, for instance, a form select field.\\n\\n    :param valuegetter: Can be a callable or a string. In the former case, it must\\n        be a one-argument callable which returns the value of a\\n        choice. In the latter case, the string specifies the name\\n        of an attribute of the choice objects. Defaults to `str()`.\\\"\\\"\\\"\\n    valuegetter = valuegetter if callable(valuegetter) else attrgetter(valuegetter)\\n    return ((valuegetter(choice), label) for choice, label in zip(self.choices, self.labels))\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 374,
+   "completion_tokens": 506,
+   "total_tokens": 880
+  },
+  "system_fingerprint": "fp_e11c8bbf69"
+ }
+}

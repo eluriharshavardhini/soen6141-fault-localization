@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/gz.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef is_gzipped(response):\n    \"\"\"Return True if the response is gzipped, or False otherwise\"\"\"\n    ctype = response.headers.get('Content-Type', b'')\n    return ctype in (b'application/x-gzip', b'application/gzip')\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def is_gzipped(response):\\n    \\\"\\\"\\\"Return True if the response is gzipped, or False otherwise\\\"\\\"\\\"\\n    ctype = response.headers.get('Content-Type', b'')\\n    return ctype.startswith(b'application/x-gzip') or ctype.startswith(b'application/gzip')\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 169,
+   "completion_tokens": 610,
+   "total_tokens": 779
+  },
+  "route": "openrouter",
+  "host": "Parasail",
+  "system_fingerprint": null
+ }
+}

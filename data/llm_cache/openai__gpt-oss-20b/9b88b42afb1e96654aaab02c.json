@@ -1,0 +1,28 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file src/blib2to3/pgen2/tokenize.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef transform_whitespace(\n    token: pytokens.Token, source: str, prev_token: Optional[pytokens.Token]\n) -> pytokens.Token:\n    r\"\"\"\n    Black treats `\\\\\\n` at the end of a line as a 'NL' token, while it\n    is ignored as whitespace in the regular Python parser.\n    But, only the first one. If there's a `\\\\\\n` following it\n    (as in, a \\ just by itself on a line), that is not made into NL.\n    \"\"\"\n    if (\n        token.type == TokenType.whitespace\n        and prev_token is not None\n        and prev_token.type not in (TokenType.nl, TokenType.newline)\n    ):\n        token_str = source[token.start_index : token.end_index]\n        if token_str.startswith(\"\\\\\\n\"):\n            return pytokens.Token(\n                TokenType.nl,\n                token.start_index,\n                token.start_index + 2,\n                token.start_line,\n                token.start_col,\n                token.start_line,\n                token.start_col + 2,\n            )\n\n    return token\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def transform_whitespace(\\n    token: pytokens.Token, source: str, prev_token: Optional[pytokens.Token]\\n) -> pytokens.Token:\\n    r\\\"\\\"\\\"\\n    Black treats `\\\\\\\\\\\\n` at the end of a line as a 'NL' token, while it\\n    is ignored as whitespace in the regular Python parser.\\n    But, only the first one. If there's a `\\\\\\\\\\\\n` following it\\n    (as in, a \\\\ just by itself on a line), that is not made into NL.\\n    \\\"\\\"\\\"\\n    if (\\n        token.type == TokenType.WHITESPACE\\n        and prev_token is not None\\n        and prev_token.type not in (TokenType.nl, TokenType.newline)\\n    ):\\n        token_str = source[token.start_index : token.end_index]\\n        if token_str.startswith(\\\"\\\\\\\\\\\\n\\\"):\\n            return pytokens.Token(\\n                TokenType.nl,\\n                token.start_index,\\n                token.start_index + 2,\\n                token.start_line,\\n                token.start_col,\\n                token.start_line,\\n                token.start_col + 2,\\n            )\\n\\n    return token\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 399,
+   "completion_tokens": 664,
+   "total_tokens": 1063
+  },
+  "system_fingerprint": "fp_e23fc997ca"
+ }
+}

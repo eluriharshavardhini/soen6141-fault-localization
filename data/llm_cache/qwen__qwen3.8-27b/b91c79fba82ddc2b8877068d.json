@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project tobymao/sqlglot, file sqlglot/dialects/tsql.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n        def create_sql(self, expression: exp.Create) -> str:\n            kind = expression.kind\n            exists = expression.args.pop(\"exists\", None)\n\n            like_property = expression.find(exp.LikeProperty)\n            if like_property:\n                ctas_expression = like_property.this\n            else:\n                ctas_expression = expression.expression\n\n            if kind == \"VIEW\":\n                expression.this.set(\"catalog\", None)\n                with_ = expression.args.get(\"with\")\n                if ctas_expression and with_:\n                    # We've already preprocessed the Create expression to bubble up any nested CTEs,\n                    # but CREATE VIEW actually requires the WITH clause to come after it so we need\n                    # to amend the AST by moving the CTEs to the CREATE VIEW statement's query.\n                    ctas_expression.set(\"with\", with_.pop())\n\n            sql = super().create_sql(expression)\n\n            table = expression.find(exp.Table)\n\n            # Convert CTAS statement to SELECT .. INTO ..\n            if kind == \"TABLE\" and ctas_expression:\n                if isinstance(ctas_expression, exp.UNWRAPPED_QUERIES):\n                    ctas_expression = ctas_expression.subquery()\n\n                properties = expression.args.get(\"properties\") or exp.Properties()\n                is_temp = any(isinstance(p, exp.TemporaryProperty) for p in properties.expressions)\n\n                select_into = exp.select(\"*\").from_(exp.alias_(ctas_expression, \"temp\", table=True))\n                select_into.set(\"into\", exp.Into(this=table, temporary=is_temp))\n\n                if like_property:\n                    select_into.limit(0, copy=False)\n\n                sql = self.sql(select_into)\n\n            if exists:\n                identifier = self.sql(exp.Literal.string(exp.table_name(table) if table else \"\"))\n                sql_with_ctes = self.prepend_ctes(expression, sql)\n                sql_literal = self.sql(exp.Literal.string(sql_with_ctes))\n                if kind == \"SCHEMA\":\n                    return f\"\"\"IF NOT EXISTS (SELECT * FROM information_schema.schemata WHERE schema_name = {identifier}) EXEC({sql_literal})\"\"\"\n                elif kind == \"TABLE\":\n                    assert table\n                    where = exp.and_(\n                        exp.column(\"table_name\").eq(table.name),\n                        exp.column(\"table_schema\").eq(table.db) if table.db else None,\n                        exp.column(\"table_catalog\").eq(table.catalog) if table.catalog else None,\n                    )\n                    return f\"\"\"IF NOT EXISTS (SELECT * FROM information_schema.tables WHERE {where}) EXEC({sql_literal})\"\"\"\n                elif kind == \"INDEX\":\n                    index = self.sql(exp.Literal.string(expression.this.text(\"this\")))\n                    return f\"\"\"IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = object_id({identifier}) AND name = {index}) EXEC({sql_literal})\"\"\"\n            elif expression.args.get(\"replace\"):\n                sql = sql.replace(\"CREATE OR REPLACE \", \"CREATE OR ALTER \", 1)\n\n            return self.prepend_ctes(expression, sql)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "",
+  "finish_reason": "length",
+  "usage": {
+   "prompt_tokens": 766,
+   "completion_tokens": 6000,
+   "total_tokens": 6766
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

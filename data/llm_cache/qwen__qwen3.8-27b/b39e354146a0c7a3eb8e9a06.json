@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef dump_to_file(*output: str) -> str:\n    \"\"\"Dump `output` to a temporary file. Return path to the file.\"\"\"\n    import tempfile\n\n    with tempfile.NamedTemporaryFile(\n        mode=\"w\", prefix=\"blk_\", suffix=\".log\", delete=False\n    ) as f:\n        for lines in output:\n            f.write(lines)\n            if lines and lines[-1] != \"\\n\":\n                f.write(\"\\n\")\n    return f.name\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def dump_to_file(*output: str) -> str:\\n    \\\"\\\"\\\"Dump `output` to a temporary file. Return path to the file.\\\"\\\"\\\"\\n    import tempfile\\n\\n    with tempfile.NamedTemporaryFile(\\n        mode=\\\"w\\\", prefix=\\\"blk_\\\", suffix=\\\".log\\\", delete=False\\n    ) as f:\\n        for lines in output:\\n            f.write(lines)\\n            if lines and lines[-1] != \\\"\\\\n\\\":\\n                f.write(\\\"\\\\n\\\")\\n        return f.name\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 212,
+   "completion_tokens": 982,
+   "total_tokens": 1194
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file src/black/comments.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef _is_valid_standalone_fmt_comment(\n    comment: ProtoComment, leaf: Leaf, is_fmt_off: bool, is_fmt_skip: bool\n) -> bool:\n    \"\"\"Check if comment is a valid standalone fmt directive.\n\n    We only want standalone comments. If there's no previous leaf or if\n    the previous leaf is indentation, it's a standalone comment in disguise.\n    \"\"\"\n    if comment.type == STANDALONE_COMMENT:\n        return True\n\n    prev = preceding_leaf(leaf)\n    if not prev:\n        return True\n\n    # Treat STANDALONE_COMMENT nodes as whitespace for check\n    if is_fmt_off and prev.type not in WHITESPACE and prev.type != STANDALONE_COMMENT:\n        return False\n    if is_fmt_skip and prev.type in WHITESPACE:\n        return False\n\n    return True\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def _is_valid_standalone_fmt_comment(\\n    comment: ProtoComment, leaf: Leaf, is_fmt_off: bool, is_fmt_skip: bool\\n) -> bool:\\n    \\\"\\\"\\\"Check if comment is a valid standalone fmt directive.\\n\\n    We only want standalone comments. If there's no previous leaf or if\\n    the previous leaf is indentation, it's a standalone comment in disguise.\\n    \\\"\\\"\\\"\\n    if comment.type == STANDALONE_COMMENT:\\n        return True\\n\\n    prev = preceding_leaf(leaf)\\n    if not prev:\\n        return True\\n\\n    # Treat STANDALONE_COMMENT nodes as whitespace for check\\n    if is_fmt_off and prev.type not in WHITESPACE and prev.type != STANDALONE_COMMENT:\\n        return False\\n    if is_fmt_skip and prev.type not in WHITESPACE and prev.type != STANDALONE_COMMENT:\\n        return False\\n\\n    return True\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 292,
+   "completion_tokens": 1275,
+   "total_tokens": 1567
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

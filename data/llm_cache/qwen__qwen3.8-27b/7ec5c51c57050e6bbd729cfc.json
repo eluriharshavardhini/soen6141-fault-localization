@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pallets/click, file src/click/shell_completion.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def get_completion_args(self) -> tuple[list[str], str]:\n        cwords = split_arg_string(os.environ[\"COMP_WORDS\"])\n        incomplete = os.environ[\"COMP_CWORD\"]\n        args = cwords[1:]\n\n        # Fish stores the partial word in both COMP_WORDS and\n        # COMP_CWORD, remove it from complete args.\n        if incomplete and args and args[-1] == incomplete:\n            args.pop()\n\n        return args, incomplete\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"    def get_completion_args(self) -> tuple[list[str], str]:\\n        cwords = split_arg_string(os.environ[\\\"COMP_WORDS\\\"])\\n        incomplete = cwords[int(os.environ[\\\"COMP_CWORD\\\"])]\\n        args = cwords[1:]\\n\\n        # Fish stores the partial word in both COMP_WORDS and\\n        # COMP_CWORD, remove it from complete args.\\n        if incomplete and args and args[-1] == incomplete:\\n            args.pop()\\n\\n        return args, incomplete\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 215,
+   "completion_tokens": 661,
+   "total_tokens": 876
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_fea14bdc83"
+ }
+}

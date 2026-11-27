@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/url.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef _safe_ParseResult(parts, encoding='utf8', path_encoding='utf8'):\n    return (\n        to_native_str(parts.scheme),\n        to_native_str(parts.netloc.encode('idna')),\n\n        # default encoding for path component SHOULD be UTF-8\n        quote(to_bytes(parts.path, path_encoding), _safe_chars),\n        quote(to_bytes(parts.params, path_encoding), _safe_chars),\n\n        # encoding of query and fragment follows page encoding\n        # or form-charset (if known and passed)\n        quote(to_bytes(parts.query, encoding), _safe_chars),\n        quote(to_bytes(parts.fragment, encoding), _safe_chars)\n    )\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def _safe_ParseResult(parts, encoding='utf8', path_encoding='utf8'):\\n    return (\\n        to_native_str(parts.scheme),\\n        to_native_str(parts.netloc.encode('idna')),\\n\\n        # default encoding for path component SHOULD be UTF-8\\n        quote(to_bytes(parts.path, path_encoding), _safe_chars),\\n        quote(to_bytes(parts.params, path_encoding), _safe_chars),\\n\\n        # encoding of query and fragment follows page encoding\\n        # or form-charset (if known and passed)\\n        quote(to_bytes(parts.query, encoding), _safe_chars),\\n        quote(to_bytes(parts.fragment, encoding), _safe_chars)\\n    )\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 299,
+   "completion_tokens": 379,
+   "total_tokens": 678
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_c5a89987dc"
+ }
+}

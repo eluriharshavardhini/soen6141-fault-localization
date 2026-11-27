@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/pipelines/images.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def convert_image(self, image, size=None):\n        if image.format == 'PNG' and image.mode == 'RGBA':\n            background = Image.new('RGBA', image.size, (255, 255, 255))\n            background.paste(image, image)\n            image = background.convert('RGB')\n        elif image.mode != 'RGB':\n            image = image.convert('RGB')\n\n        if size:\n            image = image.copy()\n            image.thumbnail(size, Image.ANTIALIAS)\n\n        buf = BytesIO()\n        image.save(buf, 'JPEG')\n        return image, buf\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def convert_image(self, image, size=None):\\n    if image.format == 'PNG' and image.mode == 'RGBA':\\n        background = Image.new('RGB', image.size, (255, 255, 255))\\n        background.paste(image, mask=image.split()[3])\\n        image = background\\n    elif image.mode != 'RGB':\\n        image = image.convert('RGB')\\n\\n    if size:\\n        image = image.copy()\\n        image.thumbnail(size, Image.LANCZOS)\\n\\n    buf = BytesIO()\\n    image.save(buf, 'JPEG')\\n    return image, buf\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 286,
+   "completion_tokens": 366,
+   "total_tokens": 652
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_487ff4efc6"
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project marshmallow-code/marshmallow, file src/marshmallow/fields.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    @property\n    def _field_data_key(self) -> str:\n        only_field = self.schema.fields[self.field_name]\n        return only_field.data_key or self.field_name\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"    @property\\n    def _field_data_key(self) -> str:\\n        return self.data_key or self.field_name\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 158,
+   "completion_tokens": 618,
+   "total_tokens": 776
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

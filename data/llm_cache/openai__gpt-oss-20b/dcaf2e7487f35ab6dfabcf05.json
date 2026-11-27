@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pylint-dev/astroid, file astroid/nodes/node_classes.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def default_value(self, argname):\n        \"\"\"Get the default value for an argument.\n\n        :param argname: The name of the argument to get the default value for.\n        :type argname: str\n\n        :raises NoDefault: If there is no default value defined for the\n            given argument.\n        \"\"\"\n        args = [\n            arg for arg in self.arguments if arg.name not in [self.vararg, self.kwarg]\n        ]\n\n        index = _find_arg(argname, self.kwonlyargs)[0]\n        if (index is not None) and (len(self.kw_defaults) > index):\n            if self.kw_defaults[index] is not None:\n                return self.kw_defaults[index]\n            raise NoDefault(func=self.parent, name=argname)\n\n        index = _find_arg(argname, args)[0]\n        if index is not None:\n            idx = index - (len(args) - len(self.defaults) - len(self.kw_defaults))\n            if idx >= 0:\n                return self.defaults[idx]\n\n        raise NoDefault(func=self.parent, name=argname)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def default_value(self, argname):\\n        \\\"\\\"\\\"Get the default value for an argument.\\n\\n        :param argname: The name of the argument to get the default value for.\\n        :type argname: str\\n\\n        :raises NoDefault: If there is no default value defined for the\\n            given argument.\\n        \\\"\\\"\\\"\\n        args = [\\n            arg for arg in self.arguments if arg.name not in [self.vararg, self.kwarg]\\n        ]\\n\\n        index = _find_arg(argname, self.kwonlyargs)[0]\\n        if (index is not None) and (len(self.kw_defaults) > index):\\n            if self.kw_defaults[index] is not None:\\n                return self.kw_defaults[index]\\n            raise NoDefault(func=self.parent, name=argname)\\n\\n        index = _find_arg(argname, args)[0]\\n        if index is not None:\\n            idx = index - (len(args) - len(self.defaults))\\n            if idx >= 0:\\n                return self.defaults[idx]\\n\\n        raise NoDefault(func=self.parent, name=argname)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 395,
+   "completion_tokens": 358,
+   "total_tokens": 753
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_d23c14756c"
+ }
+}

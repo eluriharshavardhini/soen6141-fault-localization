@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pylint-dev/astroid, file astroid/brain/brain_namedtuple_enum.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef _is_enum_subclass(cls: nodes.ClassDef) -> bool:\n    \"\"\"Return whether cls is a subclass of an Enum.\"\"\"\n    return cls.is_subtype_of(\"enum.Enum\")\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def _is_enum_subclass(cls: nodes.ClassDef) -> bool:\\n    \\\"\\\"\\\"Return whether cls is a subclass of an Enum.\\\"\\\"\\\"\\n    try:\\n        return cls.is_subtype_of(\\\"enum.Enum\\\")\\n    except exceptions.AstroidError:\\n        return False\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 159,
+   "completion_tokens": 1141,
+   "total_tokens": 1300
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

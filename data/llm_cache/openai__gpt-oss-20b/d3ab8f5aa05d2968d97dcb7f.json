@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/http/response/__init__.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def follow(self, url, callback=None, method='GET', headers=None, body=None,\n               cookies=None, meta=None, encoding='utf-8', priority=0,\n               dont_filter=False, errback=None):\n        # type: (...) -> Request\n        \"\"\"\n        Return a :class:`~.Request` instance to follow a link ``url``.\n        It accepts the same arguments as ``Request.__init__`` method,\n        but ``url`` can be a relative URL or a ``scrapy.link.Link`` object,\n        not only an absolute URL.\n        \n        :class:`~.TextResponse` provides a :meth:`~.TextResponse.follow` \n        method which supports selectors in addition to absolute/relative URLs\n        and Link objects.\n        \"\"\"\n        if isinstance(url, Link):\n            url = url.url\n        url = self.urljoin(url)\n        return Request(url, callback,\n                       method=method,\n                       headers=headers,\n                       body=body,\n                       cookies=cookies,\n                       meta=meta,\n                       encoding=encoding,\n                       priority=priority,\n                       dont_filter=dont_filter,\n                       errback=errback)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def follow(self, url, callback=None, method='GET', headers=None, body=None,\\n               cookies=None, meta=None, encoding='utf-8', priority=0,\\n               dont_filter=False, errback=None):\\n        # type: (...) -> Request\\n        \\\"\\\"\\\"\\n        Return a :class:`~.Request` instance to follow a link ``url``.\\n        It accepts the same arguments as ``Request.__init__`` method,\\n        but ``url`` can be a relative URL or a ``scrapy.link.Link`` object,\\n        not only an absolute URL.\\n        \\n        :class:`~.TextResponse` provides a :meth:`~.TextResponse.follow` \\n        method which supports selectors in addition to absolute/relative URLs\\n        and Link objects.\\n        \\\"\\\"\\\"\\n        if isinstance(url, Link):\\n            url = url.url\\n        url = self.urljoin(url)\\n        return Request(url, callback,\\n                       method=method,\\n                       headers=headers,\\n                       body=body,\\n                       cookies=cookies,\\n                       meta=meta,\\n                       encoding=encoding,\\n                       priority=priority,\\n                       dont_filter=dont_filter,\\n                       errback=errback)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 405,
+   "completion_tokens": 1097,
+   "total_tokens": 1502
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_5979a0e1b7"
+ }
+}

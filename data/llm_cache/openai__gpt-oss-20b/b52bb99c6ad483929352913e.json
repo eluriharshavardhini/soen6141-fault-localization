@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/http/request/__init__.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def _set_url(self, url):\n        if not isinstance(url, six.string_types):\n            raise TypeError('Request url must be str or unicode, got %s:' % type(url).__name__)\n\n        s = safe_url_string(url, self.encoding)\n        self._url = escape_ajax(s)\n\n        if ':' not in self._url:\n            raise ValueError('Missing scheme in request url: %s' % self._url)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def _set_url(self, url):\\n    if not isinstance(url, six.string_types):\\n        raise TypeError('Request url must be str or unicode, got %s:' % type(url).__name__)\\n\\n    if ':' not in url:\\n        raise ValueError('Missing scheme in request url: %s' % url)\\n\\n    s = safe_url_string(url, self.encoding)\\n    self._url = escape_ajax(s)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 259,
+   "completion_tokens": 434,
+   "total_tokens": 693
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_aef561cf8e"
+ }
+}

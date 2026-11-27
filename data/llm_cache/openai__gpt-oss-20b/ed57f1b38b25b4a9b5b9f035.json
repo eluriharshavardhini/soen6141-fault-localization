@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project python-poetry/tomlkit, file tomlkit/api.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef dumps(data: Mapping, sort_keys: bool = False) -> str:\n    \"\"\"\n    Dumps a TOMLDocument into a string.\n    \"\"\"\n    if not isinstance(data, Container) and isinstance(data, Mapping):\n        data = item(dict(data), _sort_keys=sort_keys)\n\n    try:\n        # data should be a `Container` (and therefore implement `as_string`)\n        # for all type safe invocations of this function\n        return data.as_string()  # type: ignore[attr-defined]\n    except AttributeError as ex:\n        msg = f\"Expecting Mapping or TOML Container, {type(data)} given\"\n        raise TypeError(msg) from ex\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def dumps(data: Mapping, sort_keys: bool = False) -> str:\\n    \\\"\\\"\\\"\\n    Dumps a TOMLDocument into a string.\\n    \\\"\\\"\\\"\\n    if isinstance(data, Mapping) and not isinstance(data, Container):\\n        data = item(dict(data), _sort_keys=sort_keys)\\n\\n    try:\\n        # data should be a `Container` (and therefore implement `as_string`)\\n        # for all type safe invocations of this function\\n        return data.as_string()  # type: ignore[attr-defined]\\n    except AttributeError as ex:\\n        msg = f\\\"Expecting Mapping or TOML Container, {type(data)} given\\\"\\n        raise TypeError(msg) from ex\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 309,
+   "completion_tokens": 220,
+   "total_tokens": 529
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_5979a0e1b7"
+ }
+}

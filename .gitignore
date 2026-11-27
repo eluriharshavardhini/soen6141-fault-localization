@@ -2,3 +2,4 @@ repos/
 submods/
 __pycache__/
 *.pyc
+.env

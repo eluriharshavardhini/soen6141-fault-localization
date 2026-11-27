@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/downloadermiddlewares/robotstxt.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def _robots_error(self, failure, netloc):\n        self._parsers.pop(netloc).callback(None)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"    def _robots_error(self, failure, netloc):\\n        parser = self._parsers.pop(netloc, None)\\n        if parser is not None:\\n            parser.callback(None)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 141,
+   "completion_tokens": 491,
+   "total_tokens": 632
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

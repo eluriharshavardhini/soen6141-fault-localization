@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/sitemap.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    @staticmethod\n    def _get_tag_name(elem: lxml.etree._Element) -> str:\n        if TYPE_CHECKING:\n            assert isinstance(elem.tag, str)\n        _, _, localname = elem.tag.partition(\"}\")\n        return localname or elem.tag\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    @staticmethod\\n    def _get_tag_name(elem: lxml.etree._Element) -> str:\\n        if TYPE_CHECKING:\\n            assert isinstance(elem.tag, str)\\n        tag = elem.tag\\n        if isinstance(tag, str):\\n            if \\\">\\\" in tag:\\n                return tag.split(\\\"}\\\", 1)[1]\\n            return tag\\n        # Fallback for QName objects\\n        return lxml.etree.QName(tag).localname\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 222,
+   "completion_tokens": 727,
+   "total_tokens": 949
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_d6de37e6be"
+ }
+}

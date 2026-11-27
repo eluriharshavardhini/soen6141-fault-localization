@@ -1,0 +1,28 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project marshmallow-code/marshmallow, file src/marshmallow/fields.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def __init__(self, constant: _ContantT, **kwargs: Unpack[_BaseFieldKwargs]):\n        super().__init__(**kwargs)\n        self.constant = constant\n        self.load_default = constant\n        self.dump_default = constant\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{}",
+  "finish_reason": "json_error",
+  "usage": {
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "total_tokens": null
+  },
+  "system_fingerprint": null
+ }
+}

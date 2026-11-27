@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/gz.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef gunzip(data):\n    \"\"\"Gunzip the given data and return as much data as possible.\n\n    This is resilient to CRC checksum errors.\n    \"\"\"\n    f = GzipFile(fileobj=BytesIO(data))\n    output = b''\n    chunk = b'.'\n    while chunk:\n        try:\n            chunk = read1(f, 8196)\n            output += chunk\n        except (IOError, EOFError, struct.error):\n            # complete only if there is some data, otherwise re-raise\n            # see issue 87 about catching struct.error\n            # some pages are quite small so output is '' and f.extrabuf\n            # contains the whole page content\n            if output or getattr(f, 'extrabuf', None):\n                try:\n                    output += f.extrabuf\n                finally:\n                    break\n            else:\n                raise\n    return output\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def gunzip(data):\\n    \\\"\\\"\\\"Gunzip the given data and return as much data as possible.\\n\\n    This is resilient to CRC checksum errors.\\n    \\\"\\\"\\\"\\n    f = GzipFile(fileobj=BytesIO(data))\\n    output = b''\\n    chunk = b'.'\\n    while chunk:\\n        try:\\n            chunk = read1(f, 8196)\\n            output += chunk\\n        except (IOError, EOFError, struct.error):\\n            # complete only if there is some data, otherwise re-raise\\n            # see issue 87 about catching struct.error\\n            # some pages are quite small so output is '' and f.extrabuf\\n            # contains the whole page content\\n            if output or getattr(f, \\\"extrabuf\\\", None):\\n                try:\\n                    output += getattr(f, \\\"extrabuf\\\", b\\\"\\\")\\n                finally:\\n                    break\\n            else:\\n                raise\\n    return output\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 314,
+   "completion_tokens": 2538,
+   "total_tokens": 2852
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

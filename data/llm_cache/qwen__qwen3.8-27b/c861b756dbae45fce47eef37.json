@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project tobymao/sqlglot, file sqlglot/parser.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def _parse_group(self, skip_group_by_token: bool = False) -> t.Optional[exp.Group]:\n        if not skip_group_by_token and not self._match(TokenType.GROUP_BY):\n            return None\n        comments = self._prev_comments\n\n        elements: t.Dict[str, t.Any] = defaultdict(list)\n\n        if self._match(TokenType.ALL):\n            elements[\"all\"] = True\n        elif self._match(TokenType.DISTINCT):\n            elements[\"all\"] = False\n\n        while True:\n            index = self._index\n\n            elements[\"expressions\"].extend(\n                self._parse_csv(\n                    lambda: None\n                    if self._match_set((TokenType.CUBE, TokenType.ROLLUP), advance=False)\n                    else self._parse_assignment()\n                )\n            )\n\n            before_with_index = self._index\n            with_prefix = self._match(TokenType.WITH)\n\n            if self._match(TokenType.ROLLUP):\n                elements[\"rollup\"].append(\n                    self._parse_cube_or_rollup(exp.Rollup, with_prefix=with_prefix)\n                )\n            elif self._match(TokenType.CUBE):\n                elements[\"cube\"].append(\n                    self._parse_cube_or_rollup(exp.Cube, with_prefix=with_prefix)\n                )\n            elif self._match(TokenType.GROUPING_SETS):\n                elements[\"grouping_sets\"].append(\n                    self.expression(\n                        exp.GroupingSets,\n                        expressions=self._parse_wrapped_csv(self._parse_grouping_set),\n                    )\n                )\n            elif self._match_text_seq(\"TOTALS\"):\n                elements[\"totals\"] = True  # type: ignore\n\n            if before_with_index <= self._index <= before_with_index + 1:\n                self._retreat(before_with_index)\n                break\n\n            if index == self._index:\n                break\n\n        return self.expression(exp.Group, comments=comments, **elements)  # type: ignore\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "",
+  "finish_reason": "length",
+  "usage": {
+   "prompt_tokens": 535,
+   "completion_tokens": 6000,
+   "total_tokens": 6535
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

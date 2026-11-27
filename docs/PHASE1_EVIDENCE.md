@@ -24,3 +24,5 @@ patch-identity comparison against ground truth (our C3) or a performance compari
 an older equivalent benchmark (our C2). Both need model outputs, so they run as the first
 step of Phase 2, once a model API key is available. C1 (identity overlap) is done now, but it
 is a supporting check, not one of the two the PDF names.
+
+**Update (Phase 2, 2026-11-27).** C2 and C3 are done. See [`PHASE2_EVIDENCE.md`](PHASE2_EVIDENCE.md).

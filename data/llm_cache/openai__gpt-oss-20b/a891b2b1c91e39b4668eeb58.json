@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/downloadermiddlewares/redirect.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def process_response(self, request, response, spider):\n        if (request.meta.get('dont_redirect', False) or\n                response.status in getattr(spider, 'handle_httpstatus_list', []) or\n                response.status in request.meta.get('handle_httpstatus_list', []) or\n                request.meta.get('handle_httpstatus_all', False)):\n            return response\n\n        allowed_status = (301, 302, 303, 307)\n        if 'Location' not in response.headers or response.status not in allowed_status:\n            return response\n\n        # HTTP header is ascii or latin1, redirected url will be percent-encoded utf-8\n        location = to_native_str(response.headers['location'].decode('latin1'))\n\n        redirected_url = urljoin(request.url, location)\n\n        if response.status in (301, 307) or request.method == 'HEAD':\n            redirected = request.replace(url=redirected_url)\n            return self._redirect(redirected, request, spider, response.status)\n\n        redirected = self._redirect_request_using_get(request, redirected_url)\n        return self._redirect(redirected, request, spider, response.status)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def process_response(self, request, response, spider):\\n        if (request.meta.get('dont_redirect', False) or\\n                response.status in getattr(spider, 'handle_httpstatus_list', []) or\\n                response.status in request.meta.get('handle_httpstatus_list', []) or\\n                request.meta.get('handle_httpstatus_all', False)):\\n            return response\\n\\n        allowed_status = (301, 302, 303, 307)\\n        if 'location' not in response.headers or response.status not in allowed_status:\\n            return response\\n\\n        # HTTP header is ascii or latin1, redirected url will be percent-encoded utf-8\\n        location = to_native_str(response.headers['location'].decode('latin1'))\\n\\n        redirected_url = urljoin(request.url, location)\\n\\n        if response.status in (301, 307) or request.method == 'HEAD':\\n            redirected = request.replace(url=redirected_url)\\n            return self._redirect(redirected, request, spider, response.status)\\n\\n        redirected = self._redirect_request_using_get(request, redirected_url)\\n        return self._redirect(redirected, request, spider, response.status)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 405,
+   "completion_tokens": 658,
+   "total_tokens": 1063
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_bb6a356524"
+ }
+}

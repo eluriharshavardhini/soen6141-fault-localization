@@ -1,0 +1,50 @@
+[30/63] pylint-dev__astroid-24027e6062: ['astroid.nodes.scoped_nodes.scoped_nodes::_filter_stmts', 'astroid.nodes.scoped_nodes.scoped_nodes::_get_filtered_node_statements'] tokens=3418
+[31/63] pylint-dev__astroid-37ec2fe95e: ['astroid.nodes.node_classes::Arguments.default_value', 'astroid.nodes.node_classes::_find_arg'] tokens=3186
+[32/63] pylint-dev__astroid-72b26ab0b0: ['astroid.nodes.scoped_nodes.scoped_nodes::FunctionDef.infer_call_result', 'astroid.nodes.scoped_nodes.scoped_nodes::_infer_decorator_callchain'] tokens=3101
+[33/63] pylint-dev__astroid-c1f1df7ddf: ['astroid.nodes.node_ng::_repr_tree', 'astroid.nodes.scoped_nodes.scoped_nodes::FunctionNode.getattr'] tokens=2958
+[34/63] python-poetry__tomlkit-bd31dbd8e2: ['tomlkit.api::dumps', 'tomlkit.container::Container._dump'] tokens=715
+[35/63] python-poetry__tomlkit-f8ce14b39c: ['tomlkit.parser::Parser._parse_array', 'tomlkit.parser::Parser._parse_value'] tokens=1492
+[36/63] python-poetry__tomlkit-de68fd06ee: ['tomlkit.parser::Parser._parse_table', 'tomlkit.parser::Parser._parse_aot'] tokens=1524
+[37/63] python-poetry__tomlkit-11e22aefcc: ['tomlkit.items::InlineTable.append', 'tomlkit.items::Table.append'] tokens=593
+[38/63] python-poetry__tomlkit-d3c76f0bbe: ['tomlkit.parser::_parse_table', 'tomlkit.parser::parse'] tokens=908
+[39/63] python-poetry__tomlkit-43668ddebc: ['tomlkit.toml_document::TomlDocument.__setitem__', 'tomlkit.container::Container.__setitem__'] tokens=837
+[40/63] python-poetry__tomlkit-495a42ecc9: ['tomlkit.toml_document::TomlDocument.as_string', 'tomlkit.container::Container._render'] tokens=903
+[41/63] python-poetry__tomlkit-49d6efa980: ['tomlkit.items::Time.__init__', 'tomlkit.items::DateTime.__init__'] tokens=873
+[42/63] python-poetry__tomlkit-8c30fc17d9: ['tomlkit.items::ArrayItem.__delitem__', 'tomlkit.items::ArrayItem.__setitem__'] tokens=744
+[43/63] python-poetry__tomlkit-c07c0c15c4: ['tomlkit.parser::Parser._get_line_col', 'tomlkit.parser::Parser._get_line'] tokens=1191
+[44/63] scrapy__scrapy-d239fcf936: ['scrapy.utils.response::get_meta_refresh'] tokens=3563
+Traceback (most recent call last):
+  File "/home/user/soen6141-fault-localization/scripts/run_fl.py", line 87, in <module>
+    main()
+    ~~~~^^
+  File "/home/user/soen6141-fault-localization/scripts/run_fl.py", line 74, in main
+    pred = fn(inst, a.model)
+  File "/home/user/soen6141-fault-localization/scripts/run_fl.py", line 43, in vanilla
+    r = chat(model, [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}],
+             max_tokens=1500, tag=f"vanilla:{inst['instance_id']}")
+  File "/home/user/soen6141-fault-localization/scripts/llm.py", line 172, in chat
+    resp, attempts = _call(route, body)
+                     ~~~~~^^^^^^^^^^^^^
+  File "/home/user/soen6141-fault-localization/scripts/llm.py", line 144, in _call
+    raise RuntimeError(f"{route} HTTP {e.code}: {text[:300]}") from None
+RuntimeError: groq HTTP 400: {"error":{"message":"Tool choice is none, but model called a tool","type":"invalid_request_error","code":"tool_use_failed","failed_generation":"{\"name\": \"container.exec\", \"arguments\": {\"cmd\":[\"bash\",\"-lc\",\"sed -n '1,200p' scrapy/pqueues.py\"]}}"}}
+
+[45/63] scrapy__scrapy-b68f26726a: ['scrapy.pqueues::DownloaderAwarePriorityQueue._rotate_slots', 'scrapy.pqueues::DownloaderAwarePriorityQueue._next_slot'] tokens=4039
+[46/63] scrapy__scrapy-f63a3aff25: ['scrapy.utils.url::strip_url', 'scrapy.utils.url::_strip_default_port'] tokens=4239
+[47/63] scrapy__scrapy-6ad8a043ca: ['scrapy.commands.genspider::handle_edit', 'scrapy.commands.edit::edit_command'] tokens=3738
+[48/63] scrapy__scrapy-deb7e2861e: ['scrapy.utils.sitemap::_get_tag_name', 'scrapy.utils.sitemap::_process_sitemap_element'] tokens=3445
+[49/63] scrapy__scrapy-01447f9965: ['scrapy.downloadermiddlewares.retry::RetryMiddleware._retry', 'scrapy.downloadermiddlewares.retry::RetryMiddleware._retry_response'] tokens=4048
+[50/63] scrapy__scrapy-0cbb20e8e8: ['scrapy.extensions.httpcache::FilesystemCacheStorage.retrieve_response'] tokens=4383
+[51/63] scrapy__scrapy-63d5ce6272: ['scrapy.downloadermiddlewares.cookies::CookiesMiddleware.process_request', 'scrapy.http.cookies::CookieJar._get_cookie_header'] tokens=3886
+[52/63] scrapy__scrapy-23abf7e18f: ['scrapy.utils.response::inject_base_url'] tokens=4526
+[53/63] scrapy__scrapy-a4109754c5: ['scrapy.utils.datatypes::LocalCache.__setitem__'] tokens=3335
+[54/63] tobymao__sqlglot-2a5aff1bb9: ['sqlglot.generator::Generator._format_data_type', 'sqlglot.dialects.postgres::PostgresGenerator._format_data_type'] tokens=1954
+[55/63] tobymao__sqlglot-021545ed57: ['sqlglot.dialects.tsql::TSQL::transform', 'sqlglot.dialects.tsql::TSQL::generate'] tokens=2402
+[56/63] tobymao__sqlglot-27ccb6fb98: ['sqlglot.dialects.fabric::FabricDialect.type_map'] tokens=1918
+[57/63] tobymao__sqlglot-9a0ace6c6a: ['sqlglot.lineage::to_node'] tokens=2504
+[58/63] tobymao__sqlglot-b0ff7e7179: ['sqlglot.dialects.snowflake::Parser._parse_group_by', 'sqlglot.dialects.snowflake::Parser._parse_limit'] tokens=2649
+[59/63] tobymao__sqlglot-0e46260bd6: ['sqlglot.dialects.postgres::PostgresGenerator._render_between'] tokens=1922
+[60/63] tobymao__sqlglot-92bef7b1d3: ['sqlglot.dialects.snowflake::SnowflakeGenerator._generate_add_months', 'sqlglot.dialects.snowflake::SnowflakeGenerator._generate_date_add'] tokens=2774
+[61/63] tobymao__sqlglot-e014b4c6d6: ['sqlglot.dialects.tsql::TSQLGenerator._type', 'sqlglot.generator::Generator._type'] tokens=2916
+[62/63] tobymao__sqlglot-6f97a23cef: ['sqlglot.parser.Parser::_parse_for', 'sqlglot.dialects.bigquery::BigQueryDialect::_parse_for'] tokens=2852
+[63/63] tobymao__sqlglot-00c800c6b2: ['sqlglot.optimizer.qualify_columns::_select_by_pos', 'sqlglot.optimizer.qualify_columns::_expand_positional_references'] tokens=2286

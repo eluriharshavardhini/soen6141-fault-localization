@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/request.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef request_httprepr(request):\n    \"\"\"Return the raw HTTP representation (as bytes) of the given request.\n    This is provided only for reference since it's not the actual stream of\n    bytes that will be send when performing the request (that's controlled\n    by Twisted).\n    \"\"\"\n    parsed = urlparse_cached(request)\n    path = urlunparse(('', '', parsed.path or '/', parsed.params, parsed.query, ''))\n    s = to_bytes(request.method) + b\" \" + to_bytes(path) + b\" HTTP/1.1\\r\\n\"\n    s += b\"Host: \" + to_bytes(parsed.hostname) + b\"\\r\\n\"\n    if request.headers:\n        s += request.headers.to_string() + b\"\\r\\n\"\n    s += b\"\\r\\n\"\n    s += request.body\n    return s\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def request_httprepr(request):\\n    \\\"\\\"\\\"Return the raw HTTP representation (as bytes) of the given request.\\n    This is provided only for reference since it's not the actual stream of\\n    bytes that will be send when performing the request (that's controlled\\n    by Twisted).\\n    \\\"\\\"\\\"\\n    parsed = urlparse_cached(request)\\n    path = urlunparse(('', '', parsed.path or '/', parsed.params, parsed.query, ''))\\n    s = to_bytes(request.method) + b\\\" \\\" + to_bytes(path) + b\\\" HTTP/1.1\\\\r\\\\n\\\"\\n    s += b\\\"Host: \\\" + to_bytes(parsed.netloc) + b\\\"\\\\r\\\\n\\\"\\n    if request.headers:\\n        s += request.headers.to_string() + b\\\"\\\\r\\\\n\\\"\\n    s += b\\\"\\\\r\\\\n\\\"\\n    s += request.body\\n    return s\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 295,
+   "completion_tokens": 789,
+   "total_tokens": 1084
+  },
+  "route": "openrouter",
+  "host": "Tenstorrent",
+  "system_fingerprint": "vllm-0.30.0-dp4-5fd20499"
+ }
+}

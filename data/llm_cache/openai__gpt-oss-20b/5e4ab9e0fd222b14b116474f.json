@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/downloadermiddlewares/redirect.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def process_response(self, request, response, spider):\n        if (request.meta.get('dont_redirect', False) or\n               response.status in getattr(spider, 'handle_httpstatus_list', [])):\n            return response\n\n        if request.method == 'HEAD':\n            if response.status in [301, 302, 303, 307] and 'Location' in response.headers:\n                redirected_url = urljoin(request.url, response.headers['location'])\n                redirected = request.replace(url=redirected_url)\n                return self._redirect(redirected, request, spider, response.status)\n            else:\n                return response\n\n        if response.status in [302, 303] and 'Location' in response.headers:\n            redirected_url = urljoin(request.url, response.headers['location'])\n            redirected = self._redirect_request_using_get(request, redirected_url)\n            return self._redirect(redirected, request, spider, response.status)\n\n        if response.status in [301, 307] and 'Location' in response.headers:\n            redirected_url = urljoin(request.url, response.headers['location'])\n            redirected = request.replace(url=redirected_url)\n            return self._redirect(redirected, request, spider, response.status)\n\n        return response\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def process_response(self, request, response, spider):\\n    if request.meta.get('dont_redirect', False) or response.status in getattr(spider, 'handle_httpstatus_list', []):\\n        return response\\n\\n    location = response.headers.get('Location')\\n    if not location:\\n        return response\\n\\n    if request.method == 'HEAD':\\n        if response.status in (301, 302, 303, 307):\\n            redirected_url = urljoin(request.url, location)\\n            redirected = request.replace(url=redirected_url)\\n            return self._redirect(redirected, request, spider, response.status)\\n        return response\\n\\n    if response.status in (302, 303):\\n        redirected_url = urljoin(request.url, location)\\n        redirected = self._redirect_request_using_get(request, redirected_url)\\n        return self._redirect(redirected, request, spider, response.status)\\n\\n    if response.status in (301, 307):\\n        redirected_url = urljoin(request.url, location)\\n        redirected = request.replace(url=redirected_url)\\n        return self._redirect(redirected, request, spider, response.status)\\n\\n    return response\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 424,
+   "completion_tokens": 1263,
+   "total_tokens": 1687
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_1d46a73b8b"
+ }
+}

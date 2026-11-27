@@ -1,0 +1,28 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file src/black/__init__.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n@mypyc_attr(patchable=True)\ndef reformat_one(\n    src: Path,\n    fast: bool,\n    write_back: WriteBack,\n    mode: Mode,\n    report: \"Report\",\n    *,\n    lines: Collection[tuple[int, int]] = (),\n    no_cache: bool = False,\n    cache_dir: Path | None = None,\n) -> None:\n    \"\"\"Reformat a single file under `src` without spawning child processes.\n\n    `fast`, `write_back`, and `mode` options are passed to\n    :func:`format_file_in_place` or :func:`format_stdin_to_stdout`.\n    \"\"\"\n    try:\n        changed = Changed.NO\n\n        if str(src) == \"-\":\n            is_stdin = True\n        elif str(src).startswith(STDIN_PLACEHOLDER):\n            is_stdin = True\n            # Use the original name again in case we want to print something\n            # to the user\n            src = Path(str(src)[len(STDIN_PLACEHOLDER) :])\n        else:\n            is_stdin = False\n\n        if is_stdin:\n            if src.suffix == \".pyi\":\n                mode = replace(mode, is_pyi=True)\n            elif src.suffix == \".ipynb\":\n                mode = replace(mode, is_ipynb=True)\n            if format_stdin_to_stdout(\n                fast=fast, write_back=write_back, mode=mode, lines=lines\n            ):\n                changed = Changed.YES\n        else:\n            if no_cache:\n                cache = None\n            elif cache_dir is None:\n                cache = Cache.read(mode)\n            else:\n                cache = Cache.read(mode, cache_dir)\n            if cache is not None and write_back not in (\n                WriteBack.DIFF,\n                WriteBack.COLOR_DIFF,\n            ):\n                if not cache.is_changed(src):\n                    changed = Changed.CACHED\n            if changed is not Changed.CACHED and format_file_in_place(\n                src, fast=fast, write_back=write_back, mode=mode, lines=lines\n            ):\n                changed = Changed.YES\n            if cache is not None and (\n                (write_back is WriteBack.YES and changed is not Changed.CACHED)\n                or (write_back is WriteBack.CHECK and changed is Changed.NO)\n            ):\n                cache.write([src])\n        report.done(src, changed)\n    except Exception as exc:\n        if report.verbose:\n            traceback.print_exc()\n        report.failed(src, exc)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"@mypyc_attr(patchable=True)\\n\\ndef reformat_one(\\n    src: Path,\\n    fast: bool,\\n    write_back: WriteBack,\\n    mode: Mode,\\n    report: \\\"Report\\\",\\n    *,\\n    lines: Collection[tuple[int, int]] = (),\\n    no_cache: bool = False,\\n    cache_dir: Path | None = None,\\n) -> None:\\n    \\\"\\\"\\\"Reformat a single file under `src` without spawning child processes.\\n\\n    `fast`, `write_back`, and `mode` options are passed to\\n    :func:`format_file_in_place` or :func:`format_stdin_to_stdout`.\\n    \\\"\\\"\\\"\\n    try:\\n        changed = Changed.NO\\n\\n        if str(src) == \\\"-\\\":\\n            is_stdin = True\\n        elif str(src).startswith(STDIN_PLACEHOLDER):\\n            is_stdin = True\\n            # Use the original name again in case we want to print something\\n            # to the user\\n            src = Path(str(src)[len(STDIN_PLACEHOLDER) :])\\n        else:\\n            is_stdin = False\\n\\n        if is_stdin:\\n            if src.suffix == \\\".pyi\\\":\\n                mode = replace(mode, is_pyi=True)\\n            elif src.suffix == \\\".ipynb\\\":\\n                mode = replace(mode, is_ipynb=True)\\n            if format_stdin_to_stdout(\\n                fast=fast, write_back=write_back, mode=mode, lines=lines\\n            ):\\n                changed = Changed.YES\\n        else:\\n            if no_cache:\\n                cache = None\\n            elif cache_dir is None:\\n                cache = Cache.read(mode)\\n            else:\\n                cache = Cache.read(mode, cache_dir)\\n            if cache is not None and write_back not in (\\n                WriteBack.DIFF,\\n                WriteBack.COLOR_DIFF,\\n            ):\\n                if not cache.is_changed(src):\\n                    changed = Changed.CACHED\\n            if changed is not Changed.CACHED and format_file_in_place(\\n                src, fast=fast, write_back=write_back, mode=mode, lines=lines\\n            ):\\n                changed = Changed.YES\\n            if cache is not None and (\\n                (write_back is WriteBack.YES and changed is not Changed.CACHED)\\n                or (write_back is WriteBack.CHECK and changed is Changed.NO)\\n            ):\\n                cache.write([src])\\n        report.done(src, changed)\\n    except Exception as exc:\\n        if report.verbose:\\n            traceback.print_exc()\\n        report.failed(src, exc)\\n\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 678,
+   "completion_tokens": 866,
+   "total_tokens": 1544
+  },
+  "system_fingerprint": "fp_f102a3179c"
+ }
+}

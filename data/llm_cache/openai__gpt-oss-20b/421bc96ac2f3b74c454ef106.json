@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project tobymao/sqlglot, file sqlglot/dialects/bigquery.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n        def _parse_for_in(self) -> exp.ForIn:\n            this = self._parse_range()\n            self._match_text_seq(\"DO\")\n            return self.expression(exp.ForIn, this=this, expression=self._parse_statement())\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def _parse_for_in(self) -> exp.ForIn:\\n    this = self._parse_range()\\n    self._match_text_seq(\\\"DO\\\")\\n    expression = self._parse_statement()\\n    self._match_text_seq(\\\"END\\\")\\n    return self.expression(exp.ForIn, this=this, expression=expression)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 221,
+   "completion_tokens": 499,
+   "total_tokens": 720
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_ef00694abe"
+ }
+}

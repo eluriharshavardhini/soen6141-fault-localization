@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project python-poetry/tomlkit, file tomlkit/items.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def insert(self, pos: int, value: Any) -> None:  # type: ignore[override]\n        it = item(value, _parent=self)\n        length = len(self)\n        if not isinstance(it, (Comment, Whitespace)):\n            list.insert(self, pos, it)\n        if pos < 0:\n            pos += length\n            if pos < 0:\n                pos = 0\n\n        idx = 0  # insert position of the self._value list\n        default_indent = \" \"\n        if pos < length:\n            try:\n                idx = self._index_map[pos]\n            except KeyError as e:\n                raise IndexError(\"list index out of range\") from e\n        else:\n            idx = len(self._value)\n            if idx >= 1 and self._value[idx - 1].is_whitespace():\n                # The last item is a pure whitespace(\\n ), insert before it\n                idx -= 1\n                _indent = self._value[idx].indent\n                if _indent is not None and \"\\n\" in _indent.s:\n                    default_indent = \"\\n    \"\n        indent: Whitespace | None = None\n        comma: Whitespace | None = Whitespace(\",\") if pos < length else None\n        if idx < len(self._value) and not self._value[idx].is_whitespace():\n            # Prefer to copy the indentation from the item after\n            indent = self._value[idx].indent\n        if idx > 0:\n            last_item = self._value[idx - 1]\n            if indent is None:\n                indent = last_item.indent\n            if not isinstance(last_item.value, Null) and \"\\n\" in default_indent:\n                # Copy the comma from the last item if 1) it contains a value and\n                # 2) the array is multiline\n                comma = last_item.comma\n            if last_item.comma is None and not isinstance(last_item.value, Null):\n                # Add comma to the last item to separate it from the following items.\n                last_item.comma = Whitespace(\",\")\n        if indent is None and (idx > 0 or \"\\n\" in default_indent):\n            # apply default indent if it isn't the first item or the array is multiline.\n            indent = Whitespace(default_indent)\n        new_item = _ArrayItemGroup(value=it, indent=indent, comma=comma)\n        self._value.insert(idx, new_item)\n        self._reindex()\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def insert(self, pos: int, value: Any) -> None:  # type: ignore[override]\\n    # Adjust negative positions before inserting\\n    length = len(self)\\n    if pos < 0:\\n        pos += length\\n        if pos < 0:\\n            pos = 0\\n    it = item(value, _parent=self)\\n    if not isinstance(it, (Comment, Whitespace)):\\n        list.insert(self, pos, it)\\n    idx = 0  # insert position of the self._value list\\n    default_indent = \\\" \\\"\\n    if pos < length:\\n        try:\\n            idx = self._index_map[pos]\\n        except KeyError as e:\\n            raise IndexError(\\\"list index out of range\\\") from e\\n    else:\\n        idx = len(self._value)\\n        if idx >= 1 and self._value[idx - 1].is_whitespace():\\n            # The last item is a pure whitespace(\\\\n ), insert before it\\n            idx -= 1\\n            _indent = self._value[idx].indent\\n            if _indent is not None and \\\"\\\\n\\\" in _indent.s:\\n                default_indent = \\\"\\\\n    \\\"\\n    indent: Whitespace | None = None\\n    comma: Whitespace | None = Whitespace(\\\",\\\") if pos < length else None\\n    if idx < len(self._value) and not self._value[idx].is_whitespace():\\n        # Prefer to copy the indentation from the item after\\n        indent = self._value[idx].indent\\n    if idx > 0:\\n        last_item = self._value[idx - 1]\\n        if indent is None:\\n            indent = last_item.indent\\n        if not isinstance(last_item.value, Null) and \\\"\\\\n\\\" in default_indent:\\n            # Copy the comma from the last item if 1) it contains a value and\\n            # 2) the array is multiline\\n            comma = last_item.comma\\n        if last_item.comma is None and not isinstance(last_item.value, Null):\\n            # Add comma to the last item to separate it from the following items.\\n            last_item.comma = Whitespace(\\\",\\\")\\n    if indent is None and (idx > 0 or \\\"\\\\n\\\" in default_indent):\\n        # apply default indent if it isn't the first item or the array is multiline.\\n        indent = Whitespace(default_indent)\\n    new_item = _ArrayItemGroup(value=it, indent=indent, comma=comma)\\n    self._value.insert(idx, new_item)\\n    self._reindex()\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 686,
+   "completion_tokens": 1210,
+   "total_tokens": 1896
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_34cb00738d"
+ }
+}
