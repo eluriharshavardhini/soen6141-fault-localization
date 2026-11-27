@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: tobymao/sqlglot\n\n## Failing test output\n### Failing test: tests.dialects.test_fabric.TestFabric::test_type_mappings\nAssertionError: 'CAST(x AS DATE)' != 'CAST(x AS DATE(6))'\n- CAST(x AS DATE)\n+ CAST(x AS DATE(6))\n?               +++\nself = <tests.dialects.test_fabric.TestFabric testMethod=test_type_mappings>\n\n    def test_type_mappings(self):\n        \"\"\"Test that types are correctly mapped to their alternatives\"\"\"\n        self.validate_identity(\"CAST(x AS BOOLEAN)\", \"CAST(x AS BIT)\")\n>       self.validate_identity(\"CAST(x AS DATE)\", \"CAST(x AS DATE)\")\n\ntests/dialects/test_fabric.py:11: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ntests/dialects/test_dialect.py:34: in validate_identity\n    self.assertEqual(\nE   AssertionError: 'CAST(x AS DATE)' != 'CAST(x AS DATE(6))'\nE   - CAST(x AS DATE)\nE   + CAST(x AS DATE(6))\nE   ?               +++\n\n## Source files (path and module)\npdoc/cli.py  (pdoc.cli)\nsqlglot/__init__.py  (sqlglot)\nsqlglot/__main__.py  (sqlglot.__main__)\nsqlglot/_typing.py  (sqlglot._typing)\nsqlglot/dialects/__init__.py  (sqlglot.dialects)\nsqlglot/dialects/athena.py  (sqlglot.dialects.athena)\nsqlglot/dialects/bigquery.py  (sqlglot.dialects.bigquery)\nsqlglot/dialects/clickhouse.py  (sqlglot.dialects.clickhouse)\nsqlglot/dialects/databricks.py  (sqlglot.dialects.databricks)\nsqlglot/dialects/dialect.py  (sqlglot.dialects.dialect)\nsqlglot/dialects/doris.py  (sqlglot.dialects.doris)\nsqlglot/dialects/drill.py  (sqlglot.dialects.drill)\nsqlglot/dialects/druid.py  (sqlglot.dialects.druid)\nsqlglot/dialects/duckdb.py  (sqlglot.dialects.duckdb)\nsqlglot/dialects/dune.py  (sqlglot.dialects.dune)\nsqlglot/dialects/exasol.py  (sqlglot.dialects.exasol)\nsqlglot/dialects/fabric.py  (sqlglot.dialects.fabric)\nsqlglot/dialects/hive.py  (sqlglot.dialects.hive)\nsqlglot/dialects/materialize.py  (sqlglot.dialects.materialize)\nsqlglot/dialects/mysql.py  (sqlglot.dialects.mysql)\nsqlglot/dialects/oracle.py  (sqlglot.dialects.oracle)\nsqlglot/dialects/postgres.py  (sqlglot.dialects.postgres)\nsqlglot/dialects/presto.py  (sqlglot.dialects.presto)\nsqlglot/dialects/prql.py  (sqlglot.dialects.prql)\nsqlglot/dialects/redshift.py  (sqlglot.dialects.redshift)\nsqlglot/dialects/risingwave.py  (sqlglot.dialects.risingwave)\nsqlglot/dialects/snowflake.py  (sqlglot.dialects.snowflake)\nsqlglot/dialects/spark.py  (sqlglot.dialects.spark)\nsqlglot/dialects/spark2.py  (sqlglot.dialects.spark2)\nsqlglot/dialects/sqlite.py  (sqlglot.dialects.sqlite)\nsqlglot/dialects/starrocks.py  (sqlglot.dialects.starrocks)\nsqlglot/dialects/tableau.py  (sqlglot.dialects.tableau)\nsqlglot/dialects/teradata.py  (sqlglot.dialects.teradata)\nsqlglot/dialects/trino.py  (sqlglot.dialects.trino)\nsqlglot/dialects/tsql.py  (sqlglot.dialects.tsql)\nsqlglot/diff.py  (sqlglot.diff)\nsqlglot/errors.py  (sqlglot.errors)\nsqlglot/executor/__init__.py  (sqlglot.executor)\nsqlglot/executor/context.py  (sqlglot.executor.context)\nsqlglot/executor/env.py  (sqlglot.executor.env)\nsqlglot/executor/python.py  (sqlglot.executor.python)\nsqlglot/executor/table.py  (sqlglot.executor.table)\nsqlglot/expressions.py  (sqlglot.expressions)\nsqlglot/generator.py  (sqlglot.generator)\nsqlglot/helper.py  (sqlglot.helper)\nsqlglot/jsonpath.py  (sqlglot.jsonpath)\nsqlglot/lineage.py  (sqlglot.lineage)\nsqlglot/optimizer/__init__.py  (sqlglot.optimizer)\nsqlglot/optimizer/annotate_types.py  (sqlglot.optimizer.annotate_types)\nsqlglot/optimizer/canonicalize.py  (sqlglot.optimizer.canonicalize)\nsqlglot/optimizer/eliminate_ctes.py  (sqlglot.optimizer.eliminate_ctes)\nsqlglot/optimizer/eliminate_joins.py  (sqlglot.optimizer.eliminate_joins)\nsqlglot/optimizer/eliminate_subqueries.py  (sqlglot.optimizer.eliminate_subqueries)\nsqlglot/optimizer/isolate_table_selects.py  (sqlglot.optimizer.isolate_table_selects)\nsqlglot/optimizer/merge_subqueries.py  (sqlglot.optimizer.merge_subqueries)\nsqlglot/optimizer/normalize.py  (sqlglot.optimizer.normalize)\nsqlglot/optimizer/normalize_identifiers.py  (sqlglot.optimizer.normalize_identifiers)\nsqlglot/optimizer/optimize_joins.py  (sqlglot.optimizer.optimize_joins)\nsqlglot/optimizer/optimizer.py  (sqlglot.optimizer.optimizer)\nsqlglot/optimizer/pushdown_predicates.py  (sqlglot.optimizer.pushdown_predicates)\nsqlglot/optimizer/pushdown_projections.py  (sqlglot.optimizer.pushdown_projections)\nsqlglot/optimizer/qualify.py  (sqlglot.optimizer.qualify)\nsqlglot/optimizer/qualify_columns.py  (sqlglot.optimizer.qualify_columns)\nsqlglot/optimizer/qualify_tables.py  (sqlglot.optimizer.qualify_tables)\nsqlglot/optimizer/scope.py  (sqlglot.optimizer.scope)\nsqlglot/optimizer/simplify.py  (sqlglot.optimizer.simplify)\nsqlglot/optimizer/unnest_subqueries.py  (sqlglot.optimizer.unnest_subqueries)\nsqlglot/parser.py  (sqlglot.parser)\nsqlglot/planner.py  (sqlglot.planner)\nsqlglot/schema.py  (sqlglot.schema)\nsqlglot/serde.py  (sqlglot.serde)\nsqlglot/time.py  (sqlglot.time)\nsqlglot/tokens.py  (sqlglot.tokens)\nsqlglot/transforms.py  (sqlglot.transforms)\nsqlglot/trie.py  (sqlglot.trie)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 3,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\": [\"sqlglot.dialects.fabric::Fabric\", \"sqlglot.dialects.fabric::Fabric.Generator\", \"sqlglot.generator::Generator.type_sql\", \"sqlglot.dialects.dialect::Dialect\"], \"files\": [\"sqlglot/dialects/fabric.py\", \"sqlglot/generator.py\", \"sqlglot/dialects/dialect.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1874,
+   "completion_tokens": 798,
+   "total_tokens": 2672
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

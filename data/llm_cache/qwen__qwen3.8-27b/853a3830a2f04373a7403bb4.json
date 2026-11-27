@@ -1,0 +1,34 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: tobymao/sqlglot\n\n## Failing test output\n### Failing test: tests.dialects.test_postgres.TestPostgres::test_udt\nAssertionError: 'CAST(5 AS \"MyType\")' != 'CAST(5 AS MyType)'\n- CAST(5 AS \"MyType\")\n?           -      -\n+ CAST(5 AS MyType)\nself = <tests.dialects.test_postgres.TestPostgres testMethod=test_udt>\n\n    def test_udt(self):\n        def _validate_udt(sql: str):\n            self.validate_identity(sql).to.assert_is(exp.DataType)\n    \n        _validate_udt(\"CAST(5 AS MyType)\")\n>       _validate_udt('CAST(5 AS \"MyType\")')\n\ntests/dialects/test_postgres.py:1458: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ntests/dialects/test_postgres.py:1455: in _validate_udt\n    self.validate_identity(sql).to.assert_is(exp.DataType)\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/dialects/test_dialect.py:34: in validate_identity\n    self.assertEqual(\nE   AssertionError: 'CAST(5 AS \"MyType\")' != 'CAST(5 AS MyType)'\nE   - CAST(5 AS \"MyType\")\nE   ?           -      -\nE   + CAST(5 AS MyType)\n\n## Failing test code\n```python\n# tests/dialects/test_postgres.py\n    def test_udt(self):\n        def _validate_udt(sql: str):\n            self.validate_identity(sql).to.assert_is(exp.DataType)\n\n        _validate_udt(\"CAST(5 AS MyType)\")\n        _validate_udt('CAST(5 AS \"MyType\")')\n        _validate_udt(\"CAST(5 AS MySchema.MyType)\")\n        _validate_udt('CAST(5 AS \"MySchema\".\"MyType\")')\n        _validate_udt('CAST(5 AS MySchema.\"MyType\")')\n        _validate_udt('CAST(5 AS \"MyCatalog\".\"MySchema\".\"MyType\")')\n```\n\n## Candidate functions (stack-trace functions first, then by similarity to the failure)\n- sqlglot.schema::MappingSchema._to_data_type   def _to_data_type(self, schema_type: str, dialect: DialectType = None) -> exp.DataType:\n- sqlglot.expressions::Expression.assert_is   def assert_is(self, type_: t.Type[E]) -> E:\n- sqlglot.expressions::DataType.build   def build(\n- sqlglot.dialects.databricks::Databricks.Generator.columndef_sql   def columndef_sql(self, expression: exp.ColumnDef, sep: str = \" \") -> str:\n- sqlglot.dialects.postgres::Postgres.Generator.cast_sql   def cast_sql(self, expression: exp.Cast, safe_prefix: t.Optional[str] = None) -> str:\n- sqlglot.dialects.hive::Hive.Parser._parse_types   def _parse_types(\n- sqlglot.dialects.postgres::Postgres.Generator.datatype_sql   def datatype_sql(self, expression: exp.DataType) -> str:\n- sqlglot.parser::Parser._parse_cast   def _parse_cast(self, strict: bool, safe: t.Optional[bool] = None) -> exp.Expression:\n- sqlglot.dialects.postgres::Postgres.Parser._parse_generated_as_identity   def _parse_generated_as_identity(\n- sqlglot.parser::Parser._parse_types   def _parse_types(\n- sqlglot.dialects.dialect::no_datetime_sql   def no_datetime_sql(self: Generator, expression: exp.Datetime) -> str:\n- sqlglot.dialects.postgres::_serial_to_generated   def _serial_to_generated(expression: exp.Expression) -> exp.Expression:\n- sqlglot.expressions::cast   def cast(\n- sqlglot.dialects.dialect::no_time_sql   def no_time_sql(self: Generator, expression: exp.Time) -> str:\n- sqlglot.dialects.postgres::Postgres.Generator.unnest_sql   def unnest_sql(self, expression: exp.Unnest) -> str:\n- sqlglot.dialects.dialect::timestrtotime_sql   def timestrtotime_sql(\n- sqlglot.dialects.presto::_ts_or_ds_to_date_sql   def _ts_or_ds_to_date_sql(self: Presto.Generator, expression: exp.TsOrDsToDate) -> str:\n- sqlglot.dialects.redshift::Redshift.Generator.cast_sql   def cast_sql(self, expression: exp.Cast, safe_prefix: t.Optional[str] = None) -> str:\n- sqlglot.dialects.presto::Presto.Generator.struct_sql   def struct_sql(self, expression: exp.Struct) -> str:\n- sqlglot.dialects.spark2::_build_as_cast   def _build_as_cast(to_type: str) -> t.Callable[[t.List], exp.Expression]:\n- sqlglot.optimizer.simplify::cast_value   def cast_value(value: t.Any, to: exp.DataType) -> t.Optional[t.Union[datetime.date, datetime.date]]:\n- sqlglot.dialects.dialect::datestrtodate_sql   def datestrtodate_sql(self: Generator, expression: exp.DateStrToDate) -> str:\n- sqlglot.dialects.snowflake::Snowflake.Generator.cast_sql   def cast_sql(self, expression: exp.Cast, safe_prefix: t.Optional[str] = None) -> str:\n- sqlglot.generator::Generator.div_sql   def div_sql(self, expression: exp.Div) -> str:\n- sqlglot.expressions::DataType.is_type   def is_type(self, *dtypes: DATA_TYPE, check_nullable: bool = False) -> bool:\n- sqlglot.optimizer.annotate_types::TypeAnnotator.__init__   def __init__(\n- sqlglot.dialects.teradata::Teradata.Generator.cast_sql   def cast_sql(self, expression: exp.Cast, safe_prefix: t.Optional[str] = None) -> str:\n- sqlglot.dialects.duckdb::DuckDB.Generator.length_sql   def length_sql(self, expression: exp.Length) -> str:\n- sqlglot.dialects.presto::_ts_or_ds_diff_sql   def _ts_or_ds_diff_sql(self: Presto.Generator, expression: exp.TsOrDsDiff) -> str:\n- sqlglot.optimizer.annotate_types::annotate_types   def annotate_types(\n\nYou may read the source of up to 5 functions before deciding. Choose the ones most worth reading; any function in the project may be named, not only candidates. Answer with JSON only: {\"inspect\": [\"module::Qualified.name\", ...]}"
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"inspect\": [\"sqlglot.dialects.postgres::Postgres.Generator.datatype_sql\", \"sqlglot.parser::Parser._parse_types\", \"sqlglot.dialects.postgres::Postgres.Generator.cast_sql\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1601,
+   "completion_tokens": 434,
+   "total_tokens": 2035
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: marshmallow-code/marshmallow\n\n## Failing test output\n### Failing test: tests.test_deserialization.TestFieldDeserialization::test_constant_none_allows_none_value\nmarshmallow.exceptions.ValidationError: {'foo': ['Field may not be null.']}\nself = <tests.test_deserialization.TestFieldDeserialization object at 0x7f1d2ce90bf0>\n\n    def test_constant_none_allows_none_value(self):\n        class MySchema(Schema):\n            foo = fields.Constant(None)\n    \n        sch = MySchema()\n>       assert sch.load({\"foo\": None})[\"foo\"] is None\n               ^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/test_deserialization.py:1421: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \nsrc/marshmallow/schema.py:730: in load\n    return self._do_load(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <MySchema(many=False)>, data = {'foo': None}\n\n    def _do_load(\n        self,\n        data: (Mapping[str, typing.Any] | Sequence[Mapping[str, typing.Any]]),\n        *,\n        many: bool | None = None,\n        partial: bool | types.StrSequenceOrSet | None = None,\n        unknown: types.UnknownOption | None = None,\n        postprocess: bool = True,\n    ):\n        \"\"\"Deserialize `data`, returning the deserialized result.\n        This method is private API.\n    \n        :param data: The data to deserialize.\n        :param many: Whether to deserialize `data` as a collection. If `None`, the\n            value for `self.many` is used.\n        :param\n[... output truncated ...]\n._invoke_load_processors(\n                    PRE_LOAD,\n                    data,\n                    many=many,\n                    original_data=data,\n                    partial=partial,\n                    unknown=unknown,\n                )\n            except ValidationError as err:\n                errors = err.normalized_messages()\n                result: list | dict | None = None\n        else:\n            processed_data = data\n        if not errors:\n            # Deserialize data\n            result = self._deserialize(\n                processed_data,\n                error_store=error_store,\n                many=many,\n                partial=partial,\n                unknown=unknown,\n            )\n            # Run field-level validation\n            self._invoke_field_validators(\n                error_store=error_store, data=result, many=many\n            )\n            # Run schema-level validation\n            if self._hooks[VALIDATES_SCHEMA]:\n                field_errors = bool(error_store.errors)\n                self._invoke_schema_validators(\n                    error_store=error_store,\n                    pass_collection=True,\n                    data=result,\n                    original_data=data,\n                    many=many,\n                    partial=partial,\n                    unknown=unknown,\n                    field_errors=field_errors,\n                )\n                self._invoke_schema_validators(\n                    error_store=error_store,\n                    pass_collection=False,\n                    data=result,\n                    original_data=data,\n                    many=many,\n                    partial=partial,\n                    unknown=unknown,\n                    field_errors=field_errors,\n                )\n            errors = error_store.errors\n            # Run post processors\n            if not errors and postprocess and self._hooks[POST_LOAD]:\n                try:\n                    result = self._invoke_load_processors(\n                        POST_LOAD,\n                        result,\n                        many=many,\n                        original_data=data,\n                        partial=partial,\n                        unknown=unknown,\n                    )\n                except ValidationError as err:\n                    errors = err.normalized_messages()\n        if errors:\n            exc = ValidationError(errors, data=data, valid_data=result)\n            self.handle_error(exc, data, many=many, partial=partial)\n>           raise exc\nE           marshmallow.exceptions.ValidationError: {'foo': ['Field may not be null.']}\n\nsrc/marshmallow/schema.py:938: ValidationError\n\n## Source files (path and module)\nperformance/benchmark.py  (performance.benchmark)\nsrc/marshmallow/__init__.py  (marshmallow)\nsrc/marshmallow/class_registry.py  (marshmallow.class_registry)\nsrc/marshmallow/constants.py  (marshmallow.constants)\nsrc/marshmallow/decorators.py  (marshmallow.decorators)\nsrc/marshmallow/error_store.py  (marshmallow.error_store)\nsrc/marshmallow/exceptions.py  (marshmallow.exceptions)\nsrc/marshmallow/experimental/__init__.py  (marshmallow.experimental)\nsrc/marshmallow/experimental/context.py  (marshmallow.experimental.context)\nsrc/marshmallow/fields.py  (marshmallow.fields)\nsrc/marshmallow/orderedset.py  (marshmallow.orderedset)\nsrc/marshmallow/schema.py  (marshmallow.schema)\nsrc/marshmallow/types.py  (marshmallow.types)\nsrc/marshmallow/utils.py  (marshmallow.utils)\nsrc/marshmallow/validate.py  (marshmallow.validate)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 3,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\":[\"marshmallow.fields::Constant.__init__\",\"marshmallow.fields::Constant._deserialize\",\"marshmallow.schema::Schema._invoke_field_validators\",\"marshmallow.schema::Schema._deserialize\",\"marshmallow.schema::Schema._invoke_load_processors\"],\"files\":[\"src/marshmallow/fields.py\",\"src/marshmallow/schema.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1308,
+   "completion_tokens": 109,
+   "total_tokens": 1417
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_e11c8bbf69"
+ }
+}

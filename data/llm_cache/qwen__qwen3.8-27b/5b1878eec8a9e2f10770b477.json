@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: python-poetry/tomlkit\n\n## Failing test output\n### Failing test: tests.test_api::test_dump_nested_dotted_table\nassert \"c.d='e'\" == \"b.c.d='e'\"\n  \n  - b.c.d='e'\n  ? --\n  + c.d='e'\ndef test_dump_nested_dotted_table():\n        a = tomlkit.parse(\"a.b.c.d='e'\")[\"a\"]\n        assert a == {\"b\": {\"c\": {\"d\": \"e\"}}}\n>       assert dumps(a) == \"b.c.d='e'\"\nE       assert \"c.d='e'\" == \"b.c.d='e'\"\nE         \nE         - b.c.d='e'\nE         ? --\nE         + c.d='e'\n\ntests/test_api.py:187: AssertionError\n\n## Source files (path and module)\ntomlkit/__init__.py  (tomlkit)\ntomlkit/_compat.py  (tomlkit._compat)\ntomlkit/_types.py  (tomlkit._types)\ntomlkit/_utils.py  (tomlkit._utils)\ntomlkit/api.py  (tomlkit.api)\ntomlkit/container.py  (tomlkit.container)\ntomlkit/exceptions.py  (tomlkit.exceptions)\ntomlkit/items.py  (tomlkit.items)\ntomlkit/parser.py  (tomlkit.parser)\ntomlkit/source.py  (tomlkit.source)\ntomlkit/toml_char.py  (tomlkit.toml_char)\ntomlkit/toml_document.py  (tomlkit.toml_document)\ntomlkit/toml_file.py  (tomlkit.toml_file)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 3,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\": [\"tomlkit.items::Table.as_string\", \"tomlkit.items::Table._as_string\", \"tomlkit.api::dumps\", \"tomlkit.container::Container.as_string\"], \"files\": [\"tomlkit/items.py\", \"tomlkit/api.py\", \"tomlkit/container.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 555,
+   "completion_tokens": 831,
+   "total_tokens": 1386
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

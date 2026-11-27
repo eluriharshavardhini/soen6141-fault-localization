@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: marshmallow-code/marshmallow\n\n## Failing test output\n### Failing test: tests.test_validate::test_oneof_options\nAssertionError: assert [('1', 'one')...('', 'three')] == [('1', 'one'), ('2', 'two')]\n  \n  Left contains one more item: ('', 'three')\n  Use -v to get more diff\ndef test_oneof_options():\n        oneof = validate.OneOf([1, 2, 3], [\"one\", \"two\", \"three\"])\n        expected = [(\"1\", \"one\"), (\"2\", \"two\"), (\"3\", \"three\")]\n        assert list(oneof.options()) == expected\n    \n        oneof = validate.OneOf([1, 2, 3], [\"one\", \"two\"])\n        expected = [(\"1\", \"one\"), (\"2\", \"two\"), (\"3\", \"\")]\n        assert list(oneof.options()) == expected\n    \n        oneof = validate.OneOf([1, 2], [\"one\", \"two\", \"three\"])\n        expected = [(\"1\", \"one\"), (\"2\", \"two\")]\n>       assert list(oneof.options()) == expected\nE       AssertionError: assert [('1', 'one')...('', 'three')] == [('1', 'one'), ('2', 'two')]\nE         \nE         Left contains one more item: ('', 'three')\nE         Use -v to get more diff\n\ntests/test_validate.py:730: AssertionError\n\n## Source files (path and module)\nperformance/benchmark.py  (performance.benchmark)\nsrc/marshmallow/__init__.py  (marshmallow)\nsrc/marshmallow/class_registry.py  (marshmallow.class_registry)\nsrc/marshmallow/constants.py  (marshmallow.constants)\nsrc/marshmallow/decorators.py  (marshmallow.decorators)\nsrc/marshmallow/error_store.py  (marshmallow.error_store)\nsrc/marshmallow/exceptions.py  (marshmallow.exceptions)\nsrc/marshmallow/experimental/__init__.py  (marshmallow.experimental)\nsrc/marshmallow/experimental/context.py  (marshmallow.experimental.context)\nsrc/marshmallow/fields.py  (marshmallow.fields)\nsrc/marshmallow/orderedset.py  (marshmallow.orderedset)\nsrc/marshmallow/schema.py  (marshmallow.schema)\nsrc/marshmallow/types.py  (marshmallow.types)\nsrc/marshmallow/utils.py  (marshmallow.utils)\nsrc/marshmallow/validate.py  (marshmallow.validate)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 3,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\":[\"marshmallow.validate::OneOf.options\"],\"files\":[\"src/marshmallow/validate.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 772,
+   "completion_tokens": 71,
+   "total_tokens": 843
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_c5a89987dc"
+ }
+}

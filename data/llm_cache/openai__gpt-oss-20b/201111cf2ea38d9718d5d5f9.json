@@ -1,0 +1,34 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: pallets/click\n\n## Failing test output\n### Failing test: tests.test_shell_completion::test_full_complete[fish-env6-plain,b\\tbee\\n]\nAssertionError: assert '\\n' == 'plain,b\\tbee\\n'\n  \n  Strings contain only whitespace, escaping them using repr()\n  - 'plain,b\\tbee\\n'\n  + '\\n'\nrunner = <click.testing.CliRunner object at 0x7f373f40e3f0>, shell = 'fish'\nenv = {'COMP_CWORD': '\"b', 'COMP_WORDS': 'a \"b', '_CLI_COMPLETE': 'fish_complete'}\nexpect = 'plain,b\\tbee\\n'\n\n    @pytest.mark.parametrize(\n        (\"shell\", \"env\", \"expect\"),\n        [\n            (\"bash\", {\"COMP_WORDS\": \"\", \"COMP_CWORD\": \"0\"}, \"plain,a\\nplain,b\\n\"),\n            (\"bash\", {\"COMP_WORDS\": \"a b\", \"COMP_CWORD\": \"1\"}, \"plain,b\\n\"),\n            (\"zsh\", {\"COMP_WORDS\": \"\", \"COMP_CWORD\": \"0\"}, \"plain\\na\\n_\\nplain\\nb\\nbee\\n\"),\n            (\"zsh\", {\"COMP_WORDS\": \"a b\", \"COMP_CWORD\": \"1\"}, \"plain\\nb\\nbee\\n\"),\n            (\"fish\", {\"COMP_WORDS\": \"\", \"COMP_CWORD\": \"\"}, \"plain,a\\nplain,b\\tbee\\n\"),\n            (\"fish\", {\"COMP_WORDS\": \"a b\", \"COMP_CWORD\": \"b\"}, \"plain,b\\tbee\\n\"),\n            (\"fish\", {\"COMP_WORDS\": 'a \"b', \"COMP_CWORD\": '\"b'}, \"plain,b\\tbee\\n\"),\n        ],\n    )\n    @pytest.mark.usefixtures(\"_patch_for_completion\")\n    def test_full_complete(runner, shell, env, expect):\n        cli = Group(\"cli\", commands=[Command(\"a\"), Command(\"b\", help=\"bee\")])\n        env[\"_CLI_COMPLETE\"] = f\"{shell}_complete\"\n        result = runner.invoke(cli, env=env)\n>       assert result.output == expect\nE       AssertionError: assert '\\n' == 'plain,b\\tbee\\n'\nE         \nE         Strings contain only whitespace, escaping them using repr()\nE         - 'plain,b\\tbee\\n'\nE         + '\\n'\n\ntests/test_shell_completion.py:370: AssertionError\n\n## Failing test code\n```python\n# tests/test_shell_completion.py\n@pytest.mark.parametrize(\n    (\"shell\", \"env\", \"expect\"),\n    [\n        (\"bash\", {\"COMP_WORDS\": \"\", \"COMP_CWORD\": \"0\"}, \"plain,a\\nplain,b\\n\"),\n        (\"bash\", {\"COMP_WORDS\": \"a b\", \"COMP_CWORD\": \"1\"}, \"plain,b\\n\"),\n        (\"zsh\", {\"COMP_WORDS\": \"\", \"COMP_CWORD\": \"0\"}, \"plain\\na\\n_\\nplain\\nb\\nbee\\n\"),\n        (\"zsh\", {\"COMP_WORDS\": \"a b\", \"COMP_CWORD\": \"1\"}, \"plain\\nb\\nbee\\n\"),\n        (\"fish\", {\"COMP_WORDS\": \"\", \"COMP_CWORD\": \"\"}, \"plain,a\\nplain,b\\tbee\\n\"),\n        (\"fish\", {\"COMP_WORDS\": \"a b\", \"COMP_CWORD\": \"b\"}, \"plain,b\\tbee\\n\"),\n        (\"fish\", {\"COMP_WORDS\": 'a \"b', \"COMP_CWORD\": '\"b'}, \"plain,b\\tbee\\n\"),\n    ],\n)\n@pytest.mark.usefixtures(\"_patch_for_completion\")\ndef test_full_complete(runner, shell, env, expect):\n    cli = Group(\"cli\", commands=[Command(\"a\"), Command(\"b\", help=\"bee\")])\n    env[\"_CLI_COMPLETE\"] = f\"{shell}_complete\"\n    result = runner.invoke(cli, env=env)\n    assert result.output == expect\n```\n\n## Candidate functions (stack-trace functions first, then by similarity to the failure)\n- click.testing::CliRunner.invoke   def invoke(\n- click.shell_completion::FishComplete.get_completion_args   def get_completion_args(self) -> tuple[list[str], str]:\n- click.shell_completion::ZshComplete.format_completion   def format_completion(self, item: CompletionItem) -> str:\n- click.core::Group.shell_complete   def shell_complete(self, ctx: Context, incomplete: str) -> list[CompletionItem]:\n- click.shell_completion::ZshComplete.get_completion_args   def get_completion_args(self) -> tuple[list[str], str]:\n- click.shell_completion::BashComplete.get_completion_args   def get_completion_args(self) -> tuple[list[str], str]:\n- click.core::Group.__init__   def __init__(\n- click.core::Command.shell_complete   def shell_complete(self, ctx: Context, incomplete: str) -> list[CompletionItem]:\n- click.shell_completion::BashComplete._check_version   def _check_version() -> None:\n- click.core::Command.main   def main(\n- click.testing::Result.__init__   def __init__(\n- click.shell_completion::shell_complete   def shell_complete(\n- click.shell_completion::FishComplete.format_completion   def format_completion(self, item: CompletionItem) -> str:\n- click.core::Context.forward   def forward(self, cmd: Command, /, *args: t.Any, **kwargs: t.Any) -> t.Any:\n- click.shell_completion::_resolve_context   def _resolve_context(\n- click.core::Group.invoke   def invoke(self, ctx: Context) -> t.Any:\n- click.shell_completion::CompletionItem.__init__   def __init__(\n- click.shell_completion::ShellComplete.get_completions   def get_completions(self, args: list[str], incomplete: str) -> list[CompletionItem]:\n- click.testing::CliRunner.get_default_prog_name   def get_default_prog_name(self, cli: Command) -> str:\n- click.shell_completion::ShellComplete.__init__   def __init__(\n- click.testing::Result.stdout   def stdout(self) -> str:\n- click.core::Command._main_shell_completion   def _main_shell_completion(\n- click.shell_completion::ShellComplete.get_completion_args   def get_completion_args(self) -> tuple[list[str], str]:\n- click.core::Group.result_callback   def result_callback(self, replace: bool = False) -> t.Callable[[F], F]:\n- click.testing::Result.output   def output(self) -> str:\n- click.shell_completion::BashComplete.format_completion   def format_completion(self, item: CompletionItem) -> str:\n- click.testing::CliRunner.make_env   def make_env(\n- click.types::Path.shell_complete   def shell_complete(\n- click.testing::CliRunner.__init__   def __init__(\n- click.shell_completion::BashComplete.source   def source(self) -> str:\n\nYou may read the source of up to 5 functions before deciding. Choose the ones most worth reading; any function in the project may be named, not only candidates. Answer with JSON only: {\"inspect\": [\"module::Qualified.name\", ...]}"
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{}",
+  "finish_reason": "tool_call_error",
+  "usage": {
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "total_tokens": null
+  },
+  "route": "openrouter",
+  "host": null,
+  "system_fingerprint": null
+ }
+}

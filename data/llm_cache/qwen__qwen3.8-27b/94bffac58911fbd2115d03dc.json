@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: python-poetry/tomlkit\n\n## Failing test output\n### Failing test: tests.test_toml_document::test_subtable_of_aot_element_after_other_table\ntomlkit.exceptions.ParseError: Key \"fruit\" already exists. at line 7 col 0\nself = <tomlkit.parser.Parser object at 0x7f2c15a86840>\n\n    def parse(self) -> TOMLDocument:\n        body = TOMLDocument(True)\n    \n        # Take all keyvals outside of tables/AoT's.\n        while not self.end():\n            # Break out if a table is found\n            if self._current == \"[\":\n                break\n    \n            # Otherwise, take and append one KV\n            item = self._parse_item()\n            if not item:\n                break\n    \n            key, value = item\n            if (key is not None and key.is_multi()) or not self._merge_ws(value, body):\n                # We actually have a table\n                try:\n                    body.append(key, value)\n                except Exception as e:\n                    raise self.parse_error(ParseError, str(e)) from e\n    \n            self.mark()\n    \n        while not self.end():\n            key, value = self._parse_table()\n            if isinstance(value, Table) and value.is_aot_element():\n                # This is just the first table in an AoT. Parse the rest of the array\n                # along with it.\n                value = self._parse_aot(value, key)\n    \n            try:\n>               body.append(key, value)\n\ntomlkit/parser.py:207: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _\n[... output truncated ...]\n               raise KeyAlreadyPresent(key)\n    \n                if item.is_aot_element():\n                    # New AoT element found later on\n                    # Adding it to the current AoT\n                    if not isinstance(current, AoT):\n                        current = AoT([current, item], parsed=self._parsed)\n    \n                        self._replace(key, key, current)\n                    else:\n                        current.append(item)\n    \n                    return self\n                elif isinstance(current, AoT):\n                    if not item.is_aot_element():\n                        # Tried to define a table after an AoT with the same name.\n>                       raise KeyAlreadyPresent(key)\nE                       tomlkit.exceptions.KeyAlreadyPresent: Key \"fruit\" already exists.\n\ntomlkit/container.py:264: KeyAlreadyPresent\n\nThe above exception was the direct cause of the following exception:\n\n    def test_subtable_of_aot_element_after_other_table() -> None:\n        # A sub-table header that extends the last element of an array of tables\n        # is valid even when an unrelated table appears in between (issue #261).\n        content = \"\"\"[[fruit]]\n    apple.color = \"red\"\n    \n    [potato]\n    \n    [fruit.apple.texture]\n    smooth = true\n    \"\"\"\n    \n>       doc = parse(content)\n              ^^^^^^^^^^^^^^\n\ntests/test_toml_document.py:254: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ntomlkit/api.py:106: in parse\n    return Parser(string).parse()\n           ^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <tomlkit.parser.Parser object at 0x7f2c15a86840>\n\n    def parse(self) -> TOMLDocument:\n        body = TOMLDocument(True)\n    \n        # Take all keyvals outside of tables/AoT's.\n        while not self.end():\n            # Break out if a table is found\n            if self._current == \"[\":\n                break\n    \n            # Otherwise, take and append one KV\n            item = self._parse_item()\n            if not item:\n                break\n    \n            key, value = item\n            if (key is not None and key.is_multi()) or not self._merge_ws(value, body):\n                # We actually have a table\n                try:\n                    body.append(key, value)\n                except Exception as e:\n                    raise self.parse_error(ParseError, str(e)) from e\n    \n            self.mark()\n    \n        while not self.end():\n            key, value = self._parse_table()\n            if isinstance(value, Table) and value.is_aot_element():\n                # This is just the first tabl\n\n## Source files (path and module)\ntomlkit/__init__.py  (tomlkit)\ntomlkit/_compat.py  (tomlkit._compat)\ntomlkit/_types.py  (tomlkit._types)\ntomlkit/_utils.py  (tomlkit._utils)\ntomlkit/api.py  (tomlkit.api)\ntomlkit/container.py  (tomlkit.container)\ntomlkit/exceptions.py  (tomlkit.exceptions)\ntomlkit/items.py  (tomlkit.items)\ntomlkit/parser.py  (tomlkit.parser)\ntomlkit/source.py  (tomlkit.source)\ntomlkit/toml_document.py  (tomlkit.toml_document)\ntomlkit/toml_file.py  (tomlkit.toml_file)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 2,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\": [\"tomlkit.container::Container.append\", \"tomlkit.parser::Parser.parse\", \"tomlkit.items::AoT.append\"], \"files\": [\"tomlkit/container.py\", \"tomlkit/parser.py\", \"tomlkit/items.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1382,
+   "completion_tokens": 818,
+   "total_tokens": 2200
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

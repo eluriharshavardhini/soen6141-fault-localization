@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: tobymao/sqlglot\n\n## Failing test output\n### Failing test: tests.dialects.test_dialect.TestDialect::test_between\nAssertionError: 'x BETWEEN ASYMMETRIC 1 AND 2' != 'x BETWEEN 1 AND 2'\n- x BETWEEN ASYMMETRIC 1 AND 2\n?           -----------\n+ x BETWEEN 1 AND 2\nself = <tests.dialects.test_dialect.TestDialect testMethod=test_between>\n\n    def test_between(self):\n        between = exp.column(\"x\").between(1, 2)\n>       self.assertEqual(between.sql(\"postgres\"), \"x BETWEEN 1 AND 2\")\nE       AssertionError: 'x BETWEEN ASYMMETRIC 1 AND 2' != 'x BETWEEN 1 AND 2'\nE       - x BETWEEN ASYMMETRIC 1 AND 2\nE       ?           -----------\nE       + x BETWEEN 1 AND 2\n\ntests/dialects/test_dialect.py:3661: AssertionError\n\n## Source files (path and module)\npdoc/cli.py  (pdoc.cli)\nsqlglot/__init__.py  (sqlglot)\nsqlglot/__main__.py  (sqlglot.__main__)\nsqlglot/_typing.py  (sqlglot._typing)\nsqlglot/dialects/__init__.py  (sqlglot.dialects)\nsqlglot/dialects/athena.py  (sqlglot.dialects.athena)\nsqlglot/dialects/bigquery.py  (sqlglot.dialects.bigquery)\nsqlglot/dialects/clickhouse.py  (sqlglot.dialects.clickhouse)\nsqlglot/dialects/databricks.py  (sqlglot.dialects.databricks)\nsqlglot/dialects/dialect.py  (sqlglot.dialects.dialect)\nsqlglot/dialects/doris.py  (sqlglot.dialects.doris)\nsqlglot/dialects/dremio.py  (sqlglot.dialects.dremio)\nsqlglot/dialects/drill.py  (sqlglot.dialects.drill)\nsqlglot/dialects/druid.py  (sqlglot.dialects.druid)\nsqlglot/dialects/duckdb.py  (sqlglot.dialects.duckdb)\nsqlglot/dialects/dune.py  (sqlglot.dialects.dune)\nsqlglot/dialects/exasol.py  (sqlglot.dialects.exasol)\nsqlglot/dialects/fabric.py  (sqlglot.dialects.fabric)\nsqlglot/dialects/hive.py  (sqlglot.dialects.hive)\nsqlglot/dialects/materialize.py  (sqlglot.dialects.materialize)\nsqlglot/dialects/mysql.py  (sqlglot.dialects.mysql)\nsqlglot/dialects/oracle.py  (sqlglot.dialects.oracle)\nsqlglot/dialects/postgres.py  (sqlglot.dialects.postgres)\nsqlglot/dialects/presto.py  (sqlglot.dialects.presto)\nsqlglot/dialects/prql.py  (sqlglot.dialects.prql)\nsqlglot/dialects/redshift.py  (sqlglot.dialects.redshift)\nsqlglot/dialects/risingwave.py  (sqlglot.dialects.risingwave)\nsqlglot/dialects/singlestore.py  (sqlglot.dialects.singlestore)\nsqlglot/dialects/snowflake.py  (sqlglot.dialects.snowflake)\nsqlglot/dialects/spark.py  (sqlglot.dialects.spark)\nsqlglot/dialects/spark2.py  (sqlglot.dialects.spark2)\nsqlglot/dialects/sqlite.py  (sqlglot.dialects.sqlite)\nsqlglot/dialects/starrocks.py  (sqlglot.dialects.starrocks)\nsqlglot/dialects/tableau.py  (sqlglot.dialects.tableau)\nsqlglot/dialects/teradata.py  (sqlglot.dialects.teradata)\nsqlglot/dialects/trino.py  (sqlglot.dialects.trino)\nsqlglot/dialects/tsql.py  (sqlglot.dialects.tsql)\nsqlglot/diff.py  (sqlglot.diff)\nsqlglot/errors.py  (sqlglot.errors)\nsqlglot/executor/__init__.py  (sqlglot.executor)\nsqlglot/executor/context.py  (sqlglot.executor.context)\nsqlglot/executor/env.py  (sqlglot.executor.env)\nsqlglot/executor/python.py  (sqlglot.executor.python)\nsqlglot/executor/table.py  (sqlglot.executor.table)\nsqlglot/expressions.py  (sqlglot.expressions)\nsqlglot/generator.py  (sqlglot.generator)\nsqlglot/helper.py  (sqlglot.helper)\nsqlglot/jsonpath.py  (sqlglot.jsonpath)\nsqlglot/lineage.py  (sqlglot.lineage)\nsqlglot/optimizer/__init__.py  (sqlglot.optimizer)\nsqlglot/optimizer/annotate_types.py  (sqlglot.optimizer.annotate_types)\nsqlglot/optimizer/canonicalize.py  (sqlglot.optimizer.canonicalize)\nsqlglot/optimizer/eliminate_ctes.py  (sqlglot.optimizer.eliminate_ctes)\nsqlglot/optimizer/eliminate_joins.py  (sqlglot.optimizer.eliminate_joins)\nsqlglot/optimizer/eliminate_subqueries.py  (sqlglot.optimizer.eliminate_subqueries)\nsqlglot/optimizer/isolate_table_selects.py  (sqlglot.optimizer.isolate_table_selects)\nsqlglot/optimizer/merge_subqueries.py  (sqlglot.optimizer.merge_subqueries)\nsqlglot/optimizer/normalize.py  (sqlglot.optimizer.normalize)\nsqlglot/optimizer/normalize_identifiers.py  (sqlglot.optimizer.normalize_identifiers)\nsqlglot/optimizer/optimize_joins.py  (sqlglot.optimizer.optimize_joins)\nsqlglot/optimizer/optimizer.py  (sqlglot.optimizer.optimizer)\nsqlglot/optimizer/pushdown_predicates.py  (sqlglot.optimizer.pushdown_predicates)\nsqlglot/optimizer/pushdown_projections.py  (sqlglot.optimizer.pushdown_projections)\nsqlglot/optimizer/qualify.py  (sqlglot.optimizer.qualify)\nsqlglot/optimizer/qualify_columns.py  (sqlglot.optimizer.qualify_columns)\nsqlglot/optimizer/qualify_tables.py  (sqlglot.optimizer.qualify_tables)\nsqlglot/optimizer/scope.py  (sqlglot.optimizer.scope)\nsqlglot/optimizer/simplify.py  (sqlglot.optimizer.simplify)\nsqlglot/optimizer/unnest_subqueries.py  (sqlglot.optimizer.unnest_subqueries)\nsqlglot/parser.py  (sqlglot.parser)\nsqlglot/planner.py  (sqlglot.planner)\nsqlglot/schema.py  (sqlglot.schema)\nsqlglot/serde.py  (sqlglot.serde)\nsqlglot/time.py  (sqlglot.time)\nsqlglot/tokens.py  (sqlglot.tokens)\nsqlglot/transforms.py  (sqlglot.transforms)\nsqlglot/trie.py  (sqlglot.trie)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 1,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\": [\"sqlglot.generator::Generator.between_sql\", \"sqlglot.expressions::Column.between\", \"sqlglot.expressions::Between\"], \"files\": [\"sqlglot/generator.py\", \"sqlglot/expressions.py\", \"sqlglot/dialects/postgres.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1876,
+   "completion_tokens": 709,
+   "total_tokens": 2585
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

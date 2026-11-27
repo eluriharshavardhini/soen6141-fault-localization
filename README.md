@@ -4,9 +4,9 @@ SOEN 6141 course project: *Build a Benchmark, Then Beat the Baseline*. Task: **f
 
 Given a failing (bug-revealing) test and its output, rank the files, functions and lines most likely to contain the fault. The oracle is the code changed by the real developer fix, validated by a test that fails before the fix and passes after it.
 
-> Status: **Phase 2 complete**: baseline fault localization with two open-weight model families, plus two model-based contamination checks. See [Phase 2 results](docs/PHASE2_EVIDENCE.md).
+> Status: **Phase 3 complete**: three techniques beat the baseline for both model families (function Top-1 up to 54% vs. 32%, p<0.01). See [Phase 2](docs/PHASE2_EVIDENCE.md) and [Phase 3 results](docs/PHASE3_RESULTS.md).
 
-**Start here:** [Proposal](docs/proposal.md) · [Benchmark card](docs/BENCHMARK_CARD.md) · Requirements → evidence: [Phase 1](docs/PHASE1_EVIDENCE.md), [Phase 2](docs/PHASE2_EVIDENCE.md) · [Plain-language explainer](docs/EXPLAINER.md)
+**Start here:** [Proposal](docs/proposal.md) · [Benchmark card](docs/BENCHMARK_CARD.md) · Requirements → evidence: [Phase 1](docs/PHASE1_EVIDENCE.md), [Phase 2](docs/PHASE2_EVIDENCE.md), [Phase 3](docs/PHASE3_RESULTS.md) · [Plain-language explainer](docs/EXPLAINER.md)
 
 ## Verify any bug in one command
 
@@ -50,6 +50,10 @@ FL_PROVIDER=openrouter python scripts/run_fl.py --model qwen        # baseline, 
 python scripts/contamination_model.py build-old ../BugsInPy         # old-bug set for C2/C3
 python scripts/contamination_model.py c2 --model gptoss             # same for c3, and for qwen with FL_PROVIDER=openrouter
 python scripts/score.py && python scripts/contamination_model.py report && python scripts/cost_report.py
+# Phase 3: techniques context | inspect | vote, ablation vanilla_vote, non-LLM trace_bm25
+FL_PROVIDER=openrouter python scripts/run_fl.py --technique vote --model qwen
+python scripts/run_fl.py --technique trace_bm25 --model none
+python scripts/analyze.py                                           # -> results/analysis.md
 ```
 
 ## Layout
@@ -71,6 +75,8 @@ python scripts/score.py && python scripts/contamination_model.py report && pytho
 | `data/contamination/` | Contamination check results |
 | `scripts/llm.py` | Model client: Groq / OpenRouter, response cache, cost log, hard spending cap |
 | `scripts/run_fl.py`, `scripts/fl_common.py` | Fault-localization runs (baseline `vanilla`) |
+| `scripts/techniques.py` | Phase 3 techniques (retrieval, T1 context, T2 inspect, T3 vote) |
+| `scripts/analyze.py` | Phase 3 significance tests, failure analysis, per-repo table |
 | `scripts/score.py` | Top-1/3/5, MRR, file Top-1 against the oracle |
 | `scripts/contamination_model.py` | Contamination checks C2 (old vs new bugs) and C3 (fix recall) |
 | `results/` | Predictions per technique and model, `scores.md` |

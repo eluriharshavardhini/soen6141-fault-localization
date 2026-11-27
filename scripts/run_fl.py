@@ -33,13 +33,18 @@ ANSWER_SPEC = (
     '- "files": up to 5 source file paths, most likely first.')
 
 
+def vanilla_prompt(inst: dict) -> str:
+    files = source_files(inst["repo_dir"], inst["buggy_commit"])
+    tree = "\n".join(f"{f}  ({path_to_module(f)})" for f in files)
+    return (f"Repository: {inst['repo']}\n\n"
+            f"## Failing test output\n{compact_failure(inst)}\n\n"
+            f"## Source files (path and module)\n{tree}\n\n{ANSWER_SPEC}")
+
+
 def vanilla(inst: dict, model: str) -> dict:
     """Baseline: failing test + its output + the list of source modules. One call."""
     files = source_files(inst["repo_dir"], inst["buggy_commit"])
-    tree = "\n".join(f"{f}  ({path_to_module(f)})" for f in files)
-    user = (f"Repository: {inst['repo']}\n\n"
-            f"## Failing test output\n{compact_failure(inst)}\n\n"
-            f"## Source files (path and module)\n{tree}\n\n{ANSWER_SPEC}")
+    user = vanilla_prompt(inst)
     r = chat(model, [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}],
              max_tokens=1500, tag=f"vanilla:{inst['instance_id']}")
     ans = parse_json(r["content"])
@@ -49,7 +54,32 @@ def vanilla(inst: dict, model: str) -> dict:
             "model_id": r["model_id"], "raw": r["content"][:2000]}
 
 
-TECHNIQUES = {"vanilla": vanilla}
+def vanilla_vote(inst: dict, model: str) -> dict:
+    """Ablation: the BASELINE prompt sampled 3 times (temperature 0.7) and Borda-voted.
+    Same number of calls as T3, but no retrieved context, so it separates the effect of
+    extra calls/voting from the effect of showing code."""
+    from techniques import borda
+    files = source_files(inst["repo_dir"], inst["buggy_commit"])
+    user = vanilla_prompt(inst)
+    rs, fls, fils = [], [], []
+    for seed in (1, 2, 3):
+        r = chat(model, [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}],
+                 max_tokens=1500, temperature=0.7, seed=seed,
+                 tag=f"vvote{seed}:{inst['instance_id']}")
+        ans = parse_json(r["content"])
+        rs.append(r)
+        fls.append([norm_function(f, files) for f in ans.get("functions", []) if isinstance(f, str)][:5])
+        fils.append([norm_file(f) for f in ans.get("files", []) if isinstance(f, str)][:5])
+    return {"functions": borda(fls), "files": borda(fils), "calls": 3,
+            "usage": {k: sum((r["usage"].get(k) or 0) for r in rs)
+                      for k in ("prompt_tokens", "completion_tokens", "total_tokens")},
+            "cached": all(r["cached"] for r in rs), "model_id": rs[0]["model_id"], "samples": fls}
+
+
+TECHNIQUES = {"vanilla": vanilla, "vanilla_vote": vanilla_vote}
+from techniques import TECHNIQUES as _PHASE3  # noqa: E402
+
+TECHNIQUES.update(_PHASE3)
 
 
 def main() -> None:
@@ -80,7 +110,7 @@ def main() -> None:
         with out.open("a") as f:
             f.write(json.dumps(rec) + "\n")
         print(f"[{len(done) + n}/{len(done) + len(todo)}] {inst['instance_id']}: "
-              f"{pred['functions'][:2]} tokens={pred['usage'].get('total_tokens')}", flush=True)
+              f"{pred['functions'][:2]} tokens={(pred.get('usage') or {}).get('total_tokens')}", flush=True)
 
 
 if __name__ == "__main__":

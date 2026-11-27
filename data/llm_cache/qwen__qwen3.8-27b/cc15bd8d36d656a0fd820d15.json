@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: marshmallow-code/marshmallow\n\n## Failing test output\n### Failing test: tests.test_validate::test_email_idn_invalid[user@-m\\xfcnchen.de]\nFailed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\ninvalid_email = 'user@-m\u00fcnchen.de'\n\n    @pytest.mark.parametrize(\n        \"invalid_email\",\n        [\n            \"user@-m\u00fcnchen.de\",\n            \"user@m\u00fcnchen-.de\",\n            \"user@m\u00fcnchen\",\n        ],\n    )\n    def test_email_idn_invalid(invalid_email):\n        validator = validate.Email()\n>       with pytest.raises(ValidationError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\n\ntests/test_validate.py:398: Failed\n\n### Failing test: tests.test_validate::test_email_idn_invalid[user@m\\xfcnchen-.de]\nFailed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\ninvalid_email = 'user@m\u00fcnchen-.de'\n\n    @pytest.mark.parametrize(\n        \"invalid_email\",\n        [\n            \"user@-m\u00fcnchen.de\",\n            \"user@m\u00fcnchen-.de\",\n            \"user@m\u00fcnchen\",\n        ],\n    )\n    def test_email_idn_invalid(invalid_email):\n        validator = validate.Email()\n>       with pytest.raises(ValidationError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\n\ntests/test_validate.py:398: Failed\n\n## Source files (path and module)\nperformance/benchmark.py  (performance.benchmark)\nsrc/marshmallow/__init__.py  (marshmallow)\nsrc/marshmallow/class_registry.py  (marshmallow.class_registry)\nsrc/marshmallow/constants.py  (marshmallow.constants)\nsrc/marshmallow/decorators.py  (marshmallow.decorators)\nsrc/marshmallow/error_store.py  (marshmallow.error_store)\nsrc/marshmallow/exceptions.py  (marshmallow.exceptions)\nsrc/marshmallow/experimental/__init__.py  (marshmallow.experimental)\nsrc/marshmallow/experimental/context.py  (marshmallow.experimental.context)\nsrc/marshmallow/fields.py  (marshmallow.fields)\nsrc/marshmallow/orderedset.py  (marshmallow.orderedset)\nsrc/marshmallow/schema.py  (marshmallow.schema)\nsrc/marshmallow/types.py  (marshmallow.types)\nsrc/marshmallow/utils.py  (marshmallow.utils)\nsrc/marshmallow/validate.py  (marshmallow.validate)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 1,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\": [\"marshmallow.validate::Email.__call__\"], \"files\": [\"src/marshmallow/validate.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 750,
+   "completion_tokens": 372,
+   "total_tokens": 1122
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}
