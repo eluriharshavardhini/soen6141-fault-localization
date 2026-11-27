@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/url.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef strip_url(\n    url: str,\n    strip_credentials: bool = True,\n    strip_default_port: bool = True,\n    origin_only: bool = False,\n    strip_fragment: bool = True,\n) -> str:\n    \"\"\"Strip URL string from some of its components:\n\n    - ``strip_credentials`` removes \"user:password@\"\n    - ``strip_default_port`` removes \":80\" (resp. \":443\", \":21\")\n      from http:// (resp. https://, ftp://) URLs\n    - ``origin_only`` replaces path component with \"/\", also dropping\n      query and fragment components ; it also strips credentials\n    - ``strip_fragment`` drops any #fragment component\n    \"\"\"\n\n    parsed_url = urlparse(url)\n    netloc = parsed_url.netloc\n    if (strip_credentials or origin_only) and (\n        parsed_url.username or parsed_url.password\n    ):\n        netloc = netloc.split(\"@\")[-1]\n\n    if (\n        strip_default_port\n        and parsed_url.port\n        and (parsed_url.scheme, parsed_url.port)\n        in {\n            (\"http\", 80),\n            (\"https\", 443),\n            (\"ftp\", 21),\n        }\n    ):\n        netloc = netloc.replace(f\":{parsed_url.port}\", \"\")\n\n    return urlunparse(\n        (\n            parsed_url.scheme,\n            netloc,\n            \"/\" if origin_only else parsed_url.path,\n            \"\" if origin_only else parsed_url.params,\n            \"\" if origin_only else parsed_url.query,\n            \"\" if strip_fragment else parsed_url.fragment,\n        )\n    )\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def strip_url(\\n    url: str,\\n    strip_credentials: bool = True,\\n    strip_default_port: bool = True,\\n    origin_only: bool = False,\\n    strip_fragment: bool = True,\\n) -> str:\\n    \\\"\\\"\\\"Strip URL string from some of its components:\\n\\n    - ``strip_credentials`` removes \\\"user:password@\\\"\\n    - ``strip_default_port`` removes \\\":80\\\" (resp. \\\":443\\\", \\\":21\\\")\\n      from http:// (resp. https://, ftp://) URLs\\n    - ``origin_only`` replaces path component with \\\"/\\\", also dropping\\n      query and fragment components ; it also strips credentials\\n    - ``strip_fragment`` drops any #fragment component\\n    \\\"\\\"\\\"\\n\\n    parsed_url = urlparse(url)\\n    netloc = parsed_url.netloc\\n    if (strip_credentials or origin_only) and (\\n        parsed_url.username or parsed_url.password\\n    ):\\n        netloc = netloc.split(\\\"@\\\")[-1]\\n\\n    if (\\n        strip_default_port\\n        and parsed_url.port\\n        and (parsed_url.scheme, parsed_url.port)\\n        in {\\n            (\\\"http\\\", 80),\\n            (\\\"https\\\", 443),\\n            (\\\"ftp\\\", 21),\\n        }\\n    ):\\n        netloc = netloc.replace(f\\\":{parsed_url.port}\\\", \\\"\\\")\\n\\n    return urlunparse(\\n        (\\n            parsed_url.scheme,\\n            netloc,\\n            \\\"/\\\" if origin_only else parsed_url.path,\\n            \\\"\\\" if origin_only else parsed_url.params,\\n            \\\"\\\" if origin_only else parsed_url.query,\\n            \\\"\\\" if strip_fragment else parsed_url.fragment,\\n        )\\n    )\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 491,
+   "completion_tokens": 758,
+   "total_tokens": 1249
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_8d13edce1d"
+ }
+}

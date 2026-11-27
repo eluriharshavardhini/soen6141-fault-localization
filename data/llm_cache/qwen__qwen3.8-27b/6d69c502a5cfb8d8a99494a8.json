@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pylint-dev/astroid, file astroid/nodes/scoped_nodes/scoped_nodes.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def infer_call_result(\n        self,\n        caller: SuccessfulInferenceResult | None,\n        context: InferenceContext | None = None,\n    ) -> Iterator[InferenceResult]:\n        \"\"\"Infer what the function returns when called.\"\"\"\n        if context is None:\n            context = InferenceContext()\n        if self.is_generator():\n            if isinstance(self, AsyncFunctionDef):\n                generator_cls: type[bases.Generator] = bases.AsyncGenerator\n            else:\n                generator_cls = bases.Generator\n            result = generator_cls(self, generator_initial_context=context)\n            yield result\n            return\n        # This is really a gigantic hack to work around metaclass generators\n        # that return transient class-generating functions. Pylint's AST structure\n        # cannot handle a base class object that is only used for calling __new__,\n        # but does not contribute to the inheritance structure itself. We inject\n        # a fake class into the hierarchy here for several well-known metaclass\n        # generators, and filter it out later.\n        if (\n            self.name == \"with_metaclass\"\n            and caller is not None\n            and self.args.args\n            and len(self.args.args) == 1\n            and self.args.vararg is not None\n        ):\n            if isinstance(caller.args, node_classes.Arguments):\n                assert caller.args.args is not None\n                call_args = caller.args.args\n            elif isinstance(caller.args, list):\n                call_args = caller.args\n            else:\n                raise TypeError(  # pragma: no cover\n                    f\"caller.args was neither Arguments nor list; got {type(caller.args)}\"\n                )\n            if not call_args:\n                # ``with_metaclass()`` called without a metaclass argument is\n                # invalid; there is nothing to infer.\n                raise InferenceError(\n                    \"with_metaclass() call has no metaclass argument\",\n                    node=self,\n                    context=context,\n                )\n            metaclass = next(call_args[0].infer(context), None)\n            if isinstance(metaclass, ClassDef):\n                class_bases = [_infer_last(x, context) for x in caller.args[1:]]\n                new_class = ClassDef(\n                    name=\"temporary_class\",\n                    lineno=0,\n                    col_offset=0,\n                    end_lineno=0,\n                    end_col_offset=0,\n                    parent=SYNTHETIC_ROOT,\n                )\n                new_class.hide = True\n                new_class.postinit(\n                    bases=[\n                        base\n                        for base in class_bases\n                        if not isinstance(base, util.UninferableBase)\n                    ],\n                    body=[],\n                    decorators=None,\n                    metaclass=metaclass,\n                )\n                yield new_class\n                return\n        returns = self._get_return_nodes_skip_functions()\n\n        first_return = next(returns, None)\n        if not first_return:\n            if protocols._is_stub_node(self) and self._is_stub_placeholder_body(\n                self.body\n            ):\n                if self.returns is not None:\n                    yield from protocols.infer_instance_from_annotation(\n                        self.returns, ctx=context\n                    )\n                else:\n                    yield util.Uninferable\n                return\n\n            if self.body:\n                # A body that is only ``...`` is a placeholder, like ``pass``:\n                # it does not mean the function returns ``None``.\n                if self._is_stub_placeholder_body(self.body) or self.is_abstract(\n                    pass_is_abstract=True, any_raise_is_abstract=True\n                ):\n                    yield util.Uninferable\n                else:\n                    yield node_classes.Const(None)\n                return\n\n            # Builtin dunder methods have empty bodies, return Uninferable.\n            if (\n                len(self.body) == 0\n                and self.name.startswith(\"__\")\n                and self.name.endswith(\"__\")\n                and self.root().qname() == \"builtins\"\n            ):\n                yield util.Uninferable\n                return\n\n            raise InferenceError(\"The function does not have any return statements\")\n\n        for returnnode in itertools.chain((first_return,), returns):\n            if returnnode.value is None:\n                yield node_classes.Const(None)\n            else:\n                try:\n                    yield from returnnode.value.infer(context)\n                except InferenceError:\n                    yield util.Uninferable\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "",
+  "finish_reason": "length",
+  "usage": {
+   "prompt_tokens": 1077,
+   "completion_tokens": 3000,
+   "total_tokens": 4077
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

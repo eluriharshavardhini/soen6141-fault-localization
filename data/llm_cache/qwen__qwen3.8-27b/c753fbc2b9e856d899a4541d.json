@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/crawler.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef _get_spider_loader(settings):\n    \"\"\" Get SpiderLoader instance from settings \"\"\"\n    if settings.get('SPIDER_MANAGER_CLASS'):\n        warnings.warn(\n            'SPIDER_MANAGER_CLASS option is deprecated. '\n            'Please use SPIDER_LOADER_CLASS.',\n            category=ScrapyDeprecationWarning, stacklevel=2\n        )\n    cls_path = settings.get('SPIDER_LOADER_CLASS',\n                            settings.get('SPIDER_MANAGER_CLASS'))\n    loader_cls = load_object(cls_path)\n    verifyClass(ISpiderLoader, loader_cls)\n    return loader_cls.from_settings(settings.frozencopy())\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def _get_spider_loader(settings):\\n    \\\"\\\"\\\" Get SpiderLoader instance from settings \\\"\\\"\\\"\\n    if settings.get('SPIDER_MANAGER_CLASS') and not settings.get('SPIDER_LOADER_CLASS'):\\n        warnings.warn(\\n            'SPIDER_MANAGER_CLASS option is deprecated. '\\n            'Please use SPIDER_LOADER_CLASS.',\\n            category=ScrapyDeprecationWarning, stacklevel=2\\n        )\\n    cls_path = settings.get('SPIDER_LOADER_CLASS',\\n                            settings.get('SPIDER_MANAGER_CLASS'))\\n    loader_cls = load_object(cls_path)\\n    verifyClass(ISpiderLoader, loader_cls)\\n    return loader_cls.from_settings(settings.frozencopy())\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 246,
+   "completion_tokens": 964,
+   "total_tokens": 1210
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

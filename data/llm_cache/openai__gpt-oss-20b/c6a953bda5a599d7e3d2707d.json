@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/core/downloader/handlers/http11.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def requestTunnel(self, protocol):\n        \"\"\"Asks the proxy to open a tunnel.\"\"\"\n        tunnelReq = 'CONNECT %s:%s HTTP/1.1\\r\\n' % (self._tunneledHost,\n                                                  self._tunneledPort)\n        if self._proxyAuthHeader:\n            tunnelReq += 'Proxy-Authorization: %s\\r\\n' % self._proxyAuthHeader\n        tunnelReq += '\\r\\n'\n        protocol.transport.write(tunnelReq)\n        self._protocolDataReceived = protocol.dataReceived\n        protocol.dataReceived = self.processProxyResponse\n        self._protocol = protocol\n        return protocol\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def requestTunnel(self, protocol):\\n        \\\"\\\"\\\"Asks the proxy to open a tunnel.\\\"\\\"\\\"\\n        tunnelReq = 'CONNECT %s:%s HTTP/1.1\\\\r\\\\n' % (self._tunneledHost,\\n                                                      self._tunneledPort)\\n        if self._proxyAuthHeader:\\n            tunnelReq += 'Proxy-Authorization: %s\\\\r\\\\n' % self._proxyAuthHeader\\n        tunnelReq += '\\\\r\\\\n'\\n        protocol.transport.write(tunnelReq)\\n        self._protocolDataReceived = protocol.dataReceived\\n        protocol.dataReceived = self.processProxyResponse\\n        self._protocol = protocol\\n        return protocol\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 302,
+   "completion_tokens": 642,
+   "total_tokens": 944
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_bb6a356524"
+ }
+}

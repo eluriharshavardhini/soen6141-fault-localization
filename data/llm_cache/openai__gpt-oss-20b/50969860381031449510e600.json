@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: scrapy/scrapy\n\n## Failing test output\n### Failing test: tests.test_utils_datatypes.TestLocalCache::test_cache_update_existing_key_does_not_evict\nAssertionError: assert 1 == 2\n +  where 1 = len(LocalCache({'b': 20}))\nself = <tests.test_utils_datatypes.TestLocalCache object at 0x7fd7f94b2930>\n\n    def test_cache_update_existing_key_does_not_evict(self):\n        # Updating an existing key must not evict another entry or drop the\n        # cache below its limit (regression: it used to evict the oldest key).\n        cache: LocalCache[str, int] = LocalCache(limit=2)\n        cache[\"a\"] = 1\n        cache[\"b\"] = 2\n        cache[\"b\"] = 20\n>       assert len(cache) == 2\nE       AssertionError: assert 1 == 2\nE        +  where 1 = len(LocalCache({'b': 20}))\n\ntests/test_utils_datatypes.py:334: AssertionError\n\n## Failing test code\n```python\n# tests/test_utils_datatypes.py\n    def test_cache_update_existing_key_does_not_evict(self):\n        # Updating an existing key must not evict another entry or drop the\n        # cache below its limit (regression: it used to evict the oldest key).\n        cache: LocalCache[str, int] = LocalCache(limit=2)\n        cache[\"a\"] = 1\n        cache[\"b\"] = 2\n        cache[\"b\"] = 20\n        assert len(cache) == 2\n        assert \"a\" in cache\n        assert cache[\"a\"] == 1\n        assert cache[\"b\"] == 20\n```\n\n## Candidate functions (stack-trace functions first, then by similarity to the failure)\n- scrapy.utils.datatypes::LocalWeakReferencedCache.__init__   def __init__(self, limit: int | None = None):\n- scrapy.utils.datatypes::LocalCache.__setitem__   def __setitem__(self, key: _KT, value: _VT) -> None:\n- scrapy.utils.datatypes::LocalCache.__init__   def __init__(self, limit: int | None = None):\n- scrapy.utils.datatypes::LocalWeakReferencedCache.__getitem__   def __getitem__(self, key: _KT) -> _VT | None:\n- scrapy.utils.datatypes::LocalWeakReferencedCache.__setitem__   def __setitem__(self, key: _KT, value: _VT | None) -> None:\n- scrapy.utils.trackref::format_live_refs   def format_live_refs(ignore: Any = NoneType) -> str:\n- scrapy.extensions.remote_control::_cap   def _cap(s: str, limit: int) -> tuple[str, bool]:\n- scrapy.settings::BaseSettings.update   def update(self, values: _SettingsInput, priority: int | str = \"project\") -> None:  # type: ignore[override]\n- scrapy.core.downloader::_slot_jitter   def _slot_jitter(slot_settings: dict[str, Any], default: float) -> float:\n- scrapy.utils.python::without_none_values   def without_none_values(\n- scrapy.crawler::CrawlerRunnerBase.create_crawler   def create_crawler(\n- scrapy.utils.python::re_rsearch   def re_rsearch(\n- scrapy.utils.trackref::get_oldest   def get_oldest(class_name: str) -> Any:\n- scrapy.utils.python::memoizemethod_noargs   def memoizemethod_noargs(\n- scrapy.utils.python::to_unicode   def to_unicode(\n- scrapy.utils.misc::load_object   def load_object(path: str | Callable[..., Any]) -> Any:\n- scrapy.cmdline::ScrapyArgumentParser._parse_optional   def _parse_optional(\n- scrapy.utils.iterators::csviter   def csviter(\n- scrapy.settings::BaseSettings.get_component_priority_dict_with_base   def get_component_priority_dict_with_base(self, name: str) -> BaseSettings:\n- scrapy.utils.datatypes::CaseInsensitiveDict._normkey   def _normkey(self, key: str | bytes) -> str | bytes:\n- scrapy.downloadermiddlewares.retry::get_retry_request   def get_retry_request(\n- scrapy.utils.deprecate::update_classpath   def update_classpath(path: Any) -> Any:\n- scrapy.extensions.feedexport::FeedStorageProtocol.open   def open(self, spider: Spider) -> IO[bytes]:\n- scrapy.utils.reactor::verify_installed_asyncio_event_loop   def verify_installed_asyncio_event_loop(loop_path: str) -> None:\n- scrapy.settings::BaseSettings.getwithbase   def getwithbase(self, name: str) -> BaseSettings:\n- scrapy.utils.datatypes::CaseInsensitiveDict.__setitem__   def __setitem__(self, key: str | bytes, value: Any) -> None:\n- scrapy.utils.datatypes::CaseInsensitiveDict.__getitem__   def __getitem__(self, key: str | bytes) -> Any:\n- scrapy.utils.datatypes::CaseInsensitiveDict.__contains__   def __contains__(self, key: str | bytes) -> bool:  # type: ignore[override]\n- scrapy.utils.datatypes::CaseInsensitiveDict.__delitem__   def __delitem__(self, key: str | bytes) -> None:\n- scrapy.resolver::CachingThreadedResolver.__init__   def __init__(self, reactor: ReactorBase, cache_size: int, timeout: float):\n\n## Source of the top 4 candidates\n### scrapy.utils.datatypes::LocalWeakReferencedCache.__init__  (scrapy/utils/datatypes.py:114)\n```python\n    def __init__(self, limit: int | None = None):\n        super().__init__()\n        self.data: LocalCache[_KT, _VT] = LocalCache(limit=limit)\n```\n\n### scrapy.utils.datatypes::LocalCache.__setitem__  (scrapy/utils/datatypes.py:93)\n```python\n    def __setitem__(self, key: _KT, value: _VT) -> None:\n        if self.limit is not None:\n            if self.limit == 0:\n                return\n            while len(self) >= self.limit:\n                self.popitem(last=False)\n        super().__setitem__(key, value)\n```\n\n### scrapy.utils.datatypes::LocalCache.__init__  (scrapy/utils/datatypes.py:89)\n```python\n    def __init__(self, limit: int | None = None):\n        super().__init__()\n        self.limit: int | None = limit\n```\n\n### scrapy.utils.datatypes::LocalWeakReferencedCache.__getitem__  (scrapy/utils/datatypes.py:123)\n```python\n    def __getitem__(self, key: _KT) -> _VT | None:\n        try:\n            return cast(\"_VT\", super().__getitem__(key))\n        except (TypeError, KeyError):\n            return None  # key is either not weak-referenceable or not cached\n```\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\". You may name functions that are not in the candidate list.\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 3,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\":[\"scrapy.utils.datatypes::LocalCache.__setitem__\",\"scrapy.utils.datatypes::LocalCache.__init__\"],\"files\":[\"scrapy/utils/datatypes.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1715,
+   "completion_tokens": 180,
+   "total_tokens": 1895
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_e23fc997ca"
+ }
+}

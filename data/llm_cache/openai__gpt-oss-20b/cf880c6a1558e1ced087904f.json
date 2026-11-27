@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/http/cookies.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def add_cookie_header(self, request: Request) -> None:\n        wreq = WrappedRequest(request)\n        self.policy._now = self.jar._now = int(time.time())  # type: ignore[attr-defined]\n\n        # the cookiejar implementation iterates through all domains\n        # instead we restrict to potential matches on the domain\n        req_host = urlparse_cached(request).hostname\n        if not req_host:\n            return\n\n        if not IPV4_RE.search(req_host):\n            hosts = potential_domain_matches(req_host)\n            if \".\" not in req_host:\n                hosts.append(req_host + \".local\")\n        else:\n            hosts = [req_host]\n\n        cookies = []\n        for host in hosts:\n            if host in self.jar._cookies:  # type: ignore[attr-defined]\n                cookies.extend(self.jar._cookies_for_domain(host, wreq))  # type: ignore[attr-defined]\n\n        attrs = self.jar._cookie_attrs(cookies)  # type: ignore[attr-defined]\n        if attrs and not wreq.has_header(\"Cookie\"):\n            wreq.add_unredirected_header(\"Cookie\", \"; \".join(attrs))\n\n        self.processed += 1\n        if self.processed % self.check_expired_frequency == 0:\n            # This is still quite inefficient for large number of cookies\n            self.jar.clear_expired_cookies()\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def add_cookie_header(self, request: Request) -> None:\\n        wreq = WrappedRequest(request)\\n        self.policy._now = self.jar._now = time.time()  # type: ignore[attr-defined]\\n\\n        # the cookiejar implementation iterates through all domains\\n        # instead we restrict to potential matches on the domain\\n        req_host = urlparse_cached(request).hostname\\n        if not req_host:\\n            return\\n\\n        if not IPV4_RE.search(req_host):\\n            hosts = potential_domain_matches(req_host)\\n            if \\\".\\\" not in req_host:\\n                hosts.append(req_host + \\\".local\\\")\\n        else:\\n            hosts = [req_host]\\n\\n        cookies = []\\n        for host in hosts:\\n            if host in self.jar._cookies:  # type: ignore[attr-defined]\\n                cookies.extend(self.jar._cookies_for_domain(host, wreq))  # type: ignore[attr-defined]\\n\\n        attrs = self.jar._cookie_attrs(cookies)  # type: ignore[attr-defined]\\n        if attrs and not wreq.has_header(\\\"Cookie\\\"):\\n            wreq.add_unredirected_header(\\\"Cookie\\\", \\\"; \\\".join(attrs))\\n\\n        self.processed += 1\\n        if self.processed % self.check_expired_frequency == 0:\\n            # This is still quite inefficient for large number of cookies\\n            self.jar.clear_expired_cookies()\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 443,
+   "completion_tokens": 449,
+   "total_tokens": 892
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_75c733514d"
+ }
+}

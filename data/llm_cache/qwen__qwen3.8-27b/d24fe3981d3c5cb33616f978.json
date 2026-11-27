@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef normalize_invisible_parens(node: Node, parens_after: Set[str]) -> None:\n    \"\"\"Make existing optional parentheses invisible or create new ones.\n\n    `parens_after` is a set of string leaf values immeditely after which parens\n    should be put.\n\n    Standardizes on visible parentheses for single-element tuples, and keeps\n    existing visible parentheses for other tuples and generator expressions.\n    \"\"\"\n    for pc in list_comments(node.prefix, is_endmarker=False):\n        if pc.value in FMT_OFF:\n            # This `node` has a prefix with `# fmt: off`, don't mess with parens.\n            return\n\n    check_lpar = False\n    for index, child in enumerate(list(node.children)):\n        if check_lpar:\n            if child.type == syms.atom:\n                if maybe_make_parens_invisible_in_atom(child, parent=node):\n                    lpar = Leaf(token.LPAR, \"\")\n                    rpar = Leaf(token.RPAR, \"\")\n                    index = child.remove() or 0\n                    node.insert_child(index, Node(syms.atom, [lpar, child, rpar]))\n            elif is_one_tuple(child):\n                # wrap child in visible parentheses\n                lpar = Leaf(token.LPAR, \"(\")\n                rpar = Leaf(token.RPAR, \")\")\n                child.remove()\n                node.insert_child(index, Node(syms.atom, [lpar, child, rpar]))\n            elif node.type == syms.import_from:\n                # \"import from\" nodes store parentheses directly as part of\n                # the statement\n                if child.type == token.LPAR:\n                    # make parentheses invisible\n                    child.value = \"\"  # type: ignore\n                    node.children[-1].value = \"\"  # type: ignore\n                elif child.type != token.STAR:\n                    # insert invisible parentheses\n                    node.insert_child(index, Leaf(token.LPAR, \"\"))\n                    node.append_child(Leaf(token.RPAR, \"\"))\n                break\n\n            elif not (isinstance(child, Leaf) and is_multiline_string(child)):\n                # wrap child in invisible parentheses\n                lpar = Leaf(token.LPAR, \"\")\n                rpar = Leaf(token.RPAR, \"\")\n                index = child.remove() or 0\n                node.insert_child(index, Node(syms.atom, [lpar, child, rpar]))\n\n        check_lpar = isinstance(child, Leaf) and child.value in parens_after\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "",
+  "finish_reason": "length",
+  "usage": {
+   "prompt_tokens": 640,
+   "completion_tokens": 3000,
+   "total_tokens": 3640
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

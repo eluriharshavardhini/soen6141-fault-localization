@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pallets/click, file src/click/shell_completion.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def format_completion(self, item: CompletionItem) -> str:\n        \"\"\"\n        .. versionchanged:: 8.4.0\n            Escape newlines in value and help to fix completion errors with\n            multi-line help strings.\n        \"\"\"\n        # The fish completion script splits each response line on literal\n        # newlines, so any newline in the value or help would corrupt the\n        # frame. Replace them with the two-character escape \"\\n\" so the text\n        # round-trips through fish without breaking the format. The \"_\"\n        # sentinel for missing help mirrors :class:`ZshComplete`.\n        help_ = item.help or \"_\"\n        value = item.value.replace(\"\\n\", r\"\\n\")\n        help_escaped = help_.replace(\"\\n\", r\"\\n\")\n        return f\"{item.type}\\n{value}\\n{help_escaped}\"\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def format_completion(self, item: CompletionItem) -> str:\\n        \\\"\\\"\\\"\\n        .. versionchanged:: 8.4.0\\n            Escape newlines in value and help to fix completion errors with\\n            multi-line help strings.\\n        \\\"\\\"\\\"\\n        # The fish completion script splits each response line on literal\\n        # newlines, so any newline in the value or help would corrupt the\\n        # frame. Replace them with the two-character escape \\\"\\\\n\\\" so the text\\n        # round-trips through fish without breaking the format. The \\\"_\\\"\\n        # sentinel for missing help mirrors :class:`ZshComplete`.\\n        help_ = item.help or \\\"_\\\"\\n        value = item.value.replace(\\\"\\\\n\\\", r\\\"\\\\\\\\n\\\").replace(\\\"\\\\\\\\\\\", r\\\"\\\\\\\\\\\\\\\\\\\")\\n        help_escaped = help_.replace(\\\"\\\\n\\\", r\\\"\\\\\\\\n\\\").replace(\\\"\\\\\\\\\\\", r\\\"\\\\\\\\\\\\\\\\\\\")\\n        return f\\\"{item.type}\\\\n{value}\\\\n{help_escaped}\\\"\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 349,
+   "completion_tokens": 513,
+   "total_tokens": 862
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_ce54c53bd5"
+ }
+}

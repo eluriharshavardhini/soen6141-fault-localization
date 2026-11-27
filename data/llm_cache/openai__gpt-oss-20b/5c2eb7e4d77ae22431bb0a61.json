@@ -1,0 +1,28 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pallets/click, file src/click/shell_completion.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def format_completion(self, item: CompletionItem) -> str:\n        return f\"{item.type}\\n{item.value}\\n{item.help if item.help else '_'}\"\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def format_completion(self, item: CompletionItem) -> str:\\n        return f\\\"{item.type}\\\\n{item.value}\\\\n{item.help if item.help else '_'}\\\\n\\\"\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 205,
+   "completion_tokens": 147,
+   "total_tokens": 352
+  },
+  "system_fingerprint": "fp_2b688e7cc3"
+ }
+}

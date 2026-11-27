@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: python-poetry/tomlkit\n\n## Failing test output\n### Failing test: tests.test_parser::test_parser_reports_the_same_position_regardless_of_line_ending[\\r\\n]\nassert 4 == 3\n +  where 4 = UnexpectedCharError(\"Unexpected character: '@' at line 4 col 0\").line\n +    where UnexpectedCharError(\"Unexpected character: '@' at line 4 col 0\") = <ExceptionInfo UnexpectedCharError(\"Unexpected character: '@' at line 4 col 0\") tblen=5>.value\nline_ending = '\\r\\n'\n\n    @pytest.mark.parametrize(\"line_ending\", [\"\\n\", \"\\r\\n\"])\n    def test_parser_reports_the_same_position_regardless_of_line_ending(\n        line_ending: str,\n    ) -> None:\n        content = line_ending.join([\"a = 1\", \"b = 2\", \"c = @\", \"d = 4\"]) + line_ending\n    \n        with pytest.raises(UnexpectedCharError) as e:\n            Parser(content).parse()\n    \n>       assert e.value.line == 3\nE       assert 4 == 3\nE        +  where 4 = UnexpectedCharError(\"Unexpected character: '@' at line 4 col 0\").line\nE        +    where UnexpectedCharError(\"Unexpected character: '@' at line 4 col 0\") = <ExceptionInfo UnexpectedCharError(\"Unexpected character: '@' at line 4 col 0\") tblen=5>.value\n\ntests/test_parser.py:53: AssertionError\n\n### Failing test: tests.test_parser::test_parser_reports_the_right_position_for_mixed_line_endings\nassert 5 == 4\n +  where 5 = UnexpectedCharError(\"Unexpected character: '@' at line 3 col 5\").col\n +    where UnexpectedCharError(\"Unexpected character: '@' at line 3 col 5\") = <ExceptionInfo UnexpectedCharError(\"Unexpected character: '@' at line 3 col 5\") tblen=5>.value\ndef test_parser_reports_the_right_position_for_mixed_line_endings() -> None:\n        content = \"a = 1\\r\\nb = 2\\nc = @\\r\\n\"\n    \n        with pytest.raises(UnexpectedCharError) as e:\n            Parser(content).parse()\n    \n        assert e.value.line == 3\n>       assert e.value.col == 4\nE       assert 5 == 4\nE        +  where 5 = UnexpectedCharError(\"Unexpected character: '@' at line 3 col 5\").col\nE        +    where UnexpectedCharError(\"Unexpected character: '@' at line 3 col 5\") = <ExceptionInfo UnexpectedCharError(\"Unexpected character: '@' at line 3 col 5\") tblen=5>.value\n\ntests/test_parser.py:64: AssertionError\n\n## Source files (path and module)\ntomlkit/__init__.py  (tomlkit)\ntomlkit/_compat.py  (tomlkit._compat)\ntomlkit/_types.py  (tomlkit._types)\ntomlkit/_utils.py  (tomlkit._utils)\ntomlkit/api.py  (tomlkit.api)\ntomlkit/container.py  (tomlkit.container)\ntomlkit/exceptions.py  (tomlkit.exceptions)\ntomlkit/items.py  (tomlkit.items)\ntomlkit/parser.py  (tomlkit.parser)\ntomlkit/source.py  (tomlkit.source)\ntomlkit/toml_document.py  (tomlkit.toml_document)\ntomlkit/toml_file.py  (tomlkit.toml_file)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 3,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\":[\"tomlkit.parser::Parser._parse_line\",\"tomlkit.parser::Parser._get_position\",\"tomlkit.parser::Parser._skip_whitespace\",\"tomlkit.parser::Parser._parse_line_endings\",\"tomlkit.source::Source.get_line\"],\"files\":[\"tomlkit/parser.py\",\"tomlkit/source.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1007,
+   "completion_tokens": 156,
+   "total_tokens": 1163
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_e189667b30"
+ }
+}

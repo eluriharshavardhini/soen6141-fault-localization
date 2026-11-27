@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project marshmallow-code/marshmallow, file src/marshmallow/fields.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def __init__(self, constant: _ContantT, **kwargs: Unpack[_BaseFieldKwargs]):\n        super().__init__(**kwargs)\n        self.constant = constant\n        self.load_default = constant\n        self.dump_default = constant\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def __init__(self, constant: _ConstantT, **kwargs: Unpack[_BaseFieldKwargs]):\\n    super().__init__(**kwargs)\\n    self.constant = constant\\n    self.load_default = constant\\n    self.dump_default = constant\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 226,
+   "completion_tokens": 177,
+   "total_tokens": 403
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_bb6a356524"
+ }
+}

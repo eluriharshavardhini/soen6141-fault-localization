@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project tobymao/sqlglot, file sqlglot/dialects/fabric.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n        def datatype_sql(self, expression: exp.DataType) -> str:\n            # Check if this is a temporal type that needs precision handling. Fabric limits temporal\n            # types to max 6 digits precision. When no precision is specified, we default to 6 digits.\n            if expression.is_type(*exp.DataType.TEMPORAL_TYPES):\n                # Get the current precision (first expression if it exists)\n                precision_param = expression.find(exp.DataTypeParam)\n                target_precision = 6\n\n                if precision_param and precision_param.this.is_int:\n                    # Cap precision at 6\n                    current_precision = precision_param.this.to_py()\n                    target_precision = min(current_precision, 6)\n                else:\n                    # If precision exists but is not an integer, default to 6\n                    target_precision = 6\n\n                # Create a new expression with the target precision\n                expression = exp.DataType(\n                    this=expression.this,\n                    expressions=[exp.DataTypeParam(this=exp.Literal.number(target_precision))],\n                )\n\n            return super().datatype_sql(expression)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"        def datatype_sql(self, expression: exp.DataType) -> str:\\n            # Check if this is a temporal type that needs precision handling. Fabric limits temporal\\n            # types to max 6 digits precision. When no precision is specified, we default to 6 digits.\\n            if expression.is_type(*exp.DataType.TEMPORAL_TYPES) and not expression.is_type(exp.DataType.Type.DATE):\\n                # Get the current precision (first expression if it exists)\\n                precision_param = expression.find(exp.DataTypeParam)\\n                target_precision = 6\\n\\n                if precision_param and precision_param.this.is_int:\\n                    # Cap precision at 6\\n                    current_precision = precision_param.this.to_py()\\n                    target_precision = min(current_precision, 6)\\n                else:\\n                    # If precision exists but is not an integer, default to 6\\n                    target_precision = 6\\n\\n                # Create a new expression with the target precision\\n                expression = exp.DataType(\\n                    this=expression.this,\\n                    expressions=[exp.DataTypeParam(this=exp.Literal.number(target_precision))],\\n                )\\n\\n            return super().datatype_sql(expression)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 347,
+   "completion_tokens": 2182,
+   "total_tokens": 2529
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/spidermiddlewares/offsite.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def get_host_regex(self, spider):\n        \"\"\"Override this method to implement a different offsite policy\"\"\"\n        allowed_domains = getattr(spider, 'allowed_domains', None)\n        if not allowed_domains:\n            return re.compile('')  # allow all by default\n        url_pattern = re.compile(\"^https?://.*$\")\n        for domain in allowed_domains:\n            if url_pattern.match(domain):\n                message = (\"allowed_domains accepts only domains, not URLs. \"\n                           \"Ignoring URL entry %s in allowed_domains.\" % domain)\n                warnings.warn(message, URLWarning)\n        domains = [re.escape(d) for d in allowed_domains if d is not None]\n        regex = r'^(.*\\.)?(%s)$' % '|'.join(domains)\n        return re.compile(regex)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def get_host_regex(self, spider):\\n    \\\"\\\"\\\"Override this method to implement a different offsite policy\\\"\\\"\\\"\\n    allowed_domains = getattr(spider, 'allowed_domains', None)\\n    if not allowed_domains:\\n        return re.compile('')\\n    url_pattern = re.compile(r'^https?://.*$')\\n    for domain in allowed_domains:\\n        if url_pattern.match(domain):\\n            message = (\\n                \\\"allowed_domains accepts only domains, not URLs. \\\"\\n                \\\"Ignoring URL entry %s in allowed_domains.\\\" % domain\\n            )\\n            warnings.warn(message, URLWarning)\\n    domains = [re.escape(d) for d in allowed_domains if d is not None and not url_pattern.match(d)]\\n    if not domains:\\n        return re.compile('')\\n    regex = r'^(.*\\\\.)?(%s)$' % '|'.join(domains)\\n    return re.compile(regex)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 334,
+   "completion_tokens": 740,
+   "total_tokens": 1074
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_2b688e7cc3"
+ }
+}

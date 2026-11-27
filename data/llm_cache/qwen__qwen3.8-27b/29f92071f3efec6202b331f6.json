@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/commands/parse.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n        def callback(response: Response, **cb_kwargs: Any) -> Deferred[list[Any]]:\n            # memorize first request\n            if not self.first_response:\n                self.first_response = response\n\n            cb = self._get_callback(spider=spider, opts=opts, response=response)\n\n            # parse items and requests\n            depth: int = response.meta[\"_depth\"]\n\n            d = self.run_callback(response, cb, cb_kwargs)\n            d.addCallback(self._get_items_and_requests, opts, depth, spider, callback)\n            d.addCallback(self.scraped_data)\n            return d\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"        def callback(response: Response, **cb_kwargs: Any) -> Deferred[list[Any]]:\\n            # memorize first request\\n            if not self.first_response:\\n                self.first_response = response\\n\\n            cb = self._get_callback(spider=spider, opts=opts, response=response)\\n\\n            # parse items and requests\\n            depth: int = response.meta[\\\"_depth\\\"]\\n\\n            d = self.run_callback(response, cb, cb_kwargs)\\n            if not isinstance(d, Deferred):\\n                d = defer.succeed(d)\\n            d.addCallback(self._get_items_and_requests, opts, depth, spider, callback)\\n            d.addCallback(self.scraped_data)\\n            return d\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 243,
+   "completion_tokens": 1164,
+   "total_tokens": 1407
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

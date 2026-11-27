@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: marshmallow-code/marshmallow\n\n## Failing test output\n### Failing test: tests.test_validate::test_url_absolute_valid[http://example.org#fragment]\nmarshmallow.exceptions.ValidationError: Not a valid URL.\nvalid_url = 'http://example.org#fragment'\n\n    @pytest.mark.parametrize(\n        \"valid_url\",\n        [\n            \"http://example.org\",\n            \"https://example.org\",\n            \"ftp://example.org\",\n            \"ftps://example.org\",\n            \"http://example.co.jp\",\n            \"http://www.example.com/a%C2%B1b\",\n            \"http://www.example.com/~username/\",\n            \"ht\n[... output truncated ...]\n# Check first if the scheme is valid\n        scheme = None\n        if \"://\" in value:\n            scheme = value.split(\"://\", maxsplit=1)[0].lower()\n            if scheme not in self.schemes:\n                raise ValidationError(message)\n    \n        regex = self._regex(\n            relative=self.relative, absolute=self.absolute, require_tld=self.require_tld\n        )\n    \n        # Hostname is optional for file URLS. If absent it means `localhost`.\n        # Fill it in for the validation if needed\n        if scheme == \"file\" and value.lower().startswith(\"file:///\"):\n            matched = regex.search(\"file://localhost/\" + value[8:])\n        else:\n            matched = regex.search(value)\n    \n        if not matched:\n>           raise ValidationError(message)\nE           marshmallow.exceptions.ValidationError: Not a valid URL.\n\nsrc/marshmallow/validate.py:242: ValidationError\n\n### Failing test: tests.test_validate::test_url_absolute_valid[http://user@example.com#fragment]\nmarshmallow.exceptions.ValidationError: Not a valid URL.\nvalid_url = 'http://user@example.com#fragment'\n\n    @pytest.mark.parametrize(\n        \"valid_url\",\n        [\n            \"http://example.org\",\n            \"https://example.org\",\n            \"ftp://example.org\",\n            \"ftps://example.org\",\n            \"http://example.co.jp\",\n            \"http://www.example.com/a%C2%B1b\",\n            \"http://www.example.com/~username/\",\n          \n[... output truncated ...]\n# Check first if the scheme is valid\n        scheme = None\n        if \"://\" in value:\n            scheme = value.split(\"://\", maxsplit=1)[0].lower()\n            if scheme not in self.schemes:\n                raise ValidationError(message)\n    \n        regex = self._regex(\n            relative=self.relative, absolute=self.absolute, require_tld=self.require_tld\n        )\n    \n        # Hostname is optional for file URLS. If absent it means `localhost`.\n        # Fill it in for the validation if needed\n        if scheme == \"file\" and value.lower().startswith(\"file:///\"):\n            matched = regex.search(\"file://localhost/\" + value[8:])\n        else:\n            matched = regex.search(value)\n    \n        if not matched:\n>           raise ValidationError(message)\nE           marshmallow.exceptions.ValidationError: Not a valid URL.\n\nsrc/marshmallow/validate.py:242: ValidationError\n\n### Failing test: tests.test_validate::test_url_relative_valid[#frag]\nmarshmallow.exceptions.ValidationError: Not a valid URL.\nvalid_url = '#frag'\n\n    @pytest.mark.parametrize(\n        \"valid_url\",\n        [\n            \"http://example.org\",\n            \"http://123.45.67.8/\",\n            \"http://example.com/foo/bar/../baz\",\n            \"https://example.com/../icons/logo.gif\",\n            \"http://example.com/./icons/logo.gif\",\n            \"ftp://example.com/../../../../g\",\n            \"http://example.com/g?y/\n[... output truncated ...]\n# Check first if the scheme is valid\n        scheme = None\n        if \"://\" in value:\n            scheme = value.split(\"://\", maxsplit=1)[0].lower()\n            if scheme not in self.schemes:\n                raise ValidationError(message)\n    \n        regex = self._regex(\n            relative=self.relative, absolute=self.absolute, require_tld=self.require_tld\n        )\n    \n        # Hostname is optional for file URLS. If absent it means `localhost`.\n        # Fill it in for the validation if needed\n        if scheme == \"file\" and value.lower().startswith(\"file:///\"):\n            matched = regex.search(\"file://localhost/\" + value[8:])\n        else:\n            matched = regex.search(value)\n    \n        if not matched:\n>           raise ValidationError(message)\nE           marshmallow.exceptions.ValidationError: Not a valid URL.\n\nsrc/marshmallow/validate.py:242: ValidationError\n\n(+1 more failing tests not shown)\n\n## Source files (path and module)\nperformance/benchmark.py  (performance.benchmark)\nsrc/marshmallow/__init__.py  (marshmallow)\nsrc/marshmallow/class_registry.py  (marshmallow.class_registry)\nsrc/marshmallow/constants.py  (marshmallow.constants)\nsrc/marshmallow/decorators.py  (marshmallow.decorators)\nsrc/marshmallow/error_store.py  (marshmallow.error_store)\nsrc/marshmallow/exceptions.py  (marshmallow.exceptions)\nsrc/marshmallow/experimental/__init__.py  (marshmallow.experimental)\nsrc/marshmallow/experimental/context.py  (marshmallow.experimental.context)\nsrc/marshmallow/fields.py  (marshmallow.fields)\nsrc/marshmallow/orderedset.py  (marshmallow.orderedset)\nsrc/marshmallow/schema.py  (marshmallow.schema)\nsrc/marshmallow/types.py  (marshmallow.types)\nsrc/marshmallow/utils.py  (marshmallow.utils)\nsrc/marshmallow/validate.py  (marshmallow.validate)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 1,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\": [\"marshmallow.validate::URL._regex\", \"marshmallow.validate::URL.__call__\"], \"files\": [\"src/marshmallow/validate.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1459,
+   "completion_tokens": 421,
+   "total_tokens": 1880
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: python-poetry/tomlkit\n\n## Failing test output\n### Failing test: tests.test_toml_document::test_add_key_after_dotted_inline_table_without_ending_newline\nAssertionError: assert '[x]\\na.b = {}c = 3\\n' == '[x]\\na.b = {}\\nc = 3\\n'\n  \n    [x]\n  - a.b = {}\n  + a.b = {}c = 3\n  ?         +++++\n  - c = 3\ndef test_add_key_after_dotted_inline_table_without_ending_newline() -> None:\n        content = \"[x]\\na.b = {}\"\n        doc = parse(content)\n        doc[\"x\"][\"c\"] = 3\n    \n>       assert doc.as_string() == \"[x]\\na.b = {}\\nc = 3\\n\"\nE       AssertionError: assert '[x]\\na.b = {}c = 3\\n' == '[x]\\na.b = {}\\nc = 3\\n'\nE         \nE           [x]\nE         - a.b = {}\nE         + a.b = {}c = 3\nE         ?         +++++\nE         - c = 3\n\ntests/test_toml_document.py:1536: AssertionError\n\n## Source files (path and module)\ntomlkit/__init__.py  (tomlkit)\ntomlkit/_compat.py  (tomlkit._compat)\ntomlkit/_types.py  (tomlkit._types)\ntomlkit/_utils.py  (tomlkit._utils)\ntomlkit/api.py  (tomlkit.api)\ntomlkit/container.py  (tomlkit.container)\ntomlkit/exceptions.py  (tomlkit.exceptions)\ntomlkit/items.py  (tomlkit.items)\ntomlkit/parser.py  (tomlkit.parser)\ntomlkit/source.py  (tomlkit.source)\ntomlkit/toml_document.py  (tomlkit.toml_document)\ntomlkit/toml_file.py  (tomlkit.toml_file)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 1,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\":[\"tomlkit.container::Container.__setitem__\",\"tomlkit.toml_document::TomlDocument.__setitem__\",\"tomlkit.items::Table.__setitem__\"],\"files\":[\"tomlkit/container.py\",\"tomlkit/toml_document.py\",\"tomlkit/items.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 660,
+   "completion_tokens": 174,
+   "total_tokens": 834
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_1d46a73b8b"
+ }
+}

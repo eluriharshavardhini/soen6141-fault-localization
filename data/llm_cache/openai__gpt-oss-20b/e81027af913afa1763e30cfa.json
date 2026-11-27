@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/selector/unified.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def __init__(self, response=None, text=None, type=None, root=None, _root=None, **kwargs):\n        st = _st(response, type or self._default_type)\n\n        if _root is not None:\n            warnings.warn(\"Argument `_root` is deprecated, use `root` instead\",\n                          ScrapyDeprecationWarning, stacklevel=2)\n            if root is None:\n                root = _root\n            else:\n                warnings.warn(\"Ignoring deprecated `_root` argument, using provided `root`\")\n\n        if text is not None:\n            response = _response_from_text(text, st)\n\n        if response is not None:\n            text = response.text\n            kwargs.setdefault('base_url', response.url)\n\n        self.response = response\n        super(Selector, self).__init__(text=text, type=st, root=root, **kwargs)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def __init__(self, response=None, text=None, type=None, root=None, **kwargs):\\n    st = _st(response, type or self._default_type)\\n\\n    if text is not None:\\n        response = _response_from_text(text, st)\\n\\n    if response is not None:\\n        text = response.text\\n        kwargs.setdefault('base_url', response.url)\\n\\n    self.response = response\\n    super(Selector, self).__init__(text=text, type=st, root=root, **kwargs)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 347,
+   "completion_tokens": 637,
+   "total_tokens": 984
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_d23c14756c"
+ }
+}

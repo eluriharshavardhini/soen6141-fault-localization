@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/response.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef get_meta_refresh(\n    response: TextResponse,\n    ignore_tags: Iterable[str] = (\"script\", \"noscript\"),\n) -> tuple[None, None] | tuple[float, str]:\n    \"\"\"Parse the http-equiv refresh parameter from the given response\"\"\"\n    if response not in _metaref_cache:\n        text = response.text[0:4096]\n        _metaref_cache[response] = html.get_meta_refresh(\n            text, response.url, response.encoding, ignore_tags=ignore_tags\n        )\n    return _metaref_cache[response]\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def get_meta_refresh(\\n    response: TextResponse,\\n    ignore_tags: Iterable[str] = (\\\"script\\\", \\\"noscript\\\"),\\n) -> tuple[None, None] | tuple[float, str]:\\n    \\\"\\\"\\\"Parse the http-equiv refresh parameter from the given response.\\\"\\\"\\\"\\n    key = response.url\\n    if key not in _metaref_cache:\\n        text = response.text[:4096]\\n        _metaref_cache[key] = html.get_meta_refresh(\\n            text, response.url, response.encoding, ignore_tags=ignore_tags\\n        )\\n    return _metaref_cache[key]\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 285,
+   "completion_tokens": 371,
+   "total_tokens": 656
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_75c733514d"
+ }
+}

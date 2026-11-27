@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef gen_python_files_in_dir(\n    path: Path,\n    root: Path,\n    include: Pattern[str],\n    exclude: Pattern[str],\n    report: \"Report\",\n) -> Iterator[Path]:\n    \"\"\"Generate all files under `path` whose paths are not excluded by the\n    `exclude` regex, but are included by the `include` regex.\n\n    `report` is where output about exclusions goes.\n    \"\"\"\n    assert root.is_absolute(), f\"INTERNAL ERROR: `root` must be absolute but is {root}\"\n    for child in path.iterdir():\n        normalized_path = \"/\" + child.resolve().relative_to(root).as_posix()\n        if child.is_dir():\n            normalized_path += \"/\"\n        exclude_match = exclude.search(normalized_path)\n        if exclude_match and exclude_match.group(0):\n            report.path_ignored(child, f\"matches the --exclude regular expression\")\n            continue\n\n        if child.is_dir():\n            yield from gen_python_files_in_dir(child, root, include, exclude, report)\n\n        elif child.is_file():\n            include_match = include.search(normalized_path)\n            if include_match:\n                yield child\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "",
+  "finish_reason": "length",
+  "usage": {
+   "prompt_tokens": 367,
+   "completion_tokens": 3000,
+   "total_tokens": 3367
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

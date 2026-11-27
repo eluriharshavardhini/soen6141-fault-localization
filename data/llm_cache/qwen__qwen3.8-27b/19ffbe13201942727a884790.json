@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def maybe_empty_lines(self, current_line: Line) -> Tuple[int, int]:\n        \"\"\"Return the number of extra empty lines before and after the `current_line`.\n\n        This is for separating `def`, `async def` and `class` with extra empty\n        lines (two on module-level).\n        \"\"\"\n        before, after = self._maybe_empty_lines(current_line)\n        before -= self.previous_after\n        self.previous_after = after\n        self.previous_line = current_line\n        return before, after\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"    def maybe_empty_lines(self, current_line: Line) -> Tuple[int, int]:\\n        \\\"\\\"\\\"Return the number of extra empty lines before and after the `current_line`.\\n\\n        This is for separating `def`, `async def` and `class` with extra empty\\n        lines (two on module-level).\\n        \\\"\\\"\\\"\\n        before, after = self._maybe_empty_lines(current_line)\\n        before = max(0, before - self.previous_after)\\n        self.previous_after = after\\n        self.previous_line = current_line\\n        return before, after\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 220,
+   "completion_tokens": 536,
+   "total_tokens": 756
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

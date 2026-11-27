@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/response.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef response_status_message(status):\n    \"\"\"Return status code plus status text descriptive message\n\n    >>> response_status_message(200)\n    '200 OK'\n\n    >>> response_status_message(404)\n    '404 Not Found'\n    \"\"\"\n    return '%s %s' % (status, to_native_str(http.RESPONSES.get(int(status))))\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def response_status_message(status):\\n    \\\"\\\"\\\"Return status code plus status text descriptive message\\n\\n    >>> response_status_message(200)\\n    '200 OK'\\n\\n    >>> response_status_message(404)\\n    '404 Not Found'\\n    \\\"\\\"\\\"\\n    return '%s %s' % (status, to_native_str(http.RESPONSES.get(int(status), '')))\\n\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 236,
+   "completion_tokens": 321,
+   "total_tokens": 557
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_75c733514d"
+ }
+}

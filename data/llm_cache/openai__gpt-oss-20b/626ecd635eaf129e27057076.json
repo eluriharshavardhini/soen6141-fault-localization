@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef get_future_imports(node: Node) -> Set[str]:\n    \"\"\"Return a set of __future__ imports in the file.\"\"\"\n    imports = set()\n    for child in node.children:\n        if child.type != syms.simple_stmt:\n            break\n        first_child = child.children[0]\n        if isinstance(first_child, Leaf):\n            # Continue looking if we see a docstring; otherwise stop.\n            if (\n                len(child.children) == 2\n                and first_child.type == token.STRING\n                and child.children[1].type == token.NEWLINE\n            ):\n                continue\n            else:\n                break\n        elif first_child.type == syms.import_from:\n            module_name = first_child.children[1]\n            if not isinstance(module_name, Leaf) or module_name.value != \"__future__\":\n                break\n            for import_from_child in first_child.children[3:]:\n                if isinstance(import_from_child, Leaf):\n                    if import_from_child.type == token.NAME:\n                        imports.add(import_from_child.value)\n                else:\n                    assert import_from_child.type == syms.import_as_names\n                    for leaf in import_from_child.children:\n                        if isinstance(leaf, Leaf) and leaf.type == token.NAME:\n                            imports.add(leaf.value)\n        else:\n            break\n    return imports\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def get_future_imports(node: Node) -> Set[str]:\\n    \\\"\\\"\\\"Return a set of __future__ imports in the file.\\\"\\\"\\\"\\n    imports = set()\\n    for child in node.children:\\n        if child.type != syms.simple_stmt:\\n            break\\n        first_child = child.children[0]\\n        if isinstance(first_child, Leaf):\\n            # Continue looking if we see a docstring; otherwise stop.\\n            if (\\n                len(child.children) == 2\\n                and first_child.type == token.STRING\\n                and child.children[1].type == token.NEWLINE\\n            ):\\n                continue\\n            else:\\n                break\\n        elif first_child.type == syms.import_from:\\n            module_name = first_child.children[1]\\n            if not isinstance(module_name, Leaf) or module_name.value != \\\"__future__\\\":\\n                break\\n            for import_from_child in first_child.children[3:]:\\n                if isinstance(import_from_child, Leaf):\\n                    if import_from_child.type == token.NAME:\\n                        imports.add(import_from_child.value)\\n                    elif import_from_child.type == token.COMMA:\\n                        # Skip commas between names\\n                        continue\\n                else:\\n                    assert import_from_child.type == syms.import_as_names\\n                    for leaf in import_from_child.children:\\n                        if isinstance(leaf, Leaf) and leaf.type == token.NAME:\\n                            imports.add(leaf.value)\\n        else:\\n            break\\n    return imports\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 430,
+   "completion_tokens": 557,
+   "total_tokens": 987
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_e11c8bbf69"
+ }
+}

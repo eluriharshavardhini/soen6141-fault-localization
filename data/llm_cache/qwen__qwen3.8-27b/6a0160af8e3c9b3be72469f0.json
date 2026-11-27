@@ -1,0 +1,34 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: marshmallow-code/marshmallow\n\n## Failing test output\n### Failing test: tests.test_deserialization.TestFieldDeserialization::test_enum_field_by_symbol_rejects_non_member_attributes[mro]\nFailed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\nself = <tests.test_deserialization.TestFieldDeserialization object at 0x7fdf99dc2690>\nnon_member = 'mro'\n\n    @pytest.mark.parametrize(\"non_member\", [\"mro\", \"__class__\", \"__members__\"])\n    def test_enum_field_by_symbol_rejects_non_member_attributes(self, non_member):\n        field = fields.Enum(GenderEnum)\n>       with pytest.raises(\n            ValidationError, match=\"Must be one of: male, female, non_binary.\"\n        ):\nE       Failed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\n\ntests/test_deserialization.py:1203: Failed\n\n### Failing test: tests.test_deserialization.TestFieldDeserialization::test_enum_field_by_symbol_rejects_non_member_attributes[__class__]\nFailed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\nself = <tests.test_deserialization.TestFieldDeserialization object at 0x7fdf99dc28a0>\nnon_member = '__class__'\n\n    @pytest.mark.parametrize(\"non_member\", [\"mro\", \"__class__\", \"__members__\"])\n    def test_enum_field_by_symbol_rejects_non_member_attributes(self, non_member):\n        field = fields.Enum(GenderEnum)\n>       with pytest.raises(\n            ValidationError, match=\"Must be one of: male, female, non_binary.\"\n        ):\nE       Failed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\n\ntests/test_deserialization.py:1203: Failed\n\n### Failing test: tests.test_deserialization.TestFieldDeserialization::test_enum_field_by_symbol_rejects_non_member_attributes[__members__]\nFailed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\nself = <tests.test_deserialization.TestFieldDeserialization object at 0x7fdf99dc2960>\nnon_member = '__members__'\n\n    @pytest.mark.parametrize(\"non_member\", [\"mro\", \"__class__\", \"__members__\"])\n    def test_enum_field_by_symbol_rejects_non_member_attributes(self, non_member):\n        field = fields.Enum(GenderEnum)\n>       with pytest.raises(\n            ValidationError, match=\"Must be one of: male, female, non_binary.\"\n        ):\nE       Failed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\n\ntests/test_deserialization.py:1203: Failed\n\n## Failing test code\n```python\n# tests/test_deserialization.py\n    @pytest.mark.parametrize(\"non_member\", [\"mro\", \"__class__\", \"__members__\"])\n    def test_enum_field_by_symbol_rejects_non_member_attributes(self, non_member):\n        field = fields.Enum(GenderEnum)\n        with pytest.raises(\n            ValidationError, match=\"Must be one of: male, female, non_binary.\"\n        ):\n            field.deserialize(non_member)\n\n# tests/test_deserialization.py\n    @pytest.mark.parametrize(\"non_member\", [\"mro\", \"__class__\", \"__members__\"])\n    def test_enum_field_by_symbol_rejects_non_member_attributes(self, non_member):\n        field = fields.Enum(GenderEnum)\n        with pytest.raises(\n            ValidationError, match=\"Must be one of: male, female, non_binary.\"\n        ):\n            field.deserialize(non_member)\n```\n\n## Candidate functions (stack-trace functions first, then by similarity to the failure)\n- marshmallow.fields::Enum.__init__   def __init__(\n- marshmallow.schema::_get_fields   def _get_fields(attrs) -> list[tuple[str, Field]]:\n- marshmallow.fields::Field.make_error   def make_error(self, key: str, **kwargs) -> ValidationError:\n- marshmallow.class_registry::get_class   def get_class(classname: str, *, all: bool = False) -> list[SchemaType] | SchemaType:  # noqa: A002\n- marshmallow.fields::Enum._deserialize   def _deserialize(self, value, attr, data, **kwargs) -> _EnumT:\n- marshmallow.schema::Schema._init_fields   def _init_fields(self) -> None:\n- marshmallow.validate::Email.__call__   def __call__(self, value: str) -> str:\n- marshmallow.schema::Schema.load   def load(\n- performance.benchmark::must_not_be_blank   def must_not_be_blank(data):\n- marshmallow.fields::Field._deserialize   def _deserialize(\n- marshmallow.fields::TimeDelta.__init__   def __init__(\n- marshmallow.validate::Regexp.__call__   def __call__(self, value):\n- marshmallow.fields::Field.__init__   def __init__(\n- marshmallow.fields::Field._serialize   def _serialize(\n- marshmallow.fields::Tuple.__init__   def __init__(\n- marshmallow.schema::_get_fields_by_mro   def _get_fields_by_mro(klass: SchemaMeta):\n- marshmallow.decorators::set_hook   def set_hook(\n- marshmallow.fields::Mapping.__init__   def __init__(\n- marshmallow.validate::OneOf.options   def options(\n- marshmallow.schema::SchemaMeta.__new__   def __new__(\n- marshmallow.utils::get_value   def get_value(obj, key: int | str, default=missing):\n- marshmallow.fields::Mapping._deserialize   def _deserialize(self, value, attr, data, **kwargs):\n- marshmallow.validate::OneOf.__call__   def __call__(self, value: typing.Any) -> typing.Any:\n- marshmallow.exceptions::ValidationError.normalized_messages   def normalized_messages(self):\n- marshmallow.fields::Tuple._deserialize   def _deserialize(\n- marshmallow.decorators::validates_schema   def validates_schema(\n- marshmallow.fields::Field._validate_missing   def _validate_missing(self, value: typing.Any) -> None:\n- marshmallow.schema::Schema.from_dict   def from_dict(\n- marshmallow.schema::Schema.loads   def loads(\n- marshmallow.fields::Field._bind_to_schema   def _bind_to_schema(self, field_name: str, parent: Schema | Field) -> None:\n\nYou may read the source of up to 5 functions before deciding. Choose the ones most worth reading; any function in the project may be named, not only candidates. Answer with JSON only: {\"inspect\": [\"module::Qualified.name\", ...]}"
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"inspect\": [\"marshmallow.fields::Enum._deserialize\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1516,
+   "completion_tokens": 191,
+   "total_tokens": 1707
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

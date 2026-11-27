@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef generate_ignored_nodes(leaf: Leaf) -> Iterator[LN]:\n    \"\"\"Starting from the container of `leaf`, generate all leaves until `# fmt: on`.\n\n    Stops at the end of the block.\n    \"\"\"\n    container: Optional[LN] = container_of(leaf)\n    while container is not None and container.type != token.ENDMARKER:\n        is_fmt_on = False\n        for comment in list_comments(container.prefix, is_endmarker=False):\n            if comment.value in FMT_ON:\n                is_fmt_on = True\n            elif comment.value in FMT_OFF:\n                is_fmt_on = False\n        if is_fmt_on:\n            return\n\n        yield container\n\n        container = container.next_sibling\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def generate_ignored_nodes(leaf: Leaf) -> Iterator[LN]:\\n    \\\"\\\"\\\"Starting from the container of `leaf`, generate all leaves until `# fmt: on`.\\n\\n    Stops at the end of the block.\\n    \\\"\\\"\\\"\\n    container: Optional[LN] = container_of(leaf)\\",
+  "finish_reason": "length",
+  "usage": {
+   "prompt_tokens": 266,
+   "completion_tokens": 6000,
+   "total_tokens": 6266
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

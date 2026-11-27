@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file src/black/comments.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n@lru_cache(maxsize=4096)\ndef list_comments(prefix: str, *, is_endmarker: bool) -> list[ProtoComment]:\n    \"\"\"Return a list of :class:`ProtoComment` objects parsed from the given `prefix`.\"\"\"\n    result: list[ProtoComment] = []\n    if not prefix or \"#\" not in prefix:\n        return result\n\n    consumed = 0\n    nlines = 0\n    ignored_lines = 0\n    form_feed = False\n    for index, full_line in enumerate(re.split(\"\\r?\\n\", prefix)):\n        consumed += len(full_line) + 1  # adding the length of the split '\\n'\n        match = re.match(r\"^(\\s*)(\\S.*|)$\", full_line)\n        assert match\n        whitespace, line = match.groups()\n        if not line:\n            nlines += 1\n            if \"\\f\" in full_line:\n                form_feed = True\n        if not line.startswith(\"#\"):\n            # Escaped newlines outside of a comment are not really newlines at\n            # all. We treat a single-line comment following an escaped newline\n            # as a simple trailing comment.\n            if line.endswith(\"\\\\\"):\n                ignored_lines += 1\n            continue\n\n        if index == ignored_lines and not is_endmarker:\n            comment_type = token.COMMENT  # simple trailing comment\n        else:\n            comment_type = STANDALONE_COMMENT\n        comment = make_comment(line)\n        result.append(\n            ProtoComment(\n                type=comment_type,\n                value=comment,\n                newlines=nlines,\n                consumed=consumed,\n                form_feed=form_feed,\n                leading_whitespace=whitespace,\n            )\n        )\n        form_feed = False\n        nlines = 0\n    return result\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"@lru_cache(maxsize=4096)\\n\\ndef list_comments(prefix: str, *, is_endmarker: bool) -> list[ProtoComment]:\\n    \\\"\\\"\\\"Return a list of :class:`ProtoComment` objects parsed from the given `prefix`.\\\"\\\"\\\"\\n    result: list[ProtoComment] = []\\n    if not prefix or \\\"#\\\" not in prefix:\\n        return result\\n\\n    consumed = 0\\n    nlines = 0\\n    ignored_lines = 0\\n    form_feed = False\\n    lines = re.split(\\\"\\\\r?\\\\n\\\", prefix)\\n    for index, full_line in enumerate(lines):\\n        # Add the length of the line and the newline that was removed by split\\n        # except for the last line which may not end with a newline.\\n        consumed += len(full_line) + (1 if index < len(lines) - 1 else 0)\\n        match = re.match(r\\\"^(\\\\s*)(\\\\S.*|)$\\\", full_line)\\n        assert match\\n        whitespace, line = match.groups()\\n        if not line:\\n            nlines += 1\\n            if \\\"\\\\f\\\" in full_line:\\n                form_feed = True\\n        if not line.startswith(\\\"#\\\"):\\n            # Escaped newlines outside of a comment are not really newlines at\\n            # all. We treat a single-line comment following an escaped newline\\n            # as a simple trailing comment.\\n            if line.endswith(\\\"\\\\\\\\\\\"):\\n                ignored_lines += 1\\n            continue\\n\\n        if index == ignored_lines and not is_endmarker:\\n            comment_type = token.COMMENT  # simple trailing comment\\n        else:\\n            comment_type = STANDALONE_COMMENT\\n        comment = make_comment(line)\\n        result.append(\\n            ProtoComment(\\n                type=comment_type,\\n                value=comment,\\n                newlines=nlines,\\n                consumed=consumed,\\n                form_feed=form_feed,\\n                leading_whitespace=whitespace,\\n            )\\n        )\\n        form_feed = False\\n        nlines = 0\\n    return result\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 539,
+   "completion_tokens": 705,
+   "total_tokens": 1244
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_a12402de73"
+ }
+}

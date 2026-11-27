@@ -1,0 +1,35 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: psf/black\n\n## Failing test output\n### Failing test: tests.test_format::test_simple_format[docstring]\nAssertionError\nfilename = 'docstring'\n\n    @pytest.mark.filterwarnings(\"ignore:invalid escape sequence.*:DeprecationWarning\")\n    @pytest.mark.parametrize(\"filename\", all_data_cases(\"cases\"))\n    def test_simple_format(filename: str) -> None:\n>       check_file(\"cases\", filename)\n\ntests/test_format.py:55: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ntests/test_format.py:28: in check_file\n    assert_format(\ntests/util.py:109: in assert_format\n    _assert_format_inner(\ntests/util.py:173: in _assert_format_inner\n    _assert_format_equal(expected, actual)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nexpected = '\"\"\"Module docstring.\\n\\n......................................................................................\\n\"\"\"\\n...\\n\\n\\ndef foo():\\n    \"\"\"\\n    Docstring with a backslash followed by a space\\\\ \\n    and then another line\\n    \"\"\"\\n'\nactual = '\"\"\"Module docstring.\\n\\n......................................................................................\\n\\n\"\"\"...\\n\\n\\ndef foo():\\n    \"\"\"\\n    Docstring with a backslash followed by a space\\\\ \\n    and then another line\\n    \"\"\"\\n'\n\n    def _assert_format_equal(expected: str, actual: str) -> None:\n        if actual != expected and (conftest.PRINT_FULL_TREE or conftest.PRINT_TREE_DIFF):\n            bdv: DebugVisitor[Any]\n            actual_out: str = \"\"\n            expected_out: str = \"\"\n            if conftest.PRINT_FULL_TREE:\n                out(\"Expected tree:\", fg=\"green\")\n            try:\n                exp_node = black.lib2to3_parse(expected)\n                bdv = DebugVisitor(print_output=conftest.PRINT_FULL_TREE)\n                list(bdv.visit(exp_node))\n                expected_out = \"\\n\".join(bdv.list_output)\n            except Exception as ve:\n                err(str(ve))\n            if conftest.PRINT_FULL_TREE:\n                out(\"Actual tree:\", fg=\"red\")\n            try:\n                exp_node = black.lib2to3_parse(actual)\n                bdv = DebugVisitor(print_output=conftest.PRINT_FULL_TREE)\n                list(bdv.visit(exp_node))\n                actual_out = \"\\n\".join(bdv.list_output)\n            except Exception as ve:\n                err(str(ve))\n            if conftest.PRINT_TREE_DIFF:\n                out(\"Tree Diff:\")\n                out(\n                    diff(expected_out, actual_out, \"expected tree\", \"actual tree\")\n                    or \"Trees do not differ\"\n                )\n    \n        if actual != expected:\n            out(diff(expected, actual, \"expected\", \"actual\"))\n    \n>       assert actual == expected\n               ^^^^^^^^^^^^^^^^^^\nE       AssertionError\n\ntests/util.py:86: AssertionError\n\n## Source files (path and module)\naction/main.py  (action.main)\nprofiling/dict_big.py  (profiling.dict_big)\nprofiling/dict_huge.py  (profiling.dict_huge)\nprofiling/list_big.py  (profiling.list_big)\nprofiling/list_huge.py  (profiling.list_huge)\nprofiling/mix_big.py  (profiling.mix_big)\nprofiling/mix_huge.py  (profiling.mix_huge)\nprofiling/mix_small.py  (profiling.mix_small)\nsrc/black/__init__.py  (black)\nsrc/black/__main__.py  (black.__main__)\nsrc/black/_width_table.py  (black._width_table)\nsrc/black/brackets.py  (black.brackets)\nsrc/black/cache.py  (black.cache)\nsrc/black/comments.py  (black.comments)\nsrc/black/concurrency.py  (black.concurrency)\nsrc/black/const.py  (black.const)\nsrc/black/debug.py  (black.debug)\nsrc/black/files.py  (black.files)\nsrc/black/handle_ipynb_magics.py  (black.handle_ipynb_magics)\nsrc/black/linegen.py  (black.linegen)\nsrc/black/lines.py  (black.lines)\nsrc/black/mode.py  (black.mode)\nsrc/black/nodes.py  (black.nodes)\nsrc/black/numerics.py  (black.numerics)\nsrc/black/output.py  (black.output)\nsrc/black/parsing.py  (black.parsing)\nsrc/black/ranges.py  (black.ranges)\nsrc/black/report.py  (black.report)\nsrc/black/resources/__init__.py  (black.resources)\nsrc/black/rusty.py  (black.rusty)\nsrc/black/schema.py  (black.schema)\nsrc/black/strings.py  (black.strings)\nsrc/black/trans.py  (black.trans)\nsrc/blackd/__init__.py  (blackd)\nsrc/blackd/__main__.py  (blackd.__main__)\nsrc/blackd/client.py  (blackd.client)\nsrc/blackd/middlewares.py  (blackd.middlewares)\nsrc/blib2to3/__init__.py  (blib2to3)\nsrc/blib2to3/pgen2/__init__.py  (blib2to3.pgen2)\nsrc/blib2to3/pgen2/conv.py  (blib2to3.pgen2.conv)\nsrc/blib2to3/pgen2/driver.py  (blib2to3.pgen2.driver)\nsrc/blib2to3/pgen2/grammar.py  (blib2to3.pgen2.grammar)\nsrc/blib2to3/pgen2/literals.py  (blib2to3.pgen2.literals)\nsrc/blib2to3/pgen2/parse.py  (blib2to3.pgen2.parse)\nsrc/blib2to3/pgen2/pgen.py  (blib2to3.pgen2.pgen)\nsrc/blib2to3/pgen2/token.py  (blib2to3.pgen2.token)\nsrc/blib2to3/pgen2/tokenize.py  (blib2to3.pgen2.tokenize)\nsrc/blib2to3/pygram.py  (blib2to3.pygram)\nsrc/blib2to3/pytree.py  (blib2to3.pytree)\n\nAnswer with JSON only: {\"functions\": [...], \"files\": [...]}.\n- \"functions\": up to 5 suspicious functions, most likely first, each written as \"module::Qualified.name\", e.g. \"pkg.sub.mod::ClassName.method\" or \"pkg.mod::func\".\n- \"files\": up to 5 source file paths, most likely first."
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0.7,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "seed": 2,
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"functions\":[\"black.lines::format_docstring\"],\"files\":[\"src/black/lines.py\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1638,
+   "completion_tokens": 77,
+   "total_tokens": 1715
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_34cb00738d"
+ }
+}

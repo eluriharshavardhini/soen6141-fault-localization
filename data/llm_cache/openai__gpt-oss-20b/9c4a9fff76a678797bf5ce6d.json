@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/crawler.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def __init__(self, settings):\n        super(CrawlerProcess, self).__init__(settings)\n        install_shutdown_handlers(self._signal_shutdown)\n        configure_logging(settings)\n        log_scrapy_info(settings)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 6000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"    def __init__(self, settings=None):\\n        super().__init__(settings)\\n        install_shutdown_handlers(self._signal_shutdown)\\n        configure_logging(settings)\\n        log_scrapy_info(settings)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 208,
+   "completion_tokens": 220,
+   "total_tokens": 428
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_e189667b30"
+ }
+}

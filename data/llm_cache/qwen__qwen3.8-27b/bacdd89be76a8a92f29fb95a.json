@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project tobymao/sqlglot, file sqlglot/expressions.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def between(\n        self,\n        low: t.Any,\n        high: t.Any,\n        copy: bool = True,\n        symmetric: t.Optional[bool] = False,\n        **opts,\n    ) -> Between:\n        return Between(\n            this=maybe_copy(self, copy),\n            low=convert(low, copy=copy, **opts),\n            high=convert(high, copy=copy, **opts),\n            symmetric=symmetric,\n        )\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "\n\n{\"fixed_function\": \"    def between(\\n        self,\\n        low: t.Any,\\n        high: t.Any,\\n        copy: bool = True,\\n        symmetric: t.Optional[bool] = None,\\n        **opts,\\n    ) -> Between:\\n        return Between(\\n            this=maybe_copy(self, copy),\\n            low=convert(low, copy=copy, **opts),\\n            high=convert(high, copy=copy, **opts),\\n            symmetric=symmetric,\\n        )\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 223,
+   "completion_tokens": 810,
+   "total_tokens": 1033
+  },
+  "route": "openrouter",
+  "host": "StreamLake",
+  "system_fingerprint": null
+ }
+}

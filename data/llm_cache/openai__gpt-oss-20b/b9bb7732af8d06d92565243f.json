@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project psf/black, file black.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef format_file_in_place(\n    src: Path,\n    line_length: int,\n    fast: bool,\n    write_back: WriteBack = WriteBack.NO,\n    lock: Any = None,  # multiprocessing.Manager().Lock() is some crazy proxy\n) -> bool:\n    \"\"\"Format file under `src` path. Return True if changed.\n\n    If `write_back` is True, write reformatted code back to stdout.\n    `line_length` and `fast` options are passed to :func:`format_file_contents`.\n    \"\"\"\n\n    with tokenize.open(src) as src_buffer:\n        src_contents = src_buffer.read()\n    try:\n        dst_contents = format_file_contents(\n            src_contents, line_length=line_length, fast=fast\n        )\n    except NothingChanged:\n        return False\n\n    if write_back == write_back.YES:\n        with open(src, \"w\", encoding=src_buffer.encoding) as f:\n            f.write(dst_contents)\n    elif write_back == write_back.DIFF:\n        src_name = f\"{src.name}  (original)\"\n        dst_name = f\"{src.name}  (formatted)\"\n        diff_contents = diff(src_contents, dst_contents, src_name, dst_name)\n        if lock:\n            lock.acquire()\n        try:\n            sys.stdout.write(diff_contents)\n        finally:\n            if lock:\n                lock.release()\n    return True\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\":\"def format_file_in_place(\\n    src: Path,\\n    line_length: int,\\n    fast: bool,\\n    write_back: WriteBack = WriteBack.NO,\\n    lock: Any = None,  # multiprocessing.Manager().Lock() is some crazy proxy\\n) -> bool:\\n    \\\"\\\"\\\"Format file under `src` path. Return True if changed.\\n\\n    If `write_back` is True, write reformatted code back to stdout.\\n    `line_length` and `fast` options are passed to :func:`format_file_contents`.\\n    \\\"\\\"\\\"\\n\\n    with tokenize.open(src) as src_buffer:\\n        src_contents = src_buffer.read()\\n    try:\\n        dst_contents = format_file_contents(\\n            src_contents, line_length=line_length, fast=fast\\n        )\\n    except NothingChanged:\\n        return False\\n\\n    if write_back == WriteBack.YES:\\n        with open(src, \\\"w\\\", encoding=src_buffer.encoding) as f:\\n            f.write(dst_contents)\\n    elif write_back == WriteBack.DIFF:\\n        src_name = f\\\"{src.name}  (original)\\\"\\n        dst_name = f\\\"{src.name}  (formatted)\\\"\\n        diff_contents = diff(src_contents, dst_contents, src_name, dst_name)\\n        if lock:\\n            lock.acquire()\\n        try:\\n            sys.stdout.write(diff_contents)\\n        finally:\\n            if lock:\\n                lock.release()\\n    return True\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 445,
+   "completion_tokens": 478,
+   "total_tokens": 923
+  },
+  "route": "groq",
+  "host": "groq",
+  "system_fingerprint": "fp_aef561cf8e"
+ }
+}

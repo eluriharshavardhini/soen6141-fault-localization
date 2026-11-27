@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project scrapy/scrapy, file scrapy/utils/misc.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\ndef create_instance(objcls, settings, crawler, *args, **kwargs):\n    \"\"\"Construct a class instance using its ``from_crawler`` or\n    ``from_settings`` constructors, if available.\n\n    At least one of ``settings`` and ``crawler`` needs to be different from\n    ``None``. If ``settings `` is ``None``, ``crawler.settings`` will be used.\n    If ``crawler`` is ``None``, only the ``from_settings`` constructor will be\n    tried.\n\n    ``*args`` and ``**kwargs`` are forwarded to the constructors.\n\n    Raises ``ValueError`` if both ``settings`` and ``crawler`` are ``None``.\n    \"\"\"\n    if settings is None:\n        if crawler is None:\n            raise ValueError(\"Specify at least one of settings and crawler.\")\n        settings = crawler.settings\n    if crawler and hasattr(objcls, 'from_crawler'):\n        return objcls.from_crawler(crawler, *args, **kwargs)\n    elif hasattr(objcls, 'from_settings'):\n        return objcls.from_settings(settings, *args, **kwargs)\n    else:\n        return objcls(*args, **kwargs)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"def create_instance(objcls, settings, crawler, *args, **kwargs):\\n    \\\"\\\"\\\"Construct a class instance using its ``from_crawler`` or\\n    ``from_settings`` constructors, if available.\\n\\n    At least one of ``settings`` and ``crawler`` needs to be different from\\n    ``None``. If ``settings`` is ``None``, ``crawler.settings`` will be used.\\n    If ``crawler`` is ``None``, only the ``from_settings`` constructor will be\\n    tried.\\n\\n    ``*args`` and ``**kwargs`` are forwarded to the constructors.\\n\\n    Raises ``ValueError`` if both ``settings`` and ``crawler`` are ``None``.\\n    \\\"\\\"\\\"\\n    if settings is None:\\n        if crawler is None:\\n            raise ValueError(\\\"Specify at least one of settings and crawler.\\\")\\n        settings = crawler.settings\\n    if crawler is not None and hasattr(objcls, \\\"from_crawler\\\"):\\n        return objcls.from_crawler(crawler, *args, **kwargs)\\n    elif hasattr(objcls, \\\"from_settings\\\"):\\n        return objcls.from_settings(settings, *args, **kwargs)\\n    else:\\n        return objcls(*args, **kwargs)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 364,
+   "completion_tokens": 1627,
+   "total_tokens": 1991
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

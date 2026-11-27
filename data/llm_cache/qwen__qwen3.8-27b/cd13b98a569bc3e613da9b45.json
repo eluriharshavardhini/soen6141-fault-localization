@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Return JSON {\"answer\": 17*23} computed."
+   }
+  ],
+  "max_tokens": 300,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "\n\n{\"answer\": 391}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 54,
+   "completion_tokens": 77,
+   "total_tokens": 131
+  },
+  "route": "openrouter",
+  "host": "StreamLake",
+  "system_fingerprint": null
+ }
+}

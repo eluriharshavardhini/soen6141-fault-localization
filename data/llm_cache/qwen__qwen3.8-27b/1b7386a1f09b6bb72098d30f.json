@@ -1,0 +1,28 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project marshmallow-code/marshmallow, file src/marshmallow/fields.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def _deserialize(self, value, attr, data, **kwargs) -> _EnumT:\n        if isinstance(value, self.enum):\n            return value\n        val = self.field._deserialize(value, attr, data, **kwargs)\n        if self.by_value:\n            try:\n                return self.enum(val)\n            except ValueError as error:\n                raise self.make_error(\"unknown\", choices=self.choices_text) from error\n        try:\n            return getattr(self.enum, val)\n        except AttributeError as error:\n            raise self.make_error(\"unknown\", choices=self.choices_text) from error\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"    def _deserialize(self, value, attr, data, **kwargs) -> _EnumT:\\n        if isinstance(value, self.enum):\\n            return value\\n        val = self.field._deserialize(value, attr, data, **kwargs)\\n        if self.by_value:\\n            try:\\n                return self.enum(val)\\n            except (ValueError, TypeError) as error:\\n                raise self.make_error(\\\"unknown\\\", choices=self.choices_text) from error\\n        try:\\n            return getattr(self.enum, val)\\n        except AttributeError as error:\\n            raise self.make_error(\\\"unknown\\\", choices=self.choices_text) from error\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 247,
+   "completion_tokens": 1305,
+   "total_tokens": 1552
+  },
+  "system_fingerprint": "fp_fea14bdc83"
+ }
+}

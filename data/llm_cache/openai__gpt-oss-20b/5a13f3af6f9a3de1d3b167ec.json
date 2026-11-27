@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Return JSON {\"answer\": 17*23} computed."
+   }
+  ],
+  "max_tokens": 300,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"answer\":391}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 107,
+   "completion_tokens": 28,
+   "total_tokens": 135
+  },
+  "route": "openrouter",
+  "host": "Groq",
+  "system_fingerprint": "fp_2b688e7cc3"
+ }
+}

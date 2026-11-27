@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pylint-dev/astroid, file astroid/rebuilder.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    def _get_position_info(\n        self,\n        node: ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef,\n        parent: nodes.ClassDef | nodes.FunctionDef | nodes.AsyncFunctionDef,\n    ) -> Position | None:\n        \"\"\"Return position information for ClassDef and FunctionDef nodes.\n\n        In contrast to AST positions, these only include the actual keyword(s)\n        and the class / function name.\n\n        >>> @decorator\n        >>> async def some_func(var: int) -> None:\n        >>> ^^^^^^^^^^^^^^^^^^^\n        \"\"\"\n        if not self._data:\n            return None\n        end_lineno = node.end_lineno\n        if node.body:\n            end_lineno = node.body[0].lineno\n        data = \"\\n\".join(self._data[node.lineno - 1 : end_lineno])\n\n        start_token: TokenInfo | None = None\n        keyword_tokens: tuple[int, ...] = (token.NAME,)\n        if isinstance(parent, nodes.AsyncFunctionDef):\n            search_token = \"async\"\n        elif isinstance(parent, nodes.FunctionDef):\n            search_token = \"def\"\n        else:\n            search_token = \"class\"\n\n        for t in generate_tokens(StringIO(data).readline):\n            if (\n                start_token is not None\n                and t.type == token.NAME\n                and t.string == node.name\n            ):\n                break\n            if t.type in keyword_tokens:\n                if t.string == search_token:\n                    start_token = t\n                    continue\n                if t.string in {\"def\"}:\n                    continue\n            start_token = None\n        else:\n            return None\n\n        return Position(\n            lineno=node.lineno + start_token.start[0] - 1,\n            col_offset=start_token.start[1],\n            end_lineno=node.lineno + t.end[0] - 1,\n            end_col_offset=t.end[1],\n        )\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "",
+  "finish_reason": "length",
+  "usage": {
+   "prompt_tokens": 535,
+   "completion_tokens": 3000,
+   "total_tokens": 3535
+  },
+  "route": "openrouter",
+  "host": "Tenstorrent",
+  "system_fingerprint": "vllm-0.30.0-dp4-5fd20499"
+ }
+}

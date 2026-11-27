@@ -1,0 +1,34 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "system",
+    "content": "You are an expert Python developer doing fault localization. Given a failing test and its output, you name the functions in the project's source code most likely to contain the bug (the code a developer would change to fix it). Do not name test functions."
+   },
+   {
+    "role": "user",
+    "content": "Repository: marshmallow-code/marshmallow\n\n## Failing test output\n### Failing test: tests.test_validate::test_email_idn_invalid[user@-m\\xfcnchen.de]\nFailed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\ninvalid_email = 'user@-m\u00fcnchen.de'\n\n    @pytest.mark.parametrize(\n        \"invalid_email\",\n        [\n            \"user@-m\u00fcnchen.de\",\n            \"user@m\u00fcnchen-.de\",\n            \"user@m\u00fcnchen\",\n        ],\n    )\n    def test_email_idn_invalid(invalid_email):\n        validator = validate.Email()\n>       with pytest.raises(ValidationError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\n\ntests/test_validate.py:398: Failed\n\n### Failing test: tests.test_validate::test_email_idn_invalid[user@m\\xfcnchen-.de]\nFailed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\ninvalid_email = 'user@m\u00fcnchen-.de'\n\n    @pytest.mark.parametrize(\n        \"invalid_email\",\n        [\n            \"user@-m\u00fcnchen.de\",\n            \"user@m\u00fcnchen-.de\",\n            \"user@m\u00fcnchen\",\n        ],\n    )\n    def test_email_idn_invalid(invalid_email):\n        validator = validate.Email()\n>       with pytest.raises(ValidationError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE <class 'marshmallow.exceptions.ValidationError'>\n\ntests/test_validate.py:398: Failed\n\n## Failing test code\n```python\n# tests/test_validate.py\n@pytest.mark.parametrize(\n    \"invalid_email\",\n    [\n        \"user@-m\u00fcnchen.de\",\n        \"user@m\u00fcnchen-.de\",\n        \"user@m\u00fcnchen\",\n    ],\n)\ndef test_email_idn_invalid(invalid_email):\n    validator = validate.Email()\n    with pytest.raises(ValidationError):\n        validator(invalid_email)\n\n# tests/test_validate.py\n@pytest.mark.parametrize(\n    \"invalid_email\",\n    [\n        \"user@-m\u00fcnchen.de\",\n        \"user@m\u00fcnchen-.de\",\n        \"user@m\u00fcnchen\",\n    ],\n)\ndef test_email_idn_invalid(invalid_email):\n    validator = validate.Email()\n    with pytest.raises(ValidationError):\n        validator(invalid_email)\n```\n\n## Candidate functions (stack-trace functions first, then by similarity to the failure)\n- marshmallow.fields::Email.__init__   def __init__(self, **kwargs: Unpack[_BaseFieldKwargs]) -> None:\n- marshmallow.validate::Email.__call__   def __call__(self, value: str) -> str:\n- marshmallow.class_registry::get_class   def get_class(classname: str, *, all: bool = False) -> list[SchemaType] | SchemaType:  # noqa: A002\n- marshmallow.fields::Field.make_error   def make_error(self, key: str, **kwargs) -> ValidationError:\n- marshmallow.fields::Url.__init__   def __init__(\n- marshmallow.validate::And.__call__   def __call__(self, value: typing.Any) -> typing.Any:\n- marshmallow.schema::Schema.handle_error   def handle_error(\n- marshmallow.exceptions::ValidationError.messages_dict   def messages_dict(self) -> dict[str, typing.Any]:\n- marshmallow.schema::_get_fields   def _get_fields(attrs) -> list[tuple[str, Field]]:\n- marshmallow.exceptions::ValidationError.normalized_messages   def normalized_messages(self):\n- marshmallow.validate::OneOf.__call__   def __call__(self, value: typing.Any) -> typing.Any:\n- marshmallow.schema::Schema.dumps   def dumps(self, obj: typing.Any, *args, many: bool | None = None, **kwargs):\n- marshmallow.validate::Validator.__repr__   def __repr__(self) -> str:\n- marshmallow.fields::Field._validate   def _validate(self, value: typing.Any) -> None:\n- marshmallow.fields::Tuple._deserialize   def _deserialize(\n- marshmallow.validate::Email.__init__   def __init__(self, *, error: str | None = None):\n- marshmallow.validate::Length.__call__   def __call__(self, value: _SizedT) -> _SizedT:\n- marshmallow.fields::List._deserialize   def _deserialize(self, value, attr, data, **kwargs) -> list[_InternalT | None]:\n- marshmallow.validate::Email._format_error   def _format_error(self, value: str) -> str:\n- marshmallow.decorators::set_hook   def set_hook(\n- marshmallow.fields::Number._validated   def _validated(self, value: typing.Any) -> _NumT:\n- marshmallow.validate::Equal.__call__   def __call__(self, value: _T) -> _T:\n- marshmallow.validate::Regexp.__call__   def __call__(self, value):\n- marshmallow.validate::Range.__call__   def __call__(self, value: _T) -> _T:\n- marshmallow.validate::URL.__call__   def __call__(self, value: str) -> str:\n- marshmallow.validate::Predicate.__call__   def __call__(self, value: _T) -> _T:\n- marshmallow.schema::Schema.dump   def dump(self, obj: typing.Any, *, many: bool | None = None):\n- marshmallow.fields::Field._validate_missing   def _validate_missing(self, value: typing.Any) -> None:\n- marshmallow.validate::NoneOf.__call__   def __call__(self, value: typing.Any) -> typing.Any:\n- marshmallow.validate::ContainsNoneOf.__call__   def __call__(self, value: typing.Sequence[_T]) -> typing.Sequence[_T]:\n\nYou may read the source of up to 5 functions before deciding. Choose the ones most worth reading; any function in the project may be named, not only candidates. Answer with JSON only: {\"inspect\": [\"module::Qualified.name\", ...]}"
+   }
+  ],
+  "max_tokens": 1500,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"inspect\": [\"marshmallow.validate::Email.__call__\", \"marshmallow.validate::Email.__init__\"]}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 1423,
+   "completion_tokens": 241,
+   "total_tokens": 1664
+  },
+  "route": "openrouter",
+  "host": "Wafer",
+  "system_fingerprint": null
+ }
+}

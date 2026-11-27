@@ -1,0 +1,30 @@
+{
+ "request": {
+  "model": "qwen/qwen3.8-27b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "The function below is from the open-source project pylint-dev/astroid, file astroid/nodes/node_classes.py. It contains a bug that the maintainers later fixed. Write the fixed version of the whole function exactly as it appears in the project after the fix.\n\n```python\n    @decorators.raise_if_nothing_inferred\n    def _infer(\n        self, context: InferenceContext | None = None, **kwargs: Any\n    ) -> Generator[InferenceResult]:\n        \"\"\"Support IfExp inference.\n\n        If we can't infer the truthiness of the condition, we default\n        to inferring both branches. Otherwise, we infer either branch\n        depending on the condition.\n        \"\"\"\n        both_branches = False\n        # We use two separate contexts for evaluating lhs and rhs because\n        # evaluating lhs may leave some undesired entries in context.path\n        # which may not let us infer right value of rhs.\n\n        context = context or InferenceContext()\n        lhs_context = copy_context(context)\n        rhs_context = copy_context(context)\n        try:\n            test = next(self.test.infer(context=context.clone()))\n        except (InferenceError, StopIteration):\n            both_branches = True\n        else:\n            test_bool_value = test.bool_value()\n            if not isinstance(test, util.UninferableBase) and not isinstance(\n                test_bool_value, util.UninferableBase\n            ):\n                if test_bool_value:\n                    yield from self.body.infer(context=lhs_context)\n                else:\n                    yield from self.orelse.infer(context=rhs_context)\n            else:\n                both_branches = True\n        if both_branches:\n            yield from self.body.infer(context=lhs_context)\n            yield from self.orelse.infer(context=rhs_context)\n```\n\nAnswer with JSON only: {\"fixed_function\": \"<complete fixed function source>\"}"
+   }
+  ],
+  "max_tokens": 3000,
+  "temperature": 0,
+  "reasoning_effort": "low",
+  "reasoning_format": "hidden",
+  "response_format": {
+   "type": "json_object"
+  }
+ },
+ "response": {
+  "content": "{\"fixed_function\": \"    @decorators.raise_if_nothing_inferred\\n    def _infer(\\n        self, context: InferenceContext | None = None, **kwargs: Any\\n    ) -> Generator[InferenceResult]:\\n        \\\"\\\"\\\"Support IfExp inference.\\n\\n        If we can't infer the truthiness of the condition, we default\\n        to inferring both branches. Otherwise, we infer either branch\\n        depending on the condition.\\n        \\\"\\\"\\\"\\n        both_branches = False\\n        # We use two separate contexts for evaluating lhs and rhs because\\n        # evaluating lhs may leave some undesired entries in context.path\\n        # which may not let us infer right value of rhs.\\n\\n        context = context or InferenceContext()\\n        lhs_context = context.clone()\\n        rhs_context = context.clone()\\n        try:\\n            test = next(self.test.infer(context=context.clone()))\\n        except (InferenceError, StopIteration):\\n            both_branches = True\\n        else:\\n            test_bool_value = test.bool_value()\\n            if not isinstance(test, util.UninferableBase) and not isinstance(\\n                test_bool_value, util.UninferableBase\\n            ):\\n                if test_bool_value:\\n                    yield from self.body.infer(context=lhs_context)\\n                else:\\n                    yield from self.orelse.infer(context=rhs_context)\\n            else:\\n                both_branches = True\\n        if both_branches:\\n            yield from self.body.infer(context=lhs_context)\\n            yield from self.orelse.infer(context=rhs_context)\"}",
+  "finish_reason": "stop",
+  "usage": {
+   "prompt_tokens": 450,
+   "completion_tokens": 1297,
+   "total_tokens": 1747
+  },
+  "route": "openrouter",
+  "host": "PrimeIntellect",
+  "system_fingerprint": null
+ }
+}
