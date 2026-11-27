@@ -121,3 +121,18 @@ and the benchmark card.
 ## Amendments
 
 (none yet)
+
+### Amendment 1 (2026-11-27, after a 7-candidate smoke test, one per repo, before the full run)
+
+- **R6 clarified.** As written, R6 is vacuous: a test that passes on `F` and fails on `B` is
+  F2P by definition. It is replaced by: drop with reason `transplant_broken` if more than 50%
+  of the non-skipped tests in the run files fail on `B` (and at least 4 ran), which signals
+  that overlaying the new test files broke the buggy tree rather than revealing a fault.
+- **R3 test selection detail.** If the fix touches only test *data* (no `test_*.py`), the
+  repository's data-driven runner is used (black: `tests/test_format.py`).
+- **R1 environment detail.** Dependencies are resolved with `uv --exclude-newer` set to the
+  fix date + 1 day, so each instance gets the library versions available when it was fixed.
+  Harness-only fixes found in the smoke test: tomlkit's `toml-test` git submodule directory
+  is created empty (git archive omits submodules); scrapy is run without `pytest-twisted`
+  (it conflicts with scrapy's own `--reactor` option). The 7 smoke-test candidates are
+  re-run under the final harness like every other candidate.
