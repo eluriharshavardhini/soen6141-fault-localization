@@ -1,0 +1,264 @@
+263 to run
+tomlkit 62a6708237 dropped collection_error
+tomlkit bd31dbd8e2 dropped collection_error
+tomlkit e3b7332de2 dropped collection_error
+tomlkit df4afc67ac dropped collection_error
+astroid ee26847c75 kept 
+tomlkit d4e1ecda48 dropped collection_error
+tomlkit fcb82ae1d9 dropped collection_error
+sqlglot 7caf1aba90 kept 
+sqlglot b3aa6055ed kept 
+sqlglot 2a5aff1bb9 kept 
+sqlglot 94eb5a467d kept 
+sqlglot cdfbc7ee67 kept 
+sqlglot 021545ed57 kept 
+sqlglot eccb44cc6b kept 
+black 24e4cb20ab kept 
+sqlglot 7d4083c899 dropped no_runnable_test
+sqlglot 88fff47927 kept 
+sqlglot 11b23602f7 kept 
+sqlglot 4e6e08485f kept 
+sqlglot 73efc9c6a9 kept 
+sqlglot fddbef77dc kept 
+black 60d734a84d kept 
+sqlglot d369faab06 kept 
+sqlglot 780115b37d kept 
+sqlglot 27ccb6fb98 kept 
+sqlglot 68f5e8cf26 kept 
+sqlglot d1329dae43 dropped no_runnable_test
+scrapy d602f13e8c kept 
+sqlglot cdf7352727 kept 
+sqlglot cdddf06253 dropped no_runnable_test
+sqlglot 229722a50d dropped no_runnable_test
+sqlglot fe126b65a1 dropped no_runnable_test
+tomlkit b9d22fb890 dropped collection_error
+scrapy ff7795b159 dropped no_f2p
+sqlglot 9a0ace6c6a kept 
+sqlglot 31d58a422b kept 
+sqlglot 4c203934c7 kept 
+sqlglot ae1934d0fb kept 
+sqlglot 718229747a kept 
+sqlglot b0ff7e7179 kept 
+sqlglot b6350d2b00 kept 
+scrapy 0d86fb69dc kept 
+sqlglot eba7d18298 kept 
+sqlglot ba716c994d kept 
+sqlglot 1587b7ea14 kept 
+click a1235aacb1 kept 
+sqlglot 71f1686f00 kept 
+sqlglot 0bf31cabdd kept 
+sqlglot 828b6e7717 dropped no_runnable_test
+sqlglot c990252bf0 kept 
+sqlglot be0a9450f9 dropped no_runnable_test
+sqlglot e649e1ec94 kept 
+sqlglot 3f9863204b kept 
+sqlglot 0e46260bd6 kept 
+black 262ad62ca9 kept 
+sqlglot 55589915cd kept 
+click 701b313160 kept 
+sqlglot 0b29bb3b60 dropped no_runnable_test
+sqlglot 92bef7b1d3 kept 
+sqlglot dd305a2e17 kept 
+sqlglot 021e1ce8f8 kept 
+astroid 4364218b9d kept 
+sqlglot e014b4c6d6 kept 
+sqlglot 702edacefe kept 
+sqlglot 4c98321c3c kept 
+sqlglot 450f4c1831 kept 
+sqlglot caf612e21e dropped no_runnable_test
+sqlglot 3485ba1011 kept 
+astroid 8a08a7f25c kept 
+black 9a87babc21 kept 
+sqlglot 6f97a23cef kept 
+sqlglot 2a68696a68 kept 
+sqlglot bfe3d39224 kept 
+astroid 1327f6bdb5 kept 
+sqlglot 056fa4ac40 kept 
+sqlglot ec7b3d8d95 dropped no_runnable_test
+sqlglot 0a3835c2c8 kept 
+scrapy d239fcf936 dropped env
+sqlglot c5f7a4a8c9 kept 
+sqlglot 00c800c6b2 kept 
+astroid f25ef82afa kept 
+scrapy 10850e7d29 dropped env
+black 1f779dec01 kept 
+black 77f16a777b kept 
+black 82030302ea kept 
+black 300d1d8f82 kept 
+scrapy 6ba6b032ad dropped env
+astroid 3bc2c06eb1 kept 
+astroid 3774c0a788 kept 
+black f37758e666 kept 
+astroid 7a4cae7905 dropped no_f2p
+astroid 178a796d01 kept 
+astroid 004bc52e1c kept 
+astroid 36e6134edf dropped no_f2p
+astroid bafee22246 kept 
+scrapy 3ec6ae05c1 dropped env
+astroid 25027e0398 kept 
+black a8bfcc1040 kept 
+marshmallow 19ca8dce2d kept 
+scrapy 3fe89a211b dropped no_runnable_test
+astroid 177cf4d859 kept 
+astroid 95960c4dee kept 
+astroid 2dc42c089f kept 
+black f0f40945c1 kept 
+astroid ef5d473252 kept 
+astroid 2c08ac19bd kept 
+astroid 85226dd78d kept 
+astroid a59574c3fd kept 
+black f4b006f61d kept 
+black 4937fe6cf2 kept 
+marshmallow 3bc191ab3c dropped no_f2p
+marshmallow 070dde08ba kept 
+marshmallow 65374df0c3 kept 
+marshmallow 252090c7c7 kept 
+marshmallow 024b5d09e9 kept 
+marshmallow f07eadc87d kept 
+black 88e78334af kept 
+black 01c29bd5fd kept 
+scrapy b68f26726a kept 
+scrapy 9da14cdff1 dropped no_f2p
+astroid 04b78da707 kept 
+scrapy 27092b2cb7 dropped no_f2p
+astroid 4ea0c82fdf kept 
+scrapy 9f4651151d dropped no_f2p
+scrapy fc4c57e795 kept 
+astroid 341ef0a19c dropped collection_error
+black 9fd9ea2835 dropped collection_error
+click 2468b70997 kept 
+click 19fd4d6e18 kept 
+scrapy 068aa69b35 dropped no_f2p
+astroid 3b4b7d4370 kept 
+scrapy 85c616c5c7 dropped no_f2p
+astroid 3c9d1d9e78 dropped no_f2p
+astroid d704469e65 kept 
+astroid ec0b675967 kept 
+black fc33c25068 kept 
+astroid 5007097c10 kept 
+astroid 3258d5ff67 kept 
+click c3535905c7 kept 
+astroid a7f7a7d552 kept 
+black 650983f7b3 kept 
+astroid e4ebd57d62 kept 
+astroid 55b0adcd51 kept 
+astroid 1e092757d3 kept 
+astroid d254bb9c6d kept 
+tomlkit 1d49987061 kept 
+astroid 1f3b8fad1f kept 
+tomlkit 568739658e kept 
+scrapy df2f3d708e kept 
+black 6c136f979c kept 
+black 13e97b4499 kept 
+tomlkit f8ce14b39c kept 
+astroid 94b7090f13 kept 
+tomlkit a076a6afbe kept 
+astroid ea46cd3292 kept 
+scrapy f63a3aff25 kept 
+scrapy cfef12392a kept 
+scrapy fada8be1db dropped env
+scrapy b7824db573 dropped no_runnable_test
+black 7e8ef6bc1d kept 
+tomlkit de68fd06ee kept 
+tomlkit ee4eedbacc kept 
+tomlkit 11e22aefcc kept 
+astroid e8826f1d92 kept 
+tomlkit d3c76f0bbe kept 
+tomlkit 43668ddebc kept 
+astroid 65f1e616b8 kept 
+scrapy 185d6b9a20 kept 
+black 6a1c07745a dropped collection_error
+scrapy 6591cb756c kept 
+scrapy deb7e2861e kept 
+astroid 367b25ae93 kept 
+scrapy 9d9950df69 kept 
+tomlkit 67d3e86502 kept 
+tomlkit e23a25438c kept 
+tomlkit 8cd44f58b4 kept 
+tomlkit 495a42ecc9 kept 
+astroid 3381af9ad9 kept 
+sqlglot ae9bf2cc66 dropped collection_error
+scrapy 6ad8a043ca kept 
+scrapy f3693aa8ba kept 
+scrapy 0cbb20e8e8 kept 
+black a51a0be79c kept 
+scrapy b2d4eedea8 dropped no_f2p
+astroid 574b7f282b kept 
+scrapy 8caaac6ecb dropped no_f2p
+astroid 687729cbf1 kept 
+astroid 24027e6062 kept 
+astroid 14666601dc kept 
+astroid 331e9d925f kept 
+astroid 8666418153 kept 
+astroid 5952c15802 kept 
+astroid 8bb408fcf1 kept 
+astroid 1e71c7de1f kept 
+scrapy 01447f9965 kept 
+astroid 3316637086 kept 
+marshmallow 902f99c415 kept 
+scrapy 56f4afd84e dropped no_f2p
+scrapy 23abf7e18f kept 
+scrapy 63d5ce6272 kept 
+astroid 36179a40e0 kept 
+scrapy 544f4d2d52 dropped collection_error
+black 42ed836d80 kept 
+astroid d9fef78ec5 kept 
+tomlkit 4b38becd75 kept 
+scrapy a4109754c5 kept 
+black 3224f36a0f kept 
+black 9f9c675f27 kept 
+black 6aaae16d2f kept 
+scrapy e8c708f8d4 dropped collection_error
+black 5f4516d267 kept 
+astroid 51eb16ac43 kept 
+astroid e45ca82835 kept 
+astroid 858076172f kept 
+tomlkit 49d6efa980 kept 
+astroid 09c3282b92 kept 
+scrapy bb6dc3eee9 dropped collection_error
+scrapy b05336f199 kept 
+black e1c478359c kept 
+black ccb313069b kept 
+black f4f6cd9bec dropped no_f2p
+black 994ef7eeb1 kept 
+black 5fe7881e6e kept 
+black 97fb59f06a kept 
+tomlkit f466807e25 kept 
+black 77c0cae18b kept 
+black 34bfc69e57 kept 
+astroid 37ec2fe95e kept 
+scrapy 0778a7411d dropped collection_error
+astroid 72b26ab0b0 kept 
+scrapy 03b2b7b25a dropped collection_error
+tomlkit 8c30fc17d9 kept 
+tomlkit c07c0c15c4 kept 
+tomlkit 229ee86608 kept 
+scrapy 15a3cf427b dropped collection_error
+marshmallow 5761beab39 kept 
+astroid c1f1df7ddf kept 
+scrapy 4091b936b6 dropped collection_error
+tomlkit 96a4d22fdd dropped collection_error
+black d9d091de04 kept 
+black c9b1148b5b kept 
+black 3893a789b7 kept 
+black 50a2d75be0 kept 
+black 1a1d1ec3d2 kept 
+black ac9a6edcc8 kept 
+black 165b9e2933 kept 
+black 77980472e8 kept 
+black 9888d14643 kept 
+black c8755527e5 kept 
+black 80ebf58cbc kept 
+black cc53620f5b kept 
+black c65b1dc549 kept 
+black 55996d1fb8 kept 
+black f56455da37 kept 
+black de6fd95db8 kept 
+black b75b355219 kept 
+black 80db630ac5 kept 
+black 03a21a5194 kept 
+black 6f8e43f745 dropped env
+black 05de7d12c7 kept 
+black 062d76a492 kept 
+black 04afd895bf kept 
+black f74dfd7f6d kept 

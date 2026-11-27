@@ -1,0 +1,247 @@
+Independent re-verification with scripts/verify.py, fresh clones and fresh containers, 2026-11-27
+=== marshmallow-code__marshmallow-024b5d09e9  (2026-03-26)
+  FAILS on buggy, PASSES on fixed: tests.test_deserialization.TestFieldDeserialization::test_enum_field_by_symbol_rejects_non_member_attributes[mro]
+  FAILS on buggy, PASSES on fixed: tests.test_deserialization.TestFieldDeserialization::test_enum_field_by_symbol_rejects_non_member_attributes[__class__]
+  FAILS on buggy, PASSES on fixed: tests.test_deserialization.TestFieldDeserialization::test_enum_field_by_symbol_rejects_non_member_attributes[__members__]
+  RESULT: VERIFIED
+=== marshmallow-code__marshmallow-070dde08ba  (2026-03-25)
+  FAILS on buggy, PASSES on fixed: tests.test_deserialization.TestFieldDeserialization::test_constant_with_required
+  RESULT: VERIFIED
+=== marshmallow-code__marshmallow-19ca8dce2d  (2026-02-04)
+  FAILS on buggy, PASSES on fixed: tests.test_deserialization.TestFieldDeserialization::test_constant_none_allows_none_value
+  RESULT: VERIFIED
+=== marshmallow-code__marshmallow-252090c7c7  (2026-03-26)
+  FAILS on buggy, PASSES on fixed: tests.test_deserialization.TestValidation::test_nested_partial_tuple_with_data_key
+  RESULT: VERIFIED
+=== marshmallow-code__marshmallow-5761beab39  (2026-10-18)
+  FAILS on buggy, PASSES on fixed: tests.test_fields.TestPluckFiekd::test_pluck_empty_data_key[False]
+  FAILS on buggy, PASSES on fixed: tests.test_fields.TestPluckFiekd::test_pluck_empty_data_key[True]
+  RESULT: VERIFIED
+=== marshmallow-code__marshmallow-65374df0c3  (2026-03-25)
+  FAILS on buggy, PASSES on fixed: tests.test_validate::test_oneof_options
+  RESULT: VERIFIED
+=== marshmallow-code__marshmallow-902f99c415  (2026-08-08)
+  FAILS on buggy, PASSES on fixed: tests.test_validate::test_url_absolute_valid[http://example.org#fragment]
+  FAILS on buggy, PASSES on fixed: tests.test_validate::test_url_absolute_valid[http://user@example.com#fragment]
+  FAILS on buggy, PASSES on fixed: tests.test_validate::test_url_relative_valid[#frag]
+  FAILS on buggy, PASSES on fixed: tests.test_validate::test_url_relative_only_valid[#frag]
+  RESULT: VERIFIED
+=== marshmallow-code__marshmallow-f07eadc87d  (2026-04-02)
+  FAILS on buggy, PASSES on fixed: tests.test_validate::test_email_idn_invalid[user@-m\xfcnchen.de]
+  FAILS on buggy, PASSES on fixed: tests.test_validate::test_email_idn_invalid[user@m\xfcnchen-.de]
+  RESULT: VERIFIED
+=== pallets__click-19fd4d6e18  (2026-04-30)
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_full_complete[fish-env4-plain\na\n_\nplain\nb\nbee\n]
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_full_complete[fish-env5-plain\nb\nbee\n]
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_full_complete[fish-env6-plain\nb\nbee\n]
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_fish_multiline_help_complete
+  RESULT: VERIFIED
+=== pallets__click-2468b70997  (2026-04-29)
+  FAILS on buggy, PASSES on fixed: tests.test_utils::test_prompts_abort
+  FAILS on buggy, PASSES on fixed: tests.test_utils::test_full_prompt_passed_to_readline[prompt]
+  FAILS on buggy, PASSES on fixed: tests.test_utils::test_full_prompt_passed_to_readline[prompt-hidden]
+  FAILS on buggy, PASSES on fixed: tests.test_utils::test_full_prompt_passed_to_readline[prompt-custom-suffix]
+  FAILS on buggy, PASSES on fixed: tests.test_utils::test_full_prompt_passed_to_readline[confirm]
+  FAILS on buggy, PASSES on fixed: tests.test_utils::test_echo_writing_to_standard_error
+  RESULT: VERIFIED
+=== pallets__click-701b313160  (2025-08-09)
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_full_complete[fish-env6-plain,b\tbee\n]
+  RESULT: VERIFIED
+=== pallets__click-a1235aacb1  (2025-07-21)
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_zsh_full_complete_with_colons[env0-plain\na\n_\nplain\nb\nbee\nplain\nc\\:d\ncee:dee\nplain\nc:e\n_\n]
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_zsh_full_complete_with_colons[env1-plain\nc\\:d\ncee:dee\nplain\nc:e\n_\n]
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_zsh_full_complete_with_colons[env2-plain\nc\\:d\ncee:dee\nplain\nc:e\n_\n]
+  RESULT: VERIFIED
+=== pallets__click-c3535905c7  (2026-05-23)
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_full_complete[fish-env4-plain,a\nplain,b\tbee\n]
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_full_complete[fish-env5-plain,b\tbee\n]
+  FAILS on buggy, PASSES on fixed: tests.test_shell_completion::test_full_complete[fish-env6-plain,b\tbee\n]
+  RESULT: VERIFIED
+=== psf__black-01c29bd5fd  (2026-03-01)
+  FAILS on buggy, PASSES on fixed: tests.test_format::test_simple_format[if_guard_inside_case]
+  RESULT: VERIFIED
+=== psf__black-03a21a5194  (2026-10-25)
+  FAILS on buggy, PASSES on fixed: tests.test_format::test_simple_format[fmtskip_opening_bracket_split_short_line]
+  RESULT: VERIFIED
+=== psf__black-165b9e2933  (2026-10-23)
+  FAILS on buggy, PASSES on fixed: tests.test_format::test_simple_format[fmtskip_opening_bracket_conditional]
+  RESULT: VERIFIED
+=== psf__black-24e4cb20ab  (2025-06-05)
+  FAILS on buggy, PASSES on fixed: tests.test_black.BlackTestCase::test_backslash_carriage_return
+  RESULT: VERIFIED
+=== psf__black-262ad62ca9  (2025-06-29)
+  FAILS on buggy, PASSES on fixed: tests.test_format::test_simple_format[preview_long_strings]
+  RESULT: VERIFIED
+=== psf__black-60d734a84d  (2025-06-22)
+  FAILS on buggy, PASSES on fixed: tests.test_black.BlackTestCase::test_carriage_return_edge_cases
+  RESULT: VERIFIED
+=== psf__black-80db630ac5  (2026-10-25)
+  FAILS on buggy, PASSES on fixed: tests.test_format::test_simple_format[fmtskip_own_line_between_statements]
+  RESULT: VERIFIED
+=== psf__black-97fb59f06a  (2026-10-05)
+  FAILS on buggy, PASSES on fixed: tests.test_black.TestCaching::test_no_cache_when_line_ranges[format]
+  FAILS on buggy, PASSES on fixed: tests.test_black.TestCaching::test_no_cache_when_line_ranges[check]
+  RESULT: VERIFIED
+=== psf__black-c65b1dc549  (2026-10-24)
+  FAILS on buggy, PASSES on fixed: tests.test_format::test_simple_format[preview_long_strings__small_line_length]
+  RESULT: VERIFIED
+=== psf__black-c9b1148b5b  (2026-10-07)
+  FAILS on buggy, PASSES on fixed: tests.test_format::test_simple_format[docstring]
+  RESULT: VERIFIED
+=== pylint-dev__astroid-004bc52e1c  (2026-01-14)
+  FAILS on buggy, PASSES on fixed: tests.test_objects.SuperTests::test_super_classmethod_chaining_return_type
+  FAILS on buggy, PASSES on fixed: tests.test_objects.SuperTests::test_super_method_chaining_return_type
+  RESULT: VERIFIED
+=== pylint-dev__astroid-04b78da707  (2026-04-07)
+  FAILS on buggy, PASSES on fixed: tests.test_scoped_nodes.ClassNodeTest::test_mro_circular_name_rebinding_with_gap
+  RESULT: VERIFIED
+=== pylint-dev__astroid-178a796d01  (2026-01-03)
+  FAILS on buggy, PASSES on fixed: tests.test_inference::test_ifexp_with_default_arguments
+  FAILS on buggy, PASSES on fixed: tests.test_inference::test_ifexp_with_uninferables
+  RESULT: VERIFIED
+=== pylint-dev__astroid-1f3b8fad1f  (2026-05-27)
+  FAILS on buggy, PASSES on fixed: tests.brain.test_enum.EnumBrainTest::test_enum_func_form_non_string_attribute_no_crash
+  RESULT: VERIFIED
+=== pylint-dev__astroid-24027e6062  (2026-08-02)
+  FAILS on buggy, PASSES on fixed: tests.brain.test_enum.EnumBrainTest::test_enum_predicate_does_not_raise_for_extension_class
+  RESULT: VERIFIED
+=== pylint-dev__astroid-37ec2fe95e  (2026-10-08)
+  FAILS on buggy, PASSES on fixed: tests.test_nodes::test_arguments_default_value_name_shared_with_vararg[def f(x, *y, y): ...]
+  FAILS on buggy, PASSES on fixed: tests.test_nodes::test_arguments_default_value_name_shared_with_vararg[def f(x, *, y, **y): ...]
+  FAILS on buggy, PASSES on fixed: tests.test_nodes::test_arguments_default_value_positional_shares_vararg_name
+  FAILS on buggy, PASSES on fixed: tests.test_nodes::test_infer_argument_sharing_vararg_name
+  RESULT: VERIFIED
+=== pylint-dev__astroid-574b7f282b  (2026-07-30)
+  FAILS on buggy, PASSES on fixed: tests.test_object_model.BoundMethodModelTest::test_bound_method_model_classmethod_on_class
+  FAILS on buggy, PASSES on fixed: tests.test_object_model.BoundMethodModelTest::test_bound_method_model_lambda_class_attribute
+  RESULT: VERIFIED
+=== pylint-dev__astroid-72b26ab0b0  (2026-10-08)
+  FAILS on buggy, PASSES on fixed: tests.test_inference.InferenceTest::test_infer_call_result_with_metaclass_function_caller
+  RESULT: VERIFIED
+=== pylint-dev__astroid-a7f7a7d552  (2026-05-24)
+  FAILS on buggy, PASSES on fixed: tests.test_nodes_position.TestNodePosition::test_position_malformed_tokenize
+  RESULT: VERIFIED
+=== pylint-dev__astroid-c1f1df7ddf  (2026-10-18)
+  FAILS on buggy, PASSES on fixed: tests.test_scoped_nodes.FunctionNodeTest::test_func_getattr_does_not_modify_instance_attrs
+  FAILS on buggy, PASSES on fixed: tests.test_scoped_nodes::test_classdef_repr_tree_ast_state
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-11e22aefcc  (2026-06-23)
+  FAILS on buggy, PASSES on fixed: tests.test_items::test_append_table_to_inline_table_raises
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-43668ddebc  (2026-06-23)
+  FAILS on buggy, PASSES on fixed: tests.test_toml_document::test_add_key_after_dotted_inline_table_without_ending_newline
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-495a42ecc9  (2026-07-14)
+  FAILS on buggy, PASSES on fixed: tests.test_toml_document::test_scalar_is_not_captured_by_table_rendered_from_dotted_key
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-49d6efa980  (2026-09-30)
+  FAILS on buggy, PASSES on fixed: tests.test_items::test_times_behave_like_times_fold
+  FAILS on buggy, PASSES on fixed: tests.test_items::test_datetimes_behave_like_datetimes_fold
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-8c30fc17d9  (2026-10-12)
+  FAILS on buggy, PASSES on fixed: tests.test_items::test_array_slice_deletion_keeps_render_in_sync
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-bd31dbd8e2  (2025-06-05)
+  FAILS on buggy, PASSES on fixed: tests.test_api::test_dump_nested_dotted_table
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-c07c0c15c4  (2026-10-12)
+  FAILS on buggy, PASSES on fixed: tests.test_parser::test_parser_reports_the_same_position_regardless_of_line_ending[\r\n]
+  FAILS on buggy, PASSES on fixed: tests.test_parser::test_parser_reports_the_right_position_for_mixed_line_endings
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-d3c76f0bbe  (2026-06-23)
+  FAILS on buggy, PASSES on fixed: tests.test_toml_document::test_unwrap_preserves_raise_on_invalid_out_of_order_fragment
+  FAILS on buggy, PASSES on fixed: tests.test_toml_document::test_reject_out_of_order_dotted_key_redefinition_at_parse
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-de68fd06ee  (2026-06-23)
+  FAILS on buggy, PASSES on fixed: tests.test_toml_document::test_subtable_of_aot_element_after_other_table
+  RESULT: VERIFIED
+=== python-poetry__tomlkit-f8ce14b39c  (2026-06-10)
+  FAILS on buggy, PASSES on fixed: tests.test_items::test_appending_to_comma_first_array_does_not_double_separator
+  FAILS on buggy, PASSES on fixed: tests.test_items::test_inserting_into_comma_first_array_does_not_double_separator
+  RESULT: VERIFIED
+=== scrapy__scrapy-01447f9965  (2026-07-29)
+  FAILS on buggy, PASSES on fixed: tests.test_command_parse.TestParseCommand::test_retry_response_request
+  FAILS on buggy, PASSES on fixed: tests.test_command_parse.TestParseCommand::test_retry_response_request_with_custom_callback
+  RESULT: VERIFIED
+=== scrapy__scrapy-0cbb20e8e8  (2026-07-29)
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestFilesystemStorageWithDummyPolicy::test_corrupted_cache_entry_is_a_miss
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestFilesystemStorageWithDummyPolicy::test_corrupted_cache_entry_ignore_missing
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestFilesystemStorageWithRFC2616Policy::test_corrupted_cache_entry_is_a_miss
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestFilesystemStorageWithRFC2616Policy::test_corrupted_cache_entry_ignore_missing
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestDbmStorageWithDummyPolicy::test_corrupted_cache_entry_is_a_miss
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestDbmStorageWithDummyPolicy::test_corrupted_cache_entry_ignore_missing
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestDbmStorageWithRFC2616Policy::test_corrupted_cache_entry_is_a_miss
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestDbmStorageWithRFC2616Policy::test_corrupted_cache_entry_ignore_missing
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestDbmStorageWithCustomDbmModule::test_corrupted_cache_entry_is_a_miss
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestDbmStorageWithCustomDbmModule::test_corrupted_cache_entry_ignore_missing
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestFilesystemStorageGzipWithDummyPolicy::test_corrupted_cache_entry_is_a_miss
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_httpcache.TestFilesystemStorageGzipWithDummyPolicy::test_corrupted_cache_entry_ignore_missing
+  RESULT: VERIFIED
+=== scrapy__scrapy-23abf7e18f  (2026-08-16)
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_inject_base_url[Misleading comment]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_inject_base_url[Conditional comment]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_inject_base_url[No <head>]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_inject_base_url[No <html>]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_inject_base_url[Only commented-out <head> and <base>]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_open_in_browser_keeps_base_url_of_response[<base href="http://real.com/">-http://real.com/]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_open_in_browser_keeps_base_url_of_response[<BASE HREF="http://real.com/">-http://real.com/]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_open_in_browser_keeps_base_url_of_response[<base href="/img/">-http://www.example.com/img/]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_open_in_browser_keeps_base_url_of_response[<base target="_blank">-http://www.example.com/page.html]
+  RESULT: VERIFIED
+=== scrapy__scrapy-63d5ce6272  (2026-08-09)
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_cookies.TestCookiesMiddleware::test_explicit_local_domain[http://example-host/-example-host.local]
+  FAILS on buggy, PASSES on fixed: tests.test_downloadermiddleware_cookies.TestCookiesMiddleware::test_explicit_local_domain[http://127.0.0.1/-127.0.0.1]
+  RESULT: VERIFIED
+=== scrapy__scrapy-6ad8a043ca  (2026-06-30)
+  FAILS on buggy, PASSES on fixed: tests.test_command_genspider.TestGenspiderStandaloneCommand::test_edit
+  RESULT: VERIFIED
+=== scrapy__scrapy-a4109754c5  (2026-09-10)
+  FAILS on buggy, PASSES on fixed: tests.test_utils_datatypes.TestLocalCache::test_cache_update_existing_key_does_not_evict
+  RESULT: VERIFIED
+=== scrapy__scrapy-b68f26726a  (2026-04-08)
+  FAILS on buggy, PASSES on fixed: tests.test_pqueues.TestDownloaderAwarePriorityQueue::test_tie_breaking_rotates_slots
+  FAILS on buggy, PASSES on fixed: tests.test_pqueues.TestDownloaderAwarePriorityQueue::test_tie_breaking_keeps_rotation_after_selected_slot_is_deleted
+  RESULT: VERIFIED
+=== scrapy__scrapy-d239fcf936  (2025-09-10)
+  FAILS on buggy, PASSES on fixed: tests.test_utils_response::test_get_meta_refresh
+  RESULT: VERIFIED
+=== scrapy__scrapy-deb7e2861e  (2026-06-30)
+  FAILS on buggy, PASSES on fixed: tests.test_utils_sitemap::test_sitemap_non_string_tag
+  RESULT: VERIFIED
+=== scrapy__scrapy-f63a3aff25  (2026-06-15)
+  FAILS on buggy, PASSES on fixed: tests.test_utils_url.TestStripUrl::test_default_ports[http://user:80@www.example.com:80/index.html-http://user:80@www.example.com/index.html]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_url.TestStripUrl::test_default_ports[https://user:443@www.example.com:443/index.html-https://user:443@www.example.com/index.html]
+  FAILS on buggy, PASSES on fixed: tests.test_utils_url.TestStripUrl::test_default_ports[ftp://user:21@www.example.com:21/file.txt-ftp://user:21@www.example.com/file.txt]
+  RESULT: VERIFIED
+=== tobymao__sqlglot-00c800c6b2  (2025-09-03)
+  FAILS on buggy, PASSES on fixed: tests.test_optimizer.TestOptimizer::test_expand_alias_refs
+  RESULT: VERIFIED
+=== tobymao__sqlglot-021545ed57  (2025-06-16)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_tsql.TestTSQL::test_top
+  RESULT: VERIFIED
+=== tobymao__sqlglot-0e46260bd6  (2025-07-30)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_dialect.TestDialect::test_between
+  RESULT: VERIFIED
+=== tobymao__sqlglot-27ccb6fb98  (2025-06-26)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_fabric.TestFabric::test_type_mappings
+  RESULT: VERIFIED
+=== tobymao__sqlglot-2a5aff1bb9  (2025-06-12)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_postgres.TestPostgres::test_udt
+  RESULT: VERIFIED
+=== tobymao__sqlglot-6f97a23cef  (2025-08-29)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_bigquery.TestBigQuery::test_warnings
+  RESULT: VERIFIED
+=== tobymao__sqlglot-92bef7b1d3  (2025-08-04)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_snowflake.TestSnowflake::test_snowflake
+  RESULT: VERIFIED
+=== tobymao__sqlglot-9a0ace6c6a  (2025-07-07)
+  FAILS on buggy, PASSES on fixed: tests.test_lineage.TestLineage::test_pivot_with_subquery
+  RESULT: VERIFIED
+=== tobymao__sqlglot-b0ff7e7179  (2025-07-15)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_snowflake.TestSnowflake::test_snowflake
+  RESULT: VERIFIED
+=== tobymao__sqlglot-e014b4c6d6  (2025-08-12)
+  FAILS on buggy, PASSES on fixed: tests.dialects.test_tsql.TestTSQL::test_tsql
+  RESULT: VERIFIED
+
+63/63 instances verified
